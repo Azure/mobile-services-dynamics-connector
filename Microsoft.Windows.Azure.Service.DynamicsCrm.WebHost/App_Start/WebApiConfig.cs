@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
@@ -6,6 +7,7 @@ using System.Web.Http;
 using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.DataObjects;
 using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models;
 using Microsoft.WindowsAzure.Mobile.Service;
+using AutoMapper;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
 {
@@ -23,26 +25,16 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
             // line. Comment it out again when you deploy your service for production use.
             // config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 
-            Database.SetInitializer(new MobileServiceInitializer());
-        }
-    }
+            var map = Mapper.CreateMap<Account, AccountDto>();
+            map.ForMember(dto => dto.City, opt => opt.MapFrom(crm => crm.Address1_City));
+            map.ForMember(dto => dto.CreatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.CreatedOn));
+            map.ForMember(dto => dto.UpdatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.ModifiedOn));
 
-    public class MobileServiceInitializer : DropCreateDatabaseIfModelChanges<MobileServiceContext>
-    {
-        protected override void Seed(MobileServiceContext context)
-        {
-            List<TodoItem> todoItems = new List<TodoItem>
-            {
-                new TodoItem { Id = Guid.NewGuid().ToString(), Text = "First item", Complete = false },
-                new TodoItem { Id = Guid.NewGuid().ToString(), Text = "Second item", Complete = false },
-            };
+            var reverseMap = map.ReverseMap();
+            reverseMap.ForMember(crm => crm.Address1_City, opt => opt.MapFrom(dto => dto.City));
+            reverseMap.ForMember(crm => crm.CreatedOn, opt => opt.MapFrom(dto => dto.CreatedAt));
+            reverseMap.ForMember(crm => crm.ModifiedOn, opt => opt.MapFrom(dto => dto.UpdatedAt));
 
-            foreach (TodoItem todoItem in todoItems)
-            {
-                context.Set<TodoItem>().Add(todoItem);
-            }
-
-            base.Seed(context);
         }
     }
 }
