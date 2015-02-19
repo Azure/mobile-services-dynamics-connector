@@ -1,0 +1,7 @@
+*.suo
+Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost/bin/
+Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost/obj/
+Microsoft.Windows.Azure.Service.DynamicsCrm/bin/
+Microsoft.Windows.Azure.Service.DynamicsCrm/obj/
+packages/
+*.user
