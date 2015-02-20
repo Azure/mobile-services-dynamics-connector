@@ -31,20 +31,44 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 
         public QueryExpression GetQueryExpression()
         {
-            QueryExpression crmQuery = new QueryExpression("account");
+            QueryExpression crmQuery = new QueryExpression(this.EntityLogicalName);
+
+            ODataValidationSettings settings = new ODataValidationSettings();
+            
+            settings.AllowedLogicalOperators =
+                AllowedLogicalOperators.Equal |
+                AllowedLogicalOperators.NotEqual |
+                AllowedLogicalOperators.GreaterThan |
+                AllowedLogicalOperators.GreaterThanOrEqual |
+                AllowedLogicalOperators.LessThan |
+                AllowedLogicalOperators.LessThanOrEqual |
+                AllowedLogicalOperators.And |
+                AllowedLogicalOperators.Or;
+            
+            settings.AllowedFunctions = 
+                AllowedFunctions.StartsWith | 
+                AllowedFunctions.SubstringOf | 
+                AllowedFunctions.EndsWith;
+
+            settings.AllowedArithmeticOperators = AllowedArithmeticOperators.None;
+
+            settings.MaxTop = 5000;
+            settings.AllowedQueryOptions = AllowedQueryOptions.All ^ AllowedQueryOptions.Expand;
+
+            this.ODataQueryOptions.Validate(settings);
 
             var map = Mapper.FindTypeMapFor<TTableData, TEntity>();
             var propertyMaps = map.GetPropertyMaps();
 
-            UpdateCriteriaFromFilter(crmQuery.Criteria, ODataQueryOptions.Filter, propertyMaps);
-            UpdateColumnSetFromSelectExpand(crmQuery.ColumnSet, ODataQueryOptions.SelectExpand, propertyMaps);
+            UpdateCriteriaFromFilter(crmQuery.Criteria, ODataQueryOptions.Filter);
+            UpdateColumnSetFromSelectExpand(crmQuery.ColumnSet, ODataQueryOptions.SelectExpand);
             UpdatePagingFromSkipAndTop(crmQuery.PageInfo, ODataQueryOptions.Skip, ODataQueryOptions.Top);
-            UpdateOrdersFromOrderBy(crmQuery.Orders, ODataQueryOptions.OrderBy, propertyMaps);
+            UpdateOrdersFromOrderBy(crmQuery.Orders, ODataQueryOptions.OrderBy);
 
             return crmQuery;
         }
 
-        private static void UpdateCriteriaFromFilter(FilterExpression criteria, FilterQueryOption filter, IEnumerable<PropertyMap> propertyMaps)
+        private void UpdateCriteriaFromFilter(FilterExpression criteria, FilterQueryOption filter)
         {
             if (filter != null)
             {
@@ -61,32 +85,32 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
                     }
                 }
 
-                UpdateCriteriaFromExpression(criteria, filter.FilterClause.Expression, propertyMaps);
+                UpdateCriteriaFromExpression(criteria, filter.FilterClause.Expression);
             }
         }
 
-        private static void UpdateCriteriaFromExpression(FilterExpression criteria, SingleValueNode expression, IEnumerable<PropertyMap> propertyMaps)
+        private void UpdateCriteriaFromExpression(FilterExpression criteria, SingleValueNode expression)
         {
             switch (expression.Kind)
             {
                 case QueryNodeKind.BinaryOperator:
-                    UpdateCriteriaFromBinaryExpression(criteria, (BinaryOperatorNode)expression, propertyMaps);
+                    UpdateCriteriaFromBinaryExpression(criteria, (BinaryOperatorNode)expression);
                     break;
 
                 case QueryNodeKind.Convert:
-                    UpdateCriteriaFromExpression(criteria, ((ConvertNode)expression).Source, propertyMaps);
+                    UpdateCriteriaFromExpression(criteria, ((ConvertNode)expression).Source);
                     break;
 
                 case QueryNodeKind.SingleValueFunctionCall:
-                    UpdateCriteriaFromSingleValueFunctionCall(criteria, (SingleValueFunctionCallNode)expression, propertyMaps);
+                    UpdateCriteriaFromSingleValueFunctionCall(criteria, (SingleValueFunctionCallNode)expression);
                     break;
 
                 default:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException(String.Format("Unsupported expression kind: \'{0}\'.", expression.Kind));
             }
         }
 
-        private static void UpdateCriteriaFromBinaryExpression(FilterExpression criteria, BinaryOperatorNode expression, IEnumerable<PropertyMap> propertyMaps)
+        private void UpdateCriteriaFromBinaryExpression(FilterExpression criteria, BinaryOperatorNode expression)
         {
             ConditionOperator crmOperator;
             switch (expression.OperatorKind)
@@ -95,24 +119,65 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
                 case BinaryOperatorKind.Or:
                     var childCriteria = new FilterExpression(expression.OperatorKind == BinaryOperatorKind.And ? LogicalOperator.And : LogicalOperator.Or);
                     criteria.AddFilter(childCriteria);
-                    UpdateCriteriaFromExpression(childCriteria, expression.Left, propertyMaps);
-                    UpdateCriteriaFromExpression(childCriteria, expression.Right, propertyMaps);
+                    UpdateCriteriaFromExpression(childCriteria, expression.Left);
+                    UpdateCriteriaFromExpression(childCriteria, expression.Right);
                     return;
 
                 case BinaryOperatorKind.Equal:
-                    crmOperator = ConditionOperator.Equal;
+                    if (expression.Left.Kind == QueryNodeKind.SingleValueFunctionCall &&
+                        expression.Right.Kind == QueryNodeKind.Constant &&
+                        (bool)((ConstantNode)expression.Right).Value == true)
+                    {
+                        UpdateCriteriaFromSingleValueFunctionCall(criteria, (SingleValueFunctionCallNode)expression.Left);
+                        return;
+                    }
+                    else
+                    {
+                        crmOperator = ConditionOperator.Equal;
+                    }
+                    break;
+
+                case BinaryOperatorKind.NotEqual:
+                    crmOperator = ConditionOperator.NotEqual;
+                    break;
+
+                case BinaryOperatorKind.GreaterThan:
+                    crmOperator = ConditionOperator.GreaterThan;
+                    break;
+
+                case BinaryOperatorKind.GreaterThanOrEqual:
+                    crmOperator = ConditionOperator.GreaterEqual;
+                    break;
+
+                case BinaryOperatorKind.LessThan:
+                    crmOperator = ConditionOperator.LessThan;
+                    break;
+
+                case BinaryOperatorKind.LessThanOrEqual:
+                    crmOperator = ConditionOperator.LessEqual;
                     break;
 
                 default:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException(String.Format("Unsupported operator \'{0}\'.", expression.OperatorKind));
             }
 
-            var right = (ConstantNode)expression.Right;
+            var value = GetValue(expression.Right);
+            var attributeName = GetAttributeName(expression.Left);
 
-            criteria.AddCondition(GetAttributeName(expression.Left, propertyMaps), crmOperator, GetValue(expression.Right, propertyMaps));
+            if (value == null)
+            {
+                if (crmOperator == ConditionOperator.Equal) crmOperator = ConditionOperator.Null;
+                if (crmOperator == ConditionOperator.NotEqual) crmOperator = ConditionOperator.NotNull;
+                
+                criteria.AddCondition(attributeName, crmOperator);
+            }
+            else
+            {
+                criteria.AddCondition(attributeName, crmOperator, value);
+            }
         }
 
-        private static void UpdateCriteriaFromSingleValueFunctionCall(FilterExpression criteria, SingleValueFunctionCallNode expression, IEnumerable<PropertyMap> propertyMaps)
+        private void UpdateCriteriaFromSingleValueFunctionCall(FilterExpression criteria, SingleValueFunctionCallNode expression)
         {
             QueryNode[] arguments = expression.Arguments.ToArray();
 
@@ -120,53 +185,67 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
             {
                 case "startswith":
                     if (arguments.Length != 2) throw new InvalidOperationException("\'startswith\' expects 2 arguments.");
-
-                    criteria.AddCondition(GetAttributeName(arguments[0], propertyMaps), ConditionOperator.BeginsWith, GetValue(arguments[1], propertyMaps));
+                    criteria.AddCondition(GetAttributeName(arguments[0]), ConditionOperator.BeginsWith, GetValue(arguments[1]));
                     break;
+
+                case "endswith":
+                    if (arguments.Length != 2) throw new InvalidOperationException("\'endswith\' expects 2 arguments.");
+                    criteria.AddCondition(GetAttributeName(arguments[0]), ConditionOperator.EndsWith, GetValue(arguments[1]));
+                    break;
+
+                case "substringof":
+                    if (arguments.Length != 2) throw new InvalidOperationException("\'substringof\' expects 2 arguments.");
+                    criteria.AddCondition(GetAttributeName(arguments[0]), ConditionOperator.Contains, GetValue(arguments[1]));
+                    break;
+
+                default:
+                    throw new NotImplementedException(String.Format("Unsupported function \'{0}\'.", expression.Name.ToLowerInvariant()));
             }
         }
 
-        private static object GetValue(QueryNode queryNode, IEnumerable<PropertyMap> propertyMaps)
+        private static object GetValue(QueryNode queryNode)
         {
             switch (queryNode.Kind)
             {
                 case QueryNodeKind.Constant:
                     return ((ConstantNode)queryNode).Value;
-                    break;
+
+                case QueryNodeKind.Convert:
+                    return GetValue(((ConvertNode)queryNode).Source);
 
                 default:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException(String.Format("Unsupported value type \'{0}\'.", queryNode.Kind));
             }
         }
 
-        private static string GetAttributeName(QueryNode queryNode, IEnumerable<PropertyMap> propertyMaps)
+        private string GetAttributeName(QueryNode queryNode)
         {
             switch (queryNode.Kind)
             {
                 case QueryNodeKind.Convert:
-                    return GetAttributeName(((ConvertNode)queryNode).Source, propertyMaps);
+                    return GetAttributeName(((ConvertNode)queryNode).Source);
 
                 case QueryNodeKind.SingleValuePropertyAccess:
-                    var prop = GetDestinationProperty(((SingleValuePropertyAccessNode)queryNode).Property.Name, propertyMaps);
+                    var prop = GetDestinationProperty(((SingleValuePropertyAccessNode)queryNode).Property.Name);
                     return prop.Name.ToLowerInvariant();
 
                 default:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException(String.Format("Unsupported property selector type \'{0}\'.", queryNode.Kind));
             }
         }
 
-        private static IMemberAccessor GetDestinationProperty(string sourcePropertyName, IEnumerable<PropertyMap> propertyMaps)
+        private IMemberAccessor GetDestinationProperty(string sourcePropertyName)
         {
-            return propertyMaps.First(m => m.SourceMember.Name == sourcePropertyName).DestinationProperty;
+            return this.PropertyMap[sourcePropertyName];
         }
 
-        private static void UpdateColumnSetFromSelectExpand(ColumnSet columnSet, SelectExpandQueryOption selectExpand, IEnumerable<PropertyMap> propertyMaps)
+        private void UpdateColumnSetFromSelectExpand(ColumnSet columnSet, SelectExpandQueryOption selectExpand)
         {
             if (selectExpand == null || selectExpand.SelectExpandClause == null || selectExpand.SelectExpandClause.AllSelected)
             {
-                foreach (var propMap in propertyMaps)
+                foreach (var destProp in this.PropertyMap.Values)
                 {
-                    columnSet.AddColumn(propMap.DestinationProperty.Name.ToLowerInvariant());
+                    columnSet.AddColumn(destProp.Name.ToLowerInvariant());
                 }
             }
             else
@@ -174,8 +253,8 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
                 foreach (var item in selectExpand.SelectExpandClause.SelectedItems.OfType<PathSelectItem>())
                 {
                     var pathItem = item.SelectedPath.OfType<PropertySegment>().Single();
-                    var propMap = propertyMaps.First(m => m.SourceMember.Name == pathItem.Property.Name);
-                    columnSet.AddColumn(propMap.DestinationProperty.Name.ToLowerInvariant());
+                    var destProp = GetDestinationProperty(pathItem.Property.Name);
+                    columnSet.AddColumn(destProp.Name.ToLowerInvariant());
                 }
             }
 
@@ -203,15 +282,15 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
             }
         }
 
-        private static void UpdateOrdersFromOrderBy(DataCollection<OrderExpression> orders, OrderByQueryOption orderBy, IEnumerable<PropertyMap> propertyMaps)
+        private void UpdateOrdersFromOrderBy(DataCollection<OrderExpression> orders, OrderByQueryOption orderBy)
         {
             if (orderBy != null)
             {
                 foreach (var node in orderBy.OrderByNodes.OfType<OrderByPropertyNode>())
                 {
-                    var propMap = propertyMaps.First(m => m.SourceMember.Name == node.Property.Name);
+                    var destProp = GetDestinationProperty(node.Property.Name);
                     var direction = node.Direction == OrderByDirection.Ascending ? OrderType.Ascending : OrderType.Descending;
-                    orders.Add(new OrderExpression(propMap.DestinationProperty.Name.ToLowerInvariant(), direction));
+                    orders.Add(new OrderExpression(destProp.Name.ToLowerInvariant(), direction));
                 }
             }
         }
