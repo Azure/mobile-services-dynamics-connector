@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
+﻿using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Newtonsoft.Json.Linq;
+using System;
+using Windows.UI.Popups;
+using Microsoft.WindowsAzure.MobileServices;
 
 namespace DemoMobileApp
 {
@@ -25,6 +16,41 @@ namespace DemoMobileApp
         public MainPage()
         {
             this.InitializeComponent();
+        }
+
+        protected override async void OnNavigatedTo(Windows.UI.Xaml.Navigation.NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            await AuthenticateAsync();
+        }
+
+        private MobileServiceUser user;
+        private async Task AuthenticateAsync()
+        {
+            string authority = "https://login.windows.net/@nadreesgmail.onmicrosoft.com";
+            string resourceURI = "https://sonoma-mobile-sdk.azure-mobile.net/login/aad";
+            string clientID = "<INSERT-CLIENT-ID-HERE>";
+            while (user == null)
+            {
+                string message;
+                try
+                {
+                    AuthenticationContext ac = new AuthenticationContext(authority);
+                    AuthenticationResult ar = await ac.AcquireTokenAsync(resourceURI, clientID, (Uri)null);
+                    JObject payload = new JObject();
+                    payload["access_token"] = ar.AccessToken;
+                    user = await App.MobileService.LoginAsync(MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory, payload);
+                    message = string.Format("You are now logged in - {0}", user.UserId);
+                }
+                catch (InvalidOperationException)
+                {
+                    message = "You must log in. Login Required";
+                }
+                var dialog = new MessageDialog(message);
+                dialog.Commands.Add(new UICommand("OK"));
+                await dialog.ShowAsync();
+            }
         }
     }
 }
