@@ -32,20 +32,15 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
             if (!Guid.TryParse(id, out entityId))
                 return Task.FromResult(false);
 
-            try
-            {
-                OrganizationService.Delete(EntityLogicalName, entityId);
-                return Task.FromResult(true);
-            }
-            catch (Exception)
-            {
-                return Task.FromResult(false);
-            }
+            OrganizationService.Delete(EntityLogicalName, entityId);
+            return Task.FromResult(true);
         }
 
         public Task<TTableData> InsertAsync(TTableData data)
         {
-            throw new NotImplementedException();
+            var entity = Mapper.Map<TTableData, TEntity>(data);
+            entity.Id = OrganizationService.Create(entity);
+            return Task.FromResult(Mapper.Map<TEntity, TTableData>(entity));
         }
 
         public System.Web.Http.SingleResult<TTableData> Lookup(string id)

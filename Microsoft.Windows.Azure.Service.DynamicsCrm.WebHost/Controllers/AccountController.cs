@@ -34,5 +34,11 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Controllers
         {
             return DomainManager.DeleteAsync(id);
         }
+
+        [HttpPost]
+        public Task<AccountDto> Post(AccountDto data)
+        {
+            return DomainManager.InsertAsync(data);
+        }
     }
 }

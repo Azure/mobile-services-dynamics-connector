@@ -26,15 +26,19 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
             // config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 
             var map = Mapper.CreateMap<Account, AccountDto>();
-            map.ForMember(dto => dto.City, opt => opt.MapFrom(crm => crm.Address1_City));
-            map.ForMember(dto => dto.CreatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.CreatedOn));
-            map.ForMember(dto => dto.UpdatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.ModifiedOn));
+            map.ForMember(dto => dto.City, opt => opt.MapFrom(crm => crm.Address1_City))
+                .ForMember(dto => dto.CreatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.CreatedOn))
+                .ForMember(dto => dto.UpdatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.ModifiedOn));
 
             var reverseMap = map.ReverseMap();
-            reverseMap.ForMember(crm => crm.Address1_City, opt => opt.MapFrom(dto => dto.City));
-            reverseMap.ForMember(crm => crm.CreatedOn, opt => opt.MapFrom(dto => dto.CreatedAt));
-            reverseMap.ForMember(crm => crm.ModifiedOn, opt => opt.MapFrom(dto => dto.UpdatedAt));
-
+            reverseMap.ForMember(crm => crm.Address1_City, opt => opt.MapFrom(dto => dto.City))
+                .ForMember(crm => crm.CreatedOn, opt => opt.MapFrom(dto => dto.CreatedAt))
+                .ForMember(crm => crm.ModifiedOn, opt => opt.MapFrom(dto => dto.UpdatedAt))
+                .AfterMap((dto, crm) =>
+                {
+                    if (crm.Id == Guid.Empty)
+                        crm.Id = Guid.NewGuid();
+                });
         }
     }
 }
