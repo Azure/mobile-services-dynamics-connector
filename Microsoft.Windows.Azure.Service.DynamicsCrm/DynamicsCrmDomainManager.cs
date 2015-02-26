@@ -28,7 +28,19 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 
         public Task<bool> DeleteAsync(string id)
         {
-            throw new NotImplementedException();
+            Guid entityId;
+            if (!Guid.TryParse(id, out entityId))
+                return Task.FromResult(false);
+
+            try
+            {
+                OrganizationService.Delete(EntityLogicalName, entityId);
+                return Task.FromResult(true);
+            }
+            catch (Exception)
+            {
+                return Task.FromResult(false);
+            }
         }
 
         public Task<TTableData> InsertAsync(TTableData data)

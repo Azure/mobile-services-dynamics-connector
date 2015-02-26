@@ -29,5 +29,10 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Controllers
             return DomainManager.QueryAsync(query);
         }
 
+        [HttpDelete]
+        public Task<bool> Delete(String id)
+        {
+            return DomainManager.DeleteAsync(id);
+        }
     }
 }
