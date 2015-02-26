@@ -28,9 +28,9 @@ namespace DemoMobileApp
         private MobileServiceUser user;
         private async Task AuthenticateAsync()
         {
-            string authority = "https://login.windows.net/@nadreesgmail.onmicrosoft.com";
-            string resourceURI = "https://sonoma-mobile-sdk.azure-mobile.net/login/aad";
-            string clientID = "<INSERT-CLIENT-ID-HERE>";
+            string authority = "https://login.windows.net/sonomap.onmicrosoft.com";
+            string resourceURI = "https://sonoma-azure-demo.azure-mobile.net/login/aad";
+            string clientID = "23bff0e9-7ce7-433a-9d4f-4fb93098c0d3";
             while (user == null)
             {
                 string message;
@@ -38,10 +38,18 @@ namespace DemoMobileApp
                 {
                     AuthenticationContext ac = new AuthenticationContext(authority);
                     AuthenticationResult ar = await ac.AcquireTokenAsync(resourceURI, clientID, (Uri)null);
-                    JObject payload = new JObject();
-                    payload["access_token"] = ar.AccessToken;
-                    user = await App.MobileService.LoginAsync(MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory, payload);
-                    message = string.Format("You are now logged in - {0}", user.UserId);
+
+                    if (ar.Status == AuthenticationStatus.Success)
+                    {
+                        JObject payload = new JObject();
+                        payload["access_token"] = ar.AccessToken;
+                        user = await App.MobileService.LoginAsync(MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory, payload);
+                        message = string.Format("You are now logged in - {0}", user.UserId);
+                    }
+                    else
+                    {
+                        message = ar.ErrorDescription;
+                    }
                 }
                 catch (InvalidOperationException)
                 {
