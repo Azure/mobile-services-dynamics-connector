@@ -22,10 +22,16 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Controllers
             DomainManager = new DynamicsCrmDomainManager<AccountDto, Account>(orgService);
         }
 
-        // GET api/Account
+        [HttpGet]
         public Task<IEnumerable<AccountDto>> Get(ODataQueryOptions<AccountDto> query)
         {
             return DomainManager.QueryAsync(query);
+        }
+
+        [HttpGet]
+        public Task<SingleResult<AccountDto>> Get(String id)
+        {
+            return DomainManager.LookupAsync(id);
         }
 
         [HttpDelete]

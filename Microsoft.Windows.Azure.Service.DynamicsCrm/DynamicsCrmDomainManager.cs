@@ -2,11 +2,13 @@
 using Microsoft.WindowsAzure.Mobile.Service.Tables;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http;
 using System.Web.Http.OData.Query;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm
@@ -50,7 +52,14 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 
         public Task<System.Web.Http.SingleResult<TTableData>> LookupAsync(string id)
         {
-            throw new NotImplementedException();
+            Guid entityId;
+            if (!Guid.TryParse(id, out entityId))
+                return Task.FromResult(SingleResult.Create(new List<TTableData>().AsQueryable()));
+
+            var result = OrganizationService.Retrieve(EntityLogicalName, entityId, new ColumnSet(true));
+            var mappedResult = Mapper.Map<TEntity, TTableData>(result.ToEntity<TEntity>());
+
+            return Task.FromResult(SingleResult.Create(new List<TTableData> { mappedResult }.AsQueryable()));
         }
 
         public IQueryable<TTableData> Query()
