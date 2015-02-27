@@ -70,11 +70,14 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 
         public Task<TTableData> ReplaceAsync(string id, TTableData data)
         {
-            throw new NotImplementedException();
+            OrganizationService.Update(Mapper.Map<TTableData, TEntity>(data));
+            return Task.FromResult(data);
         }
 
         public Task<TTableData> UpdateAsync(string id, System.Web.Http.OData.Delta<TTableData> patch)
         {
+            // doesn't work with JSON, see
+            // http://stackoverflow.com/questions/14729249/how-to-use-deltat-from-microsoft-asp-net-web-api-odata-with-code-first-jsonmed
             throw new NotImplementedException();
         }
     }

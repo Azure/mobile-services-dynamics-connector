@@ -1,18 +1,17 @@
-﻿using System;
+﻿using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models;
+using Microsoft.WindowsAzure.Mobile.Service;
+using Microsoft.Xrm.Client.Services;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http;
-using Microsoft.WindowsAzure.Mobile.Service;
 using System.Threading.Tasks;
-using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models;
+using System.Web.Http;
 using System.Web.Http.OData.Query;
-using Microsoft.Xrm.Client;
-using Microsoft.Xrm.Client.Services;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Controllers
 {
+    //http://www.odata.org/documentation/odata-version-2-0/operations/
     public class AccountController : TableController<AccountDto>
     {
         protected override void Initialize(System.Web.Http.Controllers.HttpControllerContext controllerContext)
@@ -36,9 +35,22 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Controllers
         }
 
         [HttpPost]
-        public Task<AccountDto> Post(AccountDto data)
+        public async Task<HttpResponseMessage> Post(AccountDto data)
         {
-            return DomainManager.InsertAsync(data);
+            var result = await DomainManager.InsertAsync(data);
+            return this.Request.CreateResponse(HttpStatusCode.Created, result);
+        }
+
+        [HttpPut]
+        public async System.Threading.Tasks.Task Put(AccountDto data)
+        {
+            await DomainManager.ReplaceAsync(data.Id, data);
+        }
+
+        [HttpPatch]
+        public async System.Threading.Tasks.Task Patch(AccountDto data)
+        {
+            await DomainManager.ReplaceAsync(data.Id, data);
         }
     }
 }
