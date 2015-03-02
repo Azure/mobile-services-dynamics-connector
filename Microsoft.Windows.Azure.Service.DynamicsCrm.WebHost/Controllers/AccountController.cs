@@ -29,12 +29,6 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Controllers
             return DomainManager.QueryAsync(query);
         }
 
-        [HttpGet]
-        public Task<SingleResult<AccountDto>> Get([FromODataUri]String id)
-        {
-            return DomainManager.LookupAsync(id);
-        }
-
         [HttpDelete]
         public Task<bool> Delete(String id)
         {
