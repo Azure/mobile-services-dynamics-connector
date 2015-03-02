@@ -256,6 +256,10 @@
     <Content Include="Performance\Microsoft.ServiceBus.MessagingPerformanceCounters.man" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Microsoft.Windows.Azure.Service.DynamicsCrm.Automapper\Microsoft.Windows.Azure.Service.DynamicsCrm.Automapper.csproj">
+      <Project>{bafec795-3636-4fef-ae7b-866d63468a79}</Project>
+      <Name>Microsoft.Windows.Azure.Service.DynamicsCrm.Automapper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Microsoft.Windows.Azure.Service.DynamicsCrm\Microsoft.Windows.Azure.Service.DynamicsCrm.csproj">
       <Project>{3e035011-6ba4-4de8-92e4-86fb19b8134f}</Project>
       <Name>Microsoft.Windows.Azure.Service.DynamicsCrm</Name>
