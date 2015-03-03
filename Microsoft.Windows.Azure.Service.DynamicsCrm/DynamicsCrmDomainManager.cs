@@ -53,7 +53,8 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 
         public Task<IEnumerable<TTableData>> QueryAsync(ODataQueryOptions query)
         {
-            var builder = new QueryExpressionBuilder<TTableData, TEntity>(this.EntityLogicalName, query);
+            var attributeMap = new AutoMapperAttributeMap<TTableData, TEntity>();
+            var builder = new QueryExpressionBuilder(this.EntityLogicalName, query, attributeMap);
             var crmQuery = builder.GetQueryExpression();
 
             var entityCollection = this.OrganizationService.RetrieveMultiple(crmQuery);

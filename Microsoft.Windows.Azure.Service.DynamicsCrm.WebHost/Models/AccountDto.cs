@@ -15,5 +15,7 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models
         public byte[] Version { get; set; }
         public string Name { get; set; }
         public string City { get; set; }
+        public Guid ParentAccountId { get; set; }
+        public string ParentAccountType { get; set; }
     }
 }
