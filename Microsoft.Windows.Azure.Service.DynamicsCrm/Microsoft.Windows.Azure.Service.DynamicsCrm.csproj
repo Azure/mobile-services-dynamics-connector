@@ -202,6 +202,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DynamicsCrmDomainManager.cs" />
+    <Compile Include="DynamicsTableController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryExpressionBuilder.cs" />
   </ItemGroup>
