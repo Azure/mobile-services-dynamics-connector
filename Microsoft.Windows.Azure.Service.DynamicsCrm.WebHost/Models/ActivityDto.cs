@@ -10,5 +10,10 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models
         public string Id { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
         public byte[] Version { get; set; }
+
+        public String Subject { get; set; }
+        public DateTime? ActualEnd { get; set; }
+        public String Description { get; set; }
+        public String ActivityTypeCode { get; set; }
     }
 }
