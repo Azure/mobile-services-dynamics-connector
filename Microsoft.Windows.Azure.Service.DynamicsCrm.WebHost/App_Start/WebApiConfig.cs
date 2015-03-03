@@ -8,6 +8,8 @@ using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.DataObjects;
 using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models;
 using Microsoft.WindowsAzure.Mobile.Service;
 using AutoMapper;
+using Microsoft.Xrm.Sdk;
+using Microsoft.WindowsAzure.Mobile.Service.Tables;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
 {
@@ -39,6 +41,13 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
                     if (crm.Id == Guid.Empty)
                         crm.Id = Guid.NewGuid();
                 });
+
+            Mapper.CreateMap<Contact, ContactDto>()
+                .ForMember(dto => dto.CreatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.CreatedOn))
+                .ForMember(dto => dto.UpdatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.ModifiedOn))
+                .ReverseMap()
+                .ForMember(crm => crm.CreatedOn, opt => opt.MapFrom(dto => dto.CreatedAt))
+                .ForMember(crm => crm.ModifiedOn, opt => opt.MapFrom(dto => dto.UpdatedAt));
         }
     }
 }
