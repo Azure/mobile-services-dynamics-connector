@@ -45,7 +45,7 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
             reverseMap.AfterMap((dto, crm) =>
             {
                 if (crm.ParentAccountId != null)
-                    crm.ParentAccountId.LogicalName = "account";
+                    crm.ParentAccountId.LogicalName = Account.EntityLogicalName;
             });
         }
     }
