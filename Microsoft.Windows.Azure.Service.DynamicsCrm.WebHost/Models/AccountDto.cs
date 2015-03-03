@@ -13,9 +13,7 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models
         public string Id { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
         public byte[] Version { get; set; }
-
         public string Name { get; set; }
         public string City { get; set; }
-        public int? StatusCode { get; set; }
     }
 }

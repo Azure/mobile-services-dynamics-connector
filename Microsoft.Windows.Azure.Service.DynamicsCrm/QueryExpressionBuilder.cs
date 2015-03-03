@@ -26,6 +26,7 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
             if (map == null) throw new InvalidOperationException(String.Format("Could not find a map from {0} to {1}.", typeof(TTableData), typeof(TEntity)));
 
             this.PropertyMap = map.GetPropertyMaps().ToDictionary(m => m.SourceMember.Name, m => m.DestinationProperty, StringComparer.OrdinalIgnoreCase);
+                               
         }
 
         public QueryExpression GetQueryExpression()

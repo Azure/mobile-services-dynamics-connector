@@ -1,9 +1,13 @@
-﻿using AutoMapper;
-using Microsoft.Windows.Azure.Service.DynamicsCrm.Automapper;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data.Entity;
+using System.Web.Http;
+using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.DataObjects;
 using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models;
 using Microsoft.WindowsAzure.Mobile.Service;
-using System;
-using System.Web.Http;
+using AutoMapper;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
 {
@@ -24,14 +28,12 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
             var map = Mapper.CreateMap<Account, AccountDto>();
             map.ForMember(dto => dto.City, opt => opt.MapFrom(crm => crm.Address1_City))
                 .ForMember(dto => dto.CreatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.CreatedOn))
-                .ForMember(dto => dto.UpdatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.ModifiedOn))
-                .ForMember(dto => dto.StatusCode, opt => opt.ResolveUsing(new OptionSetValueToIntValueResolver()).FromMember(crm => crm.StatusCode));
+                .ForMember(dto => dto.UpdatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.ModifiedOn));
 
             var reverseMap = map.ReverseMap();
             reverseMap.ForMember(crm => crm.Address1_City, opt => opt.MapFrom(dto => dto.City))
                 .ForMember(crm => crm.CreatedOn, opt => opt.MapFrom(dto => dto.CreatedAt))
                 .ForMember(crm => crm.ModifiedOn, opt => opt.MapFrom(dto => dto.UpdatedAt))
-                .ForMember(crm => crm.StatusCode, opt => opt.ResolveUsing(new IntToOptionSetValueValueResolver()).FromMember(crm => crm.StatusCode))
                 .AfterMap((dto, crm) =>
                 {
                     if (crm.Id == Guid.Empty)
