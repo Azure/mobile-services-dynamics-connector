@@ -17,9 +17,17 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
     {
         protected IOrganizationService OrganizationService { get; set; }
         protected string EntityLogicalName { get; set; }
-        
+        public IAttributeMap AttributeMap { get; private set; }
+
         public DynamicsCrmDomainManager(IOrganizationService organizationService)
+            : this(organizationService, new AutoMapperAttributeMap<TTableData, TEntity>())
         {
+        }
+
+        public DynamicsCrmDomainManager(IOrganizationService organizationService, IAttributeMap attributeMap)
+        {
+            this.AttributeMap = attributeMap;
+
             OrganizationService = organizationService;
             var entityAttribs = typeof(TEntity).GetCustomAttributes(typeof(EntityLogicalNameAttribute), false);
             if (entityAttribs.Length != 1) throw new InvalidOperationException("Could not determine entity logical name from entity type.");
@@ -53,8 +61,7 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 
         public Task<IEnumerable<TTableData>> QueryAsync(ODataQueryOptions query)
         {
-            var attributeMap = new AutoMapperAttributeMap<TTableData, TEntity>();
-            var builder = new QueryExpressionBuilder(this.EntityLogicalName, query, attributeMap);
+            var builder = new QueryExpressionBuilder(this.EntityLogicalName, query, this.AttributeMap);
             var crmQuery = builder.GetQueryExpression();
 
             var entityCollection = this.OrganizationService.RetrieveMultiple(crmQuery);

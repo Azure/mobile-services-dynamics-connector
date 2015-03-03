@@ -15,7 +15,6 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
             Mapper.CreateMap<EntityReference, Guid>().ConvertUsing(er => er == null ? Guid.Empty : er.Id);
             Mapper.CreateMap<EntityReference, Guid?>().ConvertUsing(er => er == null ? (Guid?)null : er.Id);
             Mapper.CreateMap<EntityReference, string>().ConvertUsing(er => er == null ? null : er.LogicalName);
-            // TODO: how to resolve logical name?
             Mapper.CreateMap<Guid?, EntityReference>().ConvertUsing(g => g == null ? null : new EntityReference { Id = g.Value });
             Mapper.CreateMap<Guid, EntityReference>().ConvertUsing(g => g == Guid.Empty ? null : new EntityReference { Id = g });
             Mapper.CreateMap<OptionSetValue, int?>().ConvertUsing(osv => osv == null ? (int?)null : osv.Value);
