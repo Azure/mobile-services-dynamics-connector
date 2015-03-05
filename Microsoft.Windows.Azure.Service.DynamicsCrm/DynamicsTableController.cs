@@ -2,16 +2,11 @@
 using Microsoft.WindowsAzure.Mobile.Service.Tables;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 {
-    public abstract class DynamicsTableController<TDTO, TEntity> : TableController<TDTO>
-        where TDTO : class, ITableData
+    public abstract class DynamicsTableController<TDto, TEntity> : TableController<TDto>
+        where TDto : class, ITableData
         where TEntity : Entity
     {
         public DynamicsTableController() : this("CrmConnection")
@@ -19,11 +14,11 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
         }
 
         public DynamicsTableController(string connectionStringName)
-            : this(new DynamicsCrmDomainManager<TDTO, TEntity>(new OrganizationService(connectionStringName)))
+            : this(new DynamicsCrmDomainManager<TDto, TEntity>(new OrganizationService(connectionStringName)))
         {
         }
 
-        public DynamicsTableController(IDomainManager<TDTO> domainManager) : base(domainManager)
+        public DynamicsTableController(IDomainManager<TDto> domainManager) : base(domainManager)
         {
         }
     }
