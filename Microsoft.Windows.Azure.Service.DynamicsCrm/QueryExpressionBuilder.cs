@@ -1,32 +1,28 @@
-﻿using AutoMapper;
-using Microsoft.Data.OData.Query;
+﻿using Microsoft.Data.OData.Query;
 using Microsoft.Data.OData.Query.SemanticAst;
+using Microsoft.WindowsAzure.Mobile.Service.Tables;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http.OData.Query;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 {
-    internal class QueryExpressionBuilder<TTableData,TEntity>
+    internal class QueryExpressionBuilder<TTableData, TEntity>
+        where TTableData : class, ITableData
+        where TEntity : Entity
     {
         protected string EntityLogicalName { get; set; }
         protected ODataQueryOptions ODataQueryOptions { get; set; }
-        protected Dictionary<String, IMemberAccessor> PropertyMap { get; set; }
+        protected IEntityMapper<TTableData, TEntity> AttributeMap { get; set; }
 
-        public QueryExpressionBuilder(string entityLogicalName, ODataQueryOptions query)
+        public QueryExpressionBuilder(string entityLogicalName, ODataQueryOptions query, 
+            IEntityMapper<TTableData, TEntity> attributeMap)
         {
             EntityLogicalName = entityLogicalName;
             ODataQueryOptions = query;
-            var map = Mapper.FindTypeMapFor<TTableData, TEntity>();
-            if (map == null) throw new InvalidOperationException(String.Format("Could not find a map from {0} to {1}.", typeof(TTableData), typeof(TEntity)));
-
-            this.PropertyMap = map.GetPropertyMaps().ToDictionary(m => m.SourceMember.Name, m => m.DestinationProperty, StringComparer.OrdinalIgnoreCase);
-                               
+            AttributeMap = attributeMap;
         }
 
         public QueryExpression GetQueryExpression()
@@ -57,9 +53,6 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 
             this.ODataQueryOptions.Validate(settings);
 
-            var map = Mapper.FindTypeMapFor<TTableData, TEntity>();
-            var propertyMaps = map.GetPropertyMaps();
-
             UpdateCriteriaFromFilter(crmQuery.Criteria, ODataQueryOptions.Filter);
             UpdateColumnSetFromSelectExpand(crmQuery.ColumnSet, ODataQueryOptions.SelectExpand);
             UpdatePagingFromSkipAndTop(crmQuery.PageInfo, ODataQueryOptions.Skip, ODataQueryOptions.Top);
@@ -77,11 +70,6 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
                     if (filter.Context.ElementType.TypeKind != Microsoft.Data.Edm.EdmTypeKind.Entity)
                     {
                         throw new NotImplementedException(String.Format("Unsupported OData element type kind: {0}", filter.Context.ElementType.TypeKind));
-                    }
-
-                    if (filter.Context.ElementClrType != typeof(TTableData))
-                    {
-                        throw new InvalidOperationException(String.Format("Unexpected OData element type: {0}", filter.Context.ElementType));
                     }
                 }
 
@@ -226,26 +214,20 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
                     return GetAttributeName(((ConvertNode)queryNode).Source);
 
                 case QueryNodeKind.SingleValuePropertyAccess:
-                    var prop = GetDestinationProperty(((SingleValuePropertyAccessNode)queryNode).Property.Name);
-                    return prop.Name.ToLowerInvariant();
+                    return AttributeMap.GetAttributeName(((SingleValuePropertyAccessNode)queryNode).Property.Name);
 
                 default:
                     throw new NotImplementedException(String.Format("Unsupported property selector type \'{0}\'.", queryNode.Kind));
             }
         }
 
-        private IMemberAccessor GetDestinationProperty(string sourcePropertyName)
-        {
-            return this.PropertyMap[sourcePropertyName];
-        }
-
         private void UpdateColumnSetFromSelectExpand(ColumnSet columnSet, SelectExpandQueryOption selectExpand)
         {
             if (selectExpand == null || selectExpand.SelectExpandClause == null || selectExpand.SelectExpandClause.AllSelected)
             {
-                foreach (var destProp in this.PropertyMap.Values)
+                foreach (var attributeName in this.AttributeMap.GetAttributeNames())
                 {
-                    columnSet.AddColumn(destProp.Name.ToLowerInvariant());
+                    columnSet.AddColumn(attributeName);
                 }
             }
             else
@@ -253,8 +235,8 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
                 foreach (var item in selectExpand.SelectExpandClause.SelectedItems.OfType<PathSelectItem>())
                 {
                     var pathItem = item.SelectedPath.OfType<PropertySegment>().Single();
-                    var destProp = GetDestinationProperty(pathItem.Property.Name);
-                    columnSet.AddColumn(destProp.Name.ToLowerInvariant());
+                    var attributeName = AttributeMap.GetAttributeName(pathItem.Property.Name);
+                    columnSet.AddColumn(attributeName);
                 }
             }
 
@@ -288,9 +270,9 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
             {
                 foreach (var node in orderBy.OrderByNodes.OfType<OrderByPropertyNode>())
                 {
-                    var destProp = GetDestinationProperty(node.Property.Name);
+                    var attributeName = AttributeMap.GetAttributeName(node.Property.Name);
                     var direction = node.Direction == OrderByDirection.Ascending ? OrderType.Ascending : OrderType.Descending;
-                    orders.Add(new OrderExpression(destProp.Name.ToLowerInvariant(), direction));
+                    orders.Add(new OrderExpression(attributeName, direction));
                 }
             }
         }

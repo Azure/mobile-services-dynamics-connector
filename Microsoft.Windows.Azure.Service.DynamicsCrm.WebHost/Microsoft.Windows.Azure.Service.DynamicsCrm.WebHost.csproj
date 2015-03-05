@@ -225,9 +225,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="AutoMapperAttributeMap.cs" />
+    <Compile Include="Controllers\ActivityController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="DataObjects\TodoItem.cs" />
     <Compile Include="Models\AccountDto.cs" />
+    <Compile Include="Models\ActivityDto.cs" />
+    <Compile Include="Models\ContactDto.cs" />
     <Compile Include="Models\Entities.cs" />
     <Compile Include="Models\MobileServiceContext.cs" />
     <Compile Include="ScheduledJobs\SampleJob.cs" />
@@ -260,6 +265,10 @@
       <Project>{3e035011-6ba4-4de8-92e4-86fb19b8134f}</Project>
       <Name>Microsoft.Windows.Azure.Service.DynamicsCrm</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\sonoma-azure-demo - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\sonoma-azure-demo - Web Deploy.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

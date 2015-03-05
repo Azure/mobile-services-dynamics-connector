@@ -1,22 +1,19 @@
 ﻿using Microsoft.WindowsAzure.Mobile.Service.Tables;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models
 {
-    public class AccountDto: ITableData
+    public class ActivityDto : ITableData
     {
         public DateTimeOffset? CreatedAt { get; set; }
         public bool Deleted { get; set; }
         public string Id { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
         public byte[] Version { get; set; }
-        public string Name { get; set; }
-        public string City { get; set; }
-        public Guid ParentAccountId { get; set; }
-        public string ParentAccountType { get; set; }
-        public int? IndustryCode { get; set; }
+
+        public String Subject { get; set; }
+        public DateTime? ActualEnd { get; set; }
+        public String Description { get; set; }
+        public String ActivityTypeCode { get; set; }
     }
 }

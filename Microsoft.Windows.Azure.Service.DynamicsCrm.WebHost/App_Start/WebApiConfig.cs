@@ -8,6 +8,8 @@ using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.DataObjects;
 using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models;
 using Microsoft.WindowsAzure.Mobile.Service;
 using AutoMapper;
+using Microsoft.Xrm.Sdk;
+using Microsoft.WindowsAzure.Mobile.Service.Tables;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
 {
@@ -29,15 +31,43 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
             // config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 
             var map = Mapper.CreateMap<Account, AccountDto>();
-            map.ForMember(dto => dto.City, opt => opt.MapFrom(crm => crm.Address1_City));
-            map.ForMember(dto => dto.CreatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.CreatedOn));
-            map.ForMember(dto => dto.UpdatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.ModifiedOn));
+            AutoMapperAttributeMap.InitializeDynamicsCrmCommonMaps();
 
+            map.ForMember(dto => dto.City, opt => opt.MapFrom(crm => crm.Address1_City))
+                .ForMember(dto => dto.CreatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.CreatedOn))
+                .ForMember(dto => dto.UpdatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.ModifiedOn))
+                .ForMember(dto => dto.ParentAccountId, opt => opt.MapFrom(crm => crm.ParentAccountId))
+                .ForMember(dto => dto.ParentAccountType, opt => opt.MapFrom(crm => crm.ParentAccountId))
+                .ForMember(dto => dto.IndustryCode, opt => opt.MapFrom(crm => crm.IndustryCode));
+            
             var reverseMap = map.ReverseMap();
-            reverseMap.ForMember(crm => crm.Address1_City, opt => opt.MapFrom(dto => dto.City));
-            reverseMap.ForMember(crm => crm.CreatedOn, opt => opt.MapFrom(dto => dto.CreatedAt));
-            reverseMap.ForMember(crm => crm.ModifiedOn, opt => opt.MapFrom(dto => dto.UpdatedAt));
+            reverseMap.ForMember(crm => crm.Address1_City, opt => opt.MapFrom(dto => dto.City))
+                .ForMember(crm => crm.CreatedOn, opt => opt.MapFrom(dto => dto.CreatedAt))
+                .ForMember(crm => crm.ModifiedOn, opt => opt.MapFrom(dto => dto.UpdatedAt))
+                .ForMember(crm => crm.ParentAccountId, opt => opt.MapFrom(dto => dto.ParentAccountId))
+                .ForMember(crm => crm.IndustryCode, opt => opt.MapFrom(dto => dto.IndustryCode))
+                .AfterMap((dto, crm) =>
+                {
+                    if (crm.Id == Guid.Empty)
+                        crm.Id = Guid.NewGuid();
 
+                    if (crm.ParentAccountId != null)
+                        crm.ParentAccountId.LogicalName = Account.EntityLogicalName;
+                });
+
+            Mapper.CreateMap<Contact, ContactDto>()
+                .ForMember(dto => dto.CreatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.CreatedOn))
+                .ForMember(dto => dto.UpdatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.ModifiedOn))
+                .ReverseMap()
+                .ForMember(crm => crm.CreatedOn, opt => opt.MapFrom(dto => dto.CreatedAt))
+                .ForMember(crm => crm.ModifiedOn, opt => opt.MapFrom(dto => dto.UpdatedAt));
+
+            Mapper.CreateMap<ActivityPointer, ActivityDto>()
+                .ForMember(dto => dto.CreatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.CreatedOn))
+                .ForMember(dto => dto.UpdatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.ModifiedOn))
+                .ReverseMap()
+                .ForMember(crm => crm.CreatedOn, opt => opt.MapFrom(dto => dto.CreatedAt))
+                .ForMember(crm => crm.ModifiedOn, opt => opt.MapFrom(dto => dto.UpdatedAt));
         }
     }
 }
