@@ -59,12 +59,12 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
 
         public TEntity MapTo(TTableData data)
         {
-            throw new NotImplementedException();
+            return Mapper.Map<TTableData, TEntity>(data);
         }
 
         public TTableData MapFrom(TEntity data)
         {
-            throw new NotImplementedException();
+            return Mapper.Map<TEntity, TTableData>(data);
         }
     }
 }
