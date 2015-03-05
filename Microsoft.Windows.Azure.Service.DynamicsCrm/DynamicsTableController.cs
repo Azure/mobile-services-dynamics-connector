@@ -5,20 +5,20 @@ using Microsoft.Xrm.Sdk;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 {
-    public abstract class DynamicsTableController<TDto, TEntity> : TableController<TDto>
-        where TDto : class, ITableData
+    public abstract class DynamicsTableController<TTableData, TEntity> : TableController<TTableData>
+        where TTableData : class, ITableData
         where TEntity : Entity
     {
-        public DynamicsTableController(IEntityMapper<TDto, TEntity> entityMapper) : this("CrmConnection", entityMapper)
+        public DynamicsTableController(IEntityMapper<TTableData, TEntity> entityMapper) : this("CrmConnection", entityMapper)
         {
         }
 
-        public DynamicsTableController(string connectionStringName, IEntityMapper<TDto, TEntity> entityMapper)
-            : this(new DynamicsCrmDomainManager<TDto, TEntity>(new OrganizationService(connectionStringName), entityMapper))
+        public DynamicsTableController(string connectionStringName, IEntityMapper<TTableData, TEntity> entityMapper)
+            : this(new DynamicsCrmDomainManager<TTableData, TEntity>(new OrganizationService(connectionStringName), entityMapper))
         {
         }
 
-        public DynamicsTableController(IDomainManager<TDto> domainManager) : base(domainManager)
+        public DynamicsTableController(IDomainManager<TTableData> domainManager) : base(domainManager)
         {
         }
     }

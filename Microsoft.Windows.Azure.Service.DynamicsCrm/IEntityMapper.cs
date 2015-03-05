@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 {
-    public interface IEntityMapper<TDto, TEntity>
-        where TDto : class, ITableData
+    public interface IEntityMapper<TTableData, TEntity>
+        where TTableData : class, ITableData
         where TEntity : Entity
     {
         string GetAttributeName(string propertyName);
         IEnumerable<string> GetAttributeNames();
 
-        TEntity MapTo(TDto data);
-        TDto MapFrom(TEntity data);
+        TEntity MapTo(TTableData data);
+        TTableData MapFrom(TEntity data);
     }
 }
