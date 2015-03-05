@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.WindowsAzure.Mobile.Service.Tables;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Microsoft.Windows.Azure.Service.DynamicsCrm
+namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
 {
     public static class AutoMapperAttributeMap
     {
@@ -24,7 +23,9 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
         }
     }
 
-    public class AutoMapperAttributeMap<TTableData, TEntity> : IAttributeMap
+    public class AutoMapperAttributeMap<TTableData, TEntity> : IEntityMapper<TTableData, TEntity>
+        where TTableData : class, ITableData
+        where TEntity : Entity
     {
         protected Dictionary<String, IMemberAccessor> PropertyMap { get; set; }
 
@@ -54,6 +55,16 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
         {
             return from p in PropertyMap.Values
                    select p.Name.ToLowerInvariant();
+        }
+
+        public TEntity MapTo(TTableData data)
+        {
+            return Mapper.Map<TTableData, TEntity>(data);
+        }
+
+        public TTableData MapFrom(TEntity data)
+        {
+            return Mapper.Map<TEntity, TTableData>(data);
         }
     }
 }

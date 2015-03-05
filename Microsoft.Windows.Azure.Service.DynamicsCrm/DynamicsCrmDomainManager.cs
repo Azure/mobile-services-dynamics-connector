@@ -1,12 +1,12 @@
-﻿using AutoMapper;
-using Microsoft.WindowsAzure.Mobile.Service.Tables;
+﻿using Microsoft.WindowsAzure.Mobile.Service.Tables;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http;
 using System.Web.Http.OData.Query;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm
@@ -17,16 +17,11 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
     {
         protected IOrganizationService OrganizationService { get; set; }
         protected string EntityLogicalName { get; set; }
-        public IAttributeMap AttributeMap { get; private set; }
+        public IEntityMapper<TTableData, TEntity> Map { get; private set; }
 
-        public DynamicsCrmDomainManager(IOrganizationService organizationService)
-            : this(organizationService, new AutoMapperAttributeMap<TTableData, TEntity>())
+        public DynamicsCrmDomainManager(IOrganizationService organizationService, IEntityMapper<TTableData, TEntity> map)
         {
-        }
-
-        public DynamicsCrmDomainManager(IOrganizationService organizationService, IAttributeMap attributeMap)
-        {
-            this.AttributeMap = attributeMap;
+            this.Map = map;
 
             OrganizationService = organizationService;
             var entityAttribs = typeof(TEntity).GetCustomAttributes(typeof(EntityLogicalNameAttribute), false);
@@ -36,12 +31,19 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 
         public Task<bool> DeleteAsync(string id)
         {
-            throw new NotImplementedException();
+            Guid entityId;
+            if (!Guid.TryParse(id, out entityId))
+                return Task.FromResult(false);
+
+            OrganizationService.Delete(EntityLogicalName, entityId);
+            return Task.FromResult(true);
         }
 
         public Task<TTableData> InsertAsync(TTableData data)
         {
-            throw new NotImplementedException();
+            var entity = Map.MapTo(data);
+            entity.Id = OrganizationService.Create(entity);
+            return Task.FromResult(Map.MapFrom(entity));
         }
 
         public System.Web.Http.SingleResult<TTableData> Lookup(string id)
@@ -51,7 +53,14 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 
         public Task<System.Web.Http.SingleResult<TTableData>> LookupAsync(string id)
         {
-            throw new NotImplementedException();
+            Guid entityId;
+            if (!Guid.TryParse(id, out entityId))
+                return Task.FromResult(SingleResult.Create(new List<TTableData>().AsQueryable()));
+
+            var result = OrganizationService.Retrieve(EntityLogicalName, entityId, new ColumnSet(true));
+            var mappedResult = Map.MapFrom(result.ToEntity<TEntity>());
+
+            return Task.FromResult(SingleResult.Create(new List<TTableData> { mappedResult }.AsQueryable()));
         }
 
         public IQueryable<TTableData> Query()
@@ -61,21 +70,24 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 
         public Task<IEnumerable<TTableData>> QueryAsync(ODataQueryOptions query)
         {
-            var builder = new QueryExpressionBuilder(this.EntityLogicalName, query, this.AttributeMap);
+            var builder = new QueryExpressionBuilder<TTableData, TEntity>(this.EntityLogicalName, query, this.Map);
             var crmQuery = builder.GetQueryExpression();
 
             var entityCollection = this.OrganizationService.RetrieveMultiple(crmQuery);
-            var dataObjects = entityCollection.Entities.Cast<TEntity>().Select(Mapper.Map<TTableData>);
+            var dataObjects = entityCollection.Entities.Cast<TEntity>().Select(Map.MapFrom);
             return Task.FromResult(dataObjects);
         }
 
         public Task<TTableData> ReplaceAsync(string id, TTableData data)
         {
-            throw new NotImplementedException();
+            OrganizationService.Update(Map.MapTo(data));
+            return Task.FromResult(data);
         }
 
         public Task<TTableData> UpdateAsync(string id, System.Web.Http.OData.Delta<TTableData> patch)
         {
+            // doesn't work with JSON, see
+            // http://stackoverflow.com/questions/14729249/how-to-use-deltat-from-microsoft-asp-net-web-api-odata-with-code-first-jsonmed
             throw new NotImplementedException();
         }
     }
