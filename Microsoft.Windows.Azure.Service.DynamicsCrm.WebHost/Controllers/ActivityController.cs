@@ -6,7 +6,7 @@ using System.Web.Http.OData.Query;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Controllers
 {
-    public class ActivityController : DynamicsTableController<ActivityDto, ActivityPointer>
+    public class ActivityController : BaseController<ActivityDto, ActivityPointer>
     {
         [HttpGet]
         public Task<IEnumerable<ActivityDto>> Get(ODataQueryOptions<ActivityDto> query)

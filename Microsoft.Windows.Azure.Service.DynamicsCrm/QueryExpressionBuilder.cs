@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.OData.Query;
 using Microsoft.Data.OData.Query.SemanticAst;
+using Microsoft.WindowsAzure.Mobile.Service.Tables;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
@@ -8,13 +9,16 @@ using System.Web.Http.OData.Query;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 {
-    internal class QueryExpressionBuilder
+    internal class QueryExpressionBuilder<TTableData, TEntity>
+        where TTableData : class, ITableData
+        where TEntity : Entity
     {
         protected string EntityLogicalName { get; set; }
         protected ODataQueryOptions ODataQueryOptions { get; set; }
-        protected IAttributeMap AttributeMap { get; set; }
+        protected IEntityMapper<TTableData, TEntity> AttributeMap { get; set; }
 
-        public QueryExpressionBuilder(string entityLogicalName, ODataQueryOptions query, IAttributeMap attributeMap)
+        public QueryExpressionBuilder(string entityLogicalName, ODataQueryOptions query, 
+            IEntityMapper<TTableData, TEntity> attributeMap)
         {
             EntityLogicalName = entityLogicalName;
             ODataQueryOptions = query;

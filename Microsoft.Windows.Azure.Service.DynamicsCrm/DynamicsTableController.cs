@@ -9,12 +9,12 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
         where TDto : class, ITableData
         where TEntity : Entity
     {
-        public DynamicsTableController() : this("CrmConnection")
+        public DynamicsTableController(IEntityMapper<TDto, TEntity> entityMapper) : this("CrmConnection", entityMapper)
         {
         }
 
-        public DynamicsTableController(string connectionStringName)
-            : this(new DynamicsCrmDomainManager<TDto, TEntity>(new OrganizationService(connectionStringName)))
+        public DynamicsTableController(string connectionStringName, IEntityMapper<TDto, TEntity> entityMapper)
+            : this(new DynamicsCrmDomainManager<TDto, TEntity>(new OrganizationService(connectionStringName), entityMapper))
         {
         }
 
