@@ -11,14 +11,24 @@ using System.Web.Http.OData.Query;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 {
+    /// <summary>
+    /// Provides a <see cref="IDomainManager{TTableData}"/> implementation targeting Dynamics CRM as the backend store.
+    /// </summary>
+    /// <typeparam name="TTableData">The data object (DTO) type.</typeparam>
+    /// <typeparam name="TEntity">The Entity type in Dynamics corresponding to the <typeparamref name="TTableData"/> type.</typeparam>
     public class DynamicsCrmDomainManager<TTableData, TEntity>: IDomainManager<TTableData>
         where TEntity: Entity
         where TTableData: class, ITableData
     {
         protected IOrganizationService OrganizationService { get; set; }
         protected string EntityLogicalName { get; set; }
-        public IEntityMapper<TTableData, TEntity> Map { get; private set; }
+        protected IEntityMapper<TTableData, TEntity> Map { get; private set; }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="DynamicsCrmDomainmanager{TTableData,TEntity}"/>
+        /// </summary>
+        /// <param name="organizationService">The <see cref="IOrganizationService"/> instance to use when communicating with Dynamics CRM.</param>
+        /// <param name="map">The <see cref="IEntityMapper{TTableData,TEntity}"/> instance to use when mapping between <typeparamref name="TTableData"/> and <typeparamref name="TEntity"/> instances.</param>
         public DynamicsCrmDomainManager(IOrganizationService organizationService, IEntityMapper<TTableData, TEntity> map)
         {
             this.Map = map;
@@ -41,9 +51,9 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
 
         public Task<TTableData> InsertAsync(TTableData data)
         {
-            var entity = Map.MapTo(data);
+            var entity = Map.Map(data);
             entity.Id = OrganizationService.Create(entity);
-            return Task.FromResult(Map.MapFrom(entity));
+            return Task.FromResult(Map.Map(entity));
         }
 
         public System.Web.Http.SingleResult<TTableData> Lookup(string id)
@@ -58,7 +68,7 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
                 return Task.FromResult(SingleResult.Create(new List<TTableData>().AsQueryable()));
 
             var result = OrganizationService.Retrieve(EntityLogicalName, entityId, new ColumnSet(true));
-            var mappedResult = Map.MapFrom(result.ToEntity<TEntity>());
+            var mappedResult = Map.Map(result.ToEntity<TEntity>());
 
             return Task.FromResult(SingleResult.Create(new List<TTableData> { mappedResult }.AsQueryable()));
         }
@@ -74,13 +84,13 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm
             var crmQuery = builder.GetQueryExpression();
 
             var entityCollection = this.OrganizationService.RetrieveMultiple(crmQuery);
-            var dataObjects = entityCollection.Entities.Cast<TEntity>().Select(Map.MapFrom);
+            var dataObjects = entityCollection.Entities.Cast<TEntity>().Select(Map.Map);
             return Task.FromResult(dataObjects);
         }
 
         public Task<TTableData> ReplaceAsync(string id, TTableData data)
         {
-            OrganizationService.Update(Map.MapTo(data));
+            OrganizationService.Update(Map.Map(data));
             return Task.FromResult(data);
         }
 
