@@ -122,11 +122,15 @@
     <Reference Include="Microsoft.WindowsAzure.Configuration">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Mobile.Service">
-      <HintPath>..\packages\WindowsAzure.MobileServices.Backend.1.0.405\lib\net45\Microsoft.WindowsAzure.Mobile.Service.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAzure.Mobile.Service, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WindowsAzure.MobileServices.Backend.1.0.450\lib\net45\Microsoft.WindowsAzure.Mobile.Service.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Mobile.Service.Entity">
       <HintPath>..\packages\WindowsAzure.MobileServices.Backend.Entity.1.0.405\lib\net45\Microsoft.WindowsAzure.Mobile.Service.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Mobile.Service.Security">
+      <HintPath>..\packages\WindowsAzure.MobileServices.Backend.Security.1.0.450\lib\net45\Microsoft.WindowsAzure.Mobile.Service.Security.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Mobile.Service.Tables">
       <HintPath>..\packages\WindowsAzure.MobileServices.Backend.Tables.1.0.405\lib\net45\Microsoft.WindowsAzure.Mobile.Service.Tables.dll</HintPath>
@@ -267,6 +271,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\mobile-sonoma-azure-demo.pubxml" />
     <None Include="Properties\PublishProfiles\sonoma-azure-demo - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\sonoma-azure-demo - Web Deploy.pubxml" />
   </ItemGroup>

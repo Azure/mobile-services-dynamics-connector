@@ -10,6 +10,7 @@ using Microsoft.WindowsAzure.Mobile.Service;
 using AutoMapper;
 using Microsoft.Xrm.Sdk;
 using Microsoft.WindowsAzure.Mobile.Service.Tables;
+using Microsoft.WindowsAzure.Mobile.Service.Security.Providers;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
 {
@@ -19,6 +20,8 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
         {
             // Use this class to set configuration options for your mobile service
             ConfigOptions options = new ConfigOptions();
+            options.LoginProviders.Remove(typeof(AzureActiveDirectoryLoginProvider));
+            options.LoginProviders.Add(typeof(AzureActiveDirectoryExtendedLoginProvider));
 
             // Use this class to set WebAPI configuration options
             HttpConfiguration config = ServiceConfig.Initialize(new ConfigBuilder(options));
