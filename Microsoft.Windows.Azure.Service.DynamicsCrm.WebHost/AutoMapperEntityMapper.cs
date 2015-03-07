@@ -57,12 +57,12 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
                    select p.Name.ToLowerInvariant();
         }
 
-        public TEntity MapTo(TTableData data)
+        public TEntity Map(TTableData data)
         {
             return Mapper.Map<TTableData, TEntity>(data);
         }
 
-        public TTableData MapFrom(TEntity data)
+        public TTableData Map(TEntity data)
         {
             return Mapper.Map<TEntity, TTableData>(data);
         }
