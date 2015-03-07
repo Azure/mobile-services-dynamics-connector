@@ -3,11 +3,11 @@ using Microsoft.Xrm.Sdk;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Controllers
 {
-    public abstract class BaseController<TDto, TEntity> : DynamicsTableController<TDto, TEntity>
+    public abstract class BaseController<TDto, TEntity> : DynamicsCrmTableController<TDto, TEntity>
         where TDto : class, ITableData
         where TEntity : Entity
     {
-        public BaseController() : base(new AutoMapperAttributeMap<TDto, TEntity>())
+        public BaseController() : base(new AutoMapperEntityMapper<TDto, TEntity>())
         {
         }
     }

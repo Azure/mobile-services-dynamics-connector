@@ -56,7 +56,7 @@ namespace DemoMobileApp
                     try
                     {
                         // Try to return an item now to determine if the cached credential has expired.
-                        await App.MobileService.GetTable<Contact>().Take(1).ToListAsync();
+                        var firstContact = await App.MobileService.GetTable<Contact>().Take(1).ToListAsync();
                     }
                     catch (MobileServiceInvalidOperationException ex)
                     {
@@ -97,7 +97,7 @@ namespace DemoMobileApp
                             user.UserId, user.MobileServiceAuthenticationToken);
                         vault.Add(credential);
                     }
-                    catch (MobileServiceInvalidOperationException ex)
+                    catch (MobileServiceInvalidOperationException)
                     {
                         message = "You must log in. Login Required";
                     }

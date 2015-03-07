@@ -2,9 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.Entity;
 using System.Web.Http;
-using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.DataObjects;
 using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models;
 using Microsoft.WindowsAzure.Mobile.Service;
 using AutoMapper;
@@ -34,7 +32,7 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
             // config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 
             var map = Mapper.CreateMap<Account, AccountDto>();
-            AutoMapperAttributeMap.InitializeDynamicsCrmCommonMaps();
+            AutoMapperEntityMapper.InitializeDynamicsCrmCommonMaps();
 
             map.ForMember(dto => dto.City, opt => opt.MapFrom(crm => crm.Address1_City))
                 .ForMember(dto => dto.CreatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.CreatedOn))
