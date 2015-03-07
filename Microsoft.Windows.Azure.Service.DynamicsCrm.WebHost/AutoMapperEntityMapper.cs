@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
 {
-    public static class AutoMapperAttributeMap
+    public static class AutoMapperEntityMapper
     {
         public static void InitializeDynamicsCrmCommonMaps()
         {
@@ -23,13 +23,13 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
         }
     }
 
-    public class AutoMapperAttributeMap<TTableData, TEntity> : IEntityMapper<TTableData, TEntity>
+    public class AutoMapperEntityMapper<TTableData, TEntity> : IEntityMapper<TTableData, TEntity>
         where TTableData : class, ITableData
         where TEntity : Entity
     {
         protected Dictionary<String, IMemberAccessor> PropertyMap { get; set; }
 
-        public AutoMapperAttributeMap()
+        public AutoMapperEntityMapper()
         {
             var map = Mapper.FindTypeMapFor<TTableData, TEntity>();
             if (map == null) throw new InvalidOperationException(String.Format("Could not find a map from {0} to {1}.", typeof(TTableData), typeof(TEntity)));

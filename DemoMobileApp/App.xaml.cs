@@ -16,7 +16,12 @@ namespace DemoMobileApp
     sealed partial class App : Application
     {
         // http://go.microsoft.com/fwlink/?LinkId=290986&clcid=0x409
-        public static MobileServiceClient MobileService = new MobileServiceClient("https://sonoma-azure-demo.azure-mobile.net/", "r9kzuySOZJ1vaggogLRS4NvsRS3XiPf7");
+        // public static MobileServiceClient MobileService = new MobileServiceClient("https://sonoma-azure-demo.azure-mobile.net/", "r9kzuySOZJ1vaggogLRS4NvsRS3XiPf7");
+
+        public static MobileServiceClient MobileService = new MobileServiceClient(
+              "https://sonoma-azure-demo.azure-mobile.net/",
+              "UzOuYZAOxIRZzDdHYqeMGifuSqGwYu15"
+        );
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code

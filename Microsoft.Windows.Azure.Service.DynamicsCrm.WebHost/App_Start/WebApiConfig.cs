@@ -2,14 +2,13 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.Entity;
 using System.Web.Http;
-using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.DataObjects;
 using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models;
 using Microsoft.WindowsAzure.Mobile.Service;
 using AutoMapper;
 using Microsoft.Xrm.Sdk;
 using Microsoft.WindowsAzure.Mobile.Service.Tables;
+using Microsoft.WindowsAzure.Mobile.Service.Security.Providers;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
 {
@@ -19,6 +18,8 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
         {
             // Use this class to set configuration options for your mobile service
             ConfigOptions options = new ConfigOptions();
+            options.LoginProviders.Remove(typeof(AzureActiveDirectoryLoginProvider));
+            options.LoginProviders.Add(typeof(AzureActiveDirectoryExtendedLoginProvider));
 
             // Use this class to set WebAPI configuration options
             HttpConfiguration config = ServiceConfig.Initialize(new ConfigBuilder(options));
@@ -31,7 +32,7 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
             // config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 
             var map = Mapper.CreateMap<Account, AccountDto>();
-            AutoMapperAttributeMap.InitializeDynamicsCrmCommonMaps();
+            AutoMapperEntityMapper.InitializeDynamicsCrmCommonMaps();
 
             map.ForMember(dto => dto.City, opt => opt.MapFrom(crm => crm.Address1_City))
                 .ForMember(dto => dto.CreatedAt, opt => opt.MapFrom(crm => (DateTimeOffset?)crm.CreatedOn))

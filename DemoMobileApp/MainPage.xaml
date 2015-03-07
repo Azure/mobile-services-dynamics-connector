@@ -14,5 +14,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
+        <Button Name="ButtonLogin" Click="ButtonLogin_Click" Visibility="Visible">Sign In</Button>
     </Grid>
 </Page>
