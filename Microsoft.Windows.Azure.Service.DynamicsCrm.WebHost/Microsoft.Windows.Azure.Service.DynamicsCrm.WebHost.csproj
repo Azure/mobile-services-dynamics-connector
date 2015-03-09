@@ -231,8 +231,11 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AutoMapperEntityMapper.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
+    <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
+    <Compile Include="Controllers\PhoneCallController.cs" />
+    <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Models\AccountDto.cs" />
     <Compile Include="Models\ActivityDto.cs" />
     <Compile Include="Models\ContactDto.cs" />
