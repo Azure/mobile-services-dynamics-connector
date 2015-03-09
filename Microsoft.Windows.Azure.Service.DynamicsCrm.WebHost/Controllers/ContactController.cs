@@ -11,7 +11,6 @@ using System.Web.Http.OData.Query;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.WebServiceClient;
 using Microsoft.Xrm.Client;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System.Net;
 
 namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Controllers
