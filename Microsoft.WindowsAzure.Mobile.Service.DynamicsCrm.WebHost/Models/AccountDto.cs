@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models
+namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Models
 {
     public class AccountDto: ITableData
     {

@@ -3,14 +3,14 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Web.Http;
-using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models;
+using Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Models;
 using Microsoft.WindowsAzure.Mobile.Service;
 using AutoMapper;
 using Microsoft.Xrm.Sdk;
 using Microsoft.WindowsAzure.Mobile.Service.Tables;
 using Microsoft.WindowsAzure.Mobile.Service.Security.Providers;
 
-namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
+namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost
 {
     public static class WebApiConfig
     {

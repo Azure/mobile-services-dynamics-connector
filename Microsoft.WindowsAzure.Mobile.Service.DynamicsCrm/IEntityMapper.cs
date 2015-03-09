@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Microsoft.Windows.Azure.Service.DynamicsCrm
+namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
 {
     /// <summary>
     /// An interface to be implemented by classes to map between <typeparamref name="TTableData"/> and <typeparamref name="TEntity"/> instances.

@@ -7,8 +7,8 @@
     <ProjectGuid>{3E035011-6BA4-4DE8-92E4-86FB19B8134F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.Windows.Azure.Service.DynamicsCrm</RootNamespace>
-    <AssemblyName>Microsoft.Windows.Azure.Service.DynamicsCrm</AssemblyName>
+    <RootNamespace>Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm</RootNamespace>
+    <AssemblyName>Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

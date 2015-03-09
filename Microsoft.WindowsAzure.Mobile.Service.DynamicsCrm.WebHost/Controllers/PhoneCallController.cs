@@ -1,6 +1,6 @@
-﻿using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models;
+﻿using Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Models;
 
-namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Controllers
+namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Controllers
 {
     public class PhoneCallController : ActivityController<PhoneCall>
     {

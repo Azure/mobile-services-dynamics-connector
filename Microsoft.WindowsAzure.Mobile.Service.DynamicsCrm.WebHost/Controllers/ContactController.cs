@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models;
+using Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Models;
 using Microsoft.WindowsAzure.Mobile.Service.Security;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk.Client;
@@ -13,7 +13,7 @@ using Microsoft.Xrm.Sdk.WebServiceClient;
 using Microsoft.Xrm.Client;
 using System.Net;
 
-namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Controllers
+namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Controllers
 {
     [AuthorizeLevel(AuthorizationLevel.User)]
     public class ContactController : BaseController<ContactDto, Contact>

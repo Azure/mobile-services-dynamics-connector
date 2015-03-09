@@ -1,7 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Mobile.Service.Tables;
 using System;
 
-namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost.Models
+namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Models
 {
     public class ContactDto : ITableData
     {

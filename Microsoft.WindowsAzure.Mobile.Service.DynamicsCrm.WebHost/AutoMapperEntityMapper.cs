@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
+namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost
 {
     public static class AutoMapperEntityMapper
     {

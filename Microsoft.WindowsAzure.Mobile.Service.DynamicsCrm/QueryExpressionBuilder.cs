@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Web.Http.OData.Query;
 
-namespace Microsoft.Windows.Azure.Service.DynamicsCrm
+namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
 {
     /// <summary>
     /// Used to build a QueryExpression from ODataQueryOptions.

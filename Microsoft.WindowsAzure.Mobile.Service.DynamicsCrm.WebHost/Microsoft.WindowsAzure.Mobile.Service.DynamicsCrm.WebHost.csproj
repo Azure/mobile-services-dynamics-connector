@@ -266,15 +266,15 @@
     <Content Include="Performance\Microsoft.ServiceBus.MessagingPerformanceCounters.man" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Windows.Azure.Service.DynamicsCrm\Microsoft.Windows.Azure.Service.DynamicsCrm.csproj">
-      <Project>{3e035011-6ba4-4de8-92e4-86fb19b8134f}</Project>
-      <Name>Microsoft.Windows.Azure.Service.DynamicsCrm</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Properties\PublishProfiles\mobile-sonoma-azure-demo.pubxml" />
     <None Include="Properties\PublishProfiles\sonoma-azure-demo - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\sonoma-azure-demo - Web Deploy.pubxml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm\Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.csproj">
+      <Project>{3e035011-6ba4-4de8-92e4-86fb19b8134f}</Project>
+      <Name>Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

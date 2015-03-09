@@ -3,7 +3,7 @@ using Microsoft.WindowsAzure.Mobile.Service.Tables;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
 
-namespace Microsoft.Windows.Azure.Service.DynamicsCrm
+namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
 {
     /// <summary>
     /// Provides a Dynamics specific partial impelmentation of <see cref="TableController{TTableData}"/>.
