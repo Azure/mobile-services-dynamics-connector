@@ -39,8 +39,8 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
         /// </summary>
         /// <param name="organizationService">The <see cref="IOrganizationService"/> instance to use when communicating with Dynamics CRM.</param>
         /// <param name="map">The <see cref="IEntityMapper{TTableData,TEntity}"/> instance to use when mapping between <typeparamref name="TTableData"/> and <typeparamref name="TEntity"/> instances.</param>
-        public DynamicsCrmDomainManager(HttpRequestMessage request, ApiServices services, IEntityMapper<TTableData, TEntity> map)
-            :base(request, services, false)
+        public DynamicsCrmDomainManager(HttpRequestMessage request, ApiServices services, bool enableSoftDelete, IEntityMapper<TTableData, TEntity> map)
+            :base(request, services, enableSoftDelete)
         {
             this.Map = map;
 
@@ -102,12 +102,18 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
         {
             var entity = Map.Map(data);
             entity.Id = OrganizationService.Create(entity);
-            return Task.FromResult(Map.Map(entity));
+            return Task.FromResult(Lookup(entity.Id));
         }
 
         public override SingleResult<TTableData> Lookup(string id)
         {
             throw new NotImplementedException();
+        }
+
+        protected TTableData Lookup(Guid id)
+        {
+            var result = OrganizationService.Retrieve(EntityLogicalName, id, new ColumnSet(true));
+            return MapEntityToTableData(result.ToEntity<TEntity>());
         }
 
         public override  Task<SingleResult<TTableData>> LookupAsync(string id)
@@ -116,10 +122,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
             if (!Guid.TryParse(id, out entityId))
                 return Task.FromResult(SingleResult.Create(new List<TTableData>().AsQueryable()));
 
-            var result = OrganizationService.Retrieve(EntityLogicalName, entityId, new ColumnSet(true));
-            var mappedResult = Map.Map(result.ToEntity<TEntity>());
-
-            return Task.FromResult(SingleResult.Create(new List<TTableData> { mappedResult }.AsQueryable()));
+            return Task.FromResult(SingleResult.Create(new List<TTableData> { Lookup(entityId) }.AsQueryable()));
         }
 
         public override IQueryable<TTableData> Query()
@@ -133,14 +136,37 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
             var crmQuery = builder.GetQueryExpression();
 
             var entityCollection = this.OrganizationService.RetrieveMultiple(crmQuery);
-            var dataObjects = entityCollection.Entities.Cast<TEntity>().Select(Map.Map);
-            return Task.FromResult(dataObjects);
+            var dataObjects = new List<TTableData>();
+            
+            foreach(TEntity entity in entityCollection.Entities.Cast<TEntity>())
+            {
+                TTableData tableData = MapEntityToTableData(entity);
+                dataObjects.Add(tableData);
+            }
+            return Task.FromResult(dataObjects.AsEnumerable());
+        }
+
+        private TTableData MapEntityToTableData(TEntity entity)
+        {
+            TTableData tableData = Map.Map(entity);
+            tableData.UpdatedAt = entity.GetAttributeValue<DateTime?>("modifiedon");
+            tableData.CreatedAt = entity.GetAttributeValue<DateTime?>("createdon");
+            if (this.EnableSoftDelete)
+            {
+                var optionSetValue = entity.GetAttributeValue<Microsoft.Xrm.Sdk.OptionSetValue>("statecode");
+                if (optionSetValue != null)
+                {
+                    tableData.Deleted = optionSetValue.Value != 0;
+                }
+            }
+            return tableData;
         }
 
         public override Task<TTableData> ReplaceAsync(string id, TTableData data)
         {
-            OrganizationService.Update(Map.Map(data));
-            return Task.FromResult(data);
+            TEntity entity = Map.Map(data);
+            OrganizationService.Update(entity);
+            return Task.FromResult(Lookup(entity.Id));
         }
 
         public override Task<TTableData> UpdateAsync(string id, System.Web.Http.OData.Delta<TTableData> patch)

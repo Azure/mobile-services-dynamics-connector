@@ -18,6 +18,13 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Controllers
     [AuthorizeLevel(AuthorizationLevel.User)]
     public class ContactController : BaseController<ContactDto, Contact>
     {
+        protected override void Initialize(System.Web.Http.Controllers.HttpControllerContext controllerContext)
+        {
+            EnableSoftDelete = true;
+
+            base.Initialize(controllerContext);
+        }
+
         [HttpGet]
         public async Task<IEnumerable<ContactDto>> Get(ODataQueryOptions<ContactDto> query)
         {

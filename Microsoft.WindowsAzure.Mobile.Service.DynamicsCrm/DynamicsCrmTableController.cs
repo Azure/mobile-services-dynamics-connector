@@ -19,6 +19,9 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
         /// </summary>
         protected IEntityMapper<TTableData, TEntity> EntityMapper { get; set; }
 
+        protected DynamicsCrmDomainManager<TTableData, TEntity> DynamicsCrmDomainManager { get { return (DynamicsCrmDomainManager<TTableData, TEntity>)this.DomainManager; } }
+        protected bool EnableSoftDelete { get; set; }
+
         /// <summary>
         /// Creates a new instance of <see cref="DynamicsCrmTableController{TTableData,TEntity}"/> using the <see cref="IEntityMapper{TTableData,TEntity}"/> specified.
         /// This constructor assumes a connection string named CrmConnection for connecting to Dynamics CRM exists in the web.config.
@@ -26,6 +29,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
         /// <param name="entityMapper">The <see cref="IEntityMapper{TTableData,TEntity}"/> implementation to use.</param>
         public DynamicsCrmTableController(IEntityMapper<TTableData, TEntity> entityMapper)
         {
+            EnableSoftDelete = false;
             EntityMapper = entityMapper;
         }
 
@@ -37,7 +41,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
         {
             base.Initialize(controllerContext);
 
-            this.DomainManager = new DynamicsCrmDomainManager<TTableData, TEntity>(Request, Services, EntityMapper);
+            this.DomainManager = new DynamicsCrmDomainManager<TTableData, TEntity>(Request, Services, EnableSoftDelete, EntityMapper);
         }
 
     }

@@ -236,7 +236,6 @@
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\PhoneCallController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
-    <Compile Include="Models\AccountDto.cs" />
     <Compile Include="Models\ActivityDto.cs" />
     <Compile Include="Models\ContactDto.cs" />
     <Compile Include="Models\Entities.cs" />
