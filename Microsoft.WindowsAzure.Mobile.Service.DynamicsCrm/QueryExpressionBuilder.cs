@@ -291,14 +291,6 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
             }
 
             columnSet.Columns.Remove("id");
-            var alwaysInclude = new[] { "statecode", "modifiedon", "createdon" };
-            foreach (var always in alwaysInclude)
-            {
-                if (!columnSet.Columns.Contains(always))
-                {
-                    columnSet.AddColumn(always);
-                }
-            }
         }
 
         /// <summary>

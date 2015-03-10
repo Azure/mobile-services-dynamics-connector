@@ -39,8 +39,8 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
         /// </summary>
         /// <param name="organizationService">The <see cref="IOrganizationService"/> instance to use when communicating with Dynamics CRM.</param>
         /// <param name="map">The <see cref="IEntityMapper{TTableData,TEntity}"/> instance to use when mapping between <typeparamref name="TTableData"/> and <typeparamref name="TEntity"/> instances.</param>
-        public DynamicsCrmDomainManager(HttpRequestMessage request, ApiServices services, bool enableSoftDelete, IEntityMapper<TTableData, TEntity> map)
-            :base(request, services, enableSoftDelete)
+        public DynamicsCrmDomainManager(HttpRequestMessage request, ApiServices services, IEntityMapper<TTableData, TEntity> map)
+            :base(request, services, false)
         {
             this.Map = map;
 
@@ -113,7 +113,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
         protected TTableData Lookup(Guid id)
         {
             var result = OrganizationService.Retrieve(EntityLogicalName, id, new ColumnSet(true));
-            return MapEntityToTableData(result.ToEntity<TEntity>());
+            return Map.Map(result.ToEntity<TEntity>());
         }
 
         public override  Task<SingleResult<TTableData>> LookupAsync(string id)
@@ -137,29 +137,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
 
             var entityCollection = this.OrganizationService.RetrieveMultiple(crmQuery);
             var dataObjects = new List<TTableData>();
-            
-            foreach(TEntity entity in entityCollection.Entities.Cast<TEntity>())
-            {
-                TTableData tableData = MapEntityToTableData(entity);
-                dataObjects.Add(tableData);
-            }
-            return Task.FromResult(dataObjects.AsEnumerable());
-        }
-
-        private TTableData MapEntityToTableData(TEntity entity)
-        {
-            TTableData tableData = Map.Map(entity);
-            tableData.UpdatedAt = entity.GetAttributeValue<DateTime?>("modifiedon");
-            tableData.CreatedAt = entity.GetAttributeValue<DateTime?>("createdon");
-            if (this.EnableSoftDelete)
-            {
-                var optionSetValue = entity.GetAttributeValue<Microsoft.Xrm.Sdk.OptionSetValue>("statecode");
-                if (optionSetValue != null)
-                {
-                    tableData.Deleted = optionSetValue.Value != 0;
-                }
-            }
-            return tableData;
+            return Task.FromResult(entityCollection.Entities.Cast<TEntity>().Select(Map.Map));
         }
 
         public override Task<TTableData> ReplaceAsync(string id, TTableData data)

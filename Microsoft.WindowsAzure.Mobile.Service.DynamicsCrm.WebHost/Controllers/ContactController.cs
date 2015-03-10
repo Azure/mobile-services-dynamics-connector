@@ -18,11 +18,9 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Controllers
     [AuthorizeLevel(AuthorizationLevel.User)]
     public class ContactController : BaseController<ContactDto, Contact>
     {
-        protected override void Initialize(System.Web.Http.Controllers.HttpControllerContext controllerContext)
+        public ContactController() : base(true)
         {
-            EnableSoftDelete = true;
 
-            base.Initialize(controllerContext);
         }
 
         [HttpGet]
