@@ -127,14 +127,24 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
             throw new NotImplementedException();
         }
 
-        public override Task<IEnumerable<TTableData>> QueryAsync(ODataQueryOptions query)
+        public Task<IEnumerable<TTableData>> QueryAsync(ODataQueryOptions query, Action<QueryExpression> queryModifier)
         {
             var builder = new QueryExpressionBuilder<TTableData, TEntity>(this.EntityLogicalName, query, this.Map);
             var crmQuery = builder.GetQueryExpression();
 
+            if(queryModifier != null)
+            {
+                queryModifier(crmQuery);
+            }
+
             var entityCollection = this.OrganizationService.RetrieveMultiple(crmQuery);
             var dataObjects = entityCollection.Entities.Cast<TEntity>().Select(Map.Map);
             return Task.FromResult(dataObjects);
+        }
+
+        public override Task<IEnumerable<TTableData>> QueryAsync(ODataQueryOptions query)
+        {
+            return QueryAsync(query, null);
         }
 
         public override Task<TTableData> ReplaceAsync(string id, TTableData data)

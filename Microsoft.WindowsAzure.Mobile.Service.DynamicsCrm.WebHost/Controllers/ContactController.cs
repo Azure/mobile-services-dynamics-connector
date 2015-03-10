@@ -12,6 +12,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.WebServiceClient;
 using Microsoft.Xrm.Client;
 using System.Net;
+using Microsoft.Xrm.Sdk.Query;
 
 namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Controllers
 {
@@ -21,7 +22,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Controllers
         [HttpGet]
         public async Task<IEnumerable<ContactDto>> Get(ODataQueryOptions<ContactDto> query)
         {
-            return await QueryAsync(query);
+            return await QueryAsync(query, qe => qe.Criteria.AddCondition("ownerid", ConditionOperator.EqualUserId));
         }
     }
 }

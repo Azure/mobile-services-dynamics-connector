@@ -1,5 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Models;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -13,7 +14,8 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Controllers
         [HttpGet]
         public Task<IEnumerable<ActivityDto>> Get(ODataQueryOptions<ActivityDto> query)
         {
-            return QueryAsync(query);
+            return QueryAsync(query, qe =>
+                qe.AddLink("contact", "regardingobjectid", "contactid").LinkCriteria.AddCondition("ownerid", ConditionOperator.EqualUserId));
         }
     }
 }
