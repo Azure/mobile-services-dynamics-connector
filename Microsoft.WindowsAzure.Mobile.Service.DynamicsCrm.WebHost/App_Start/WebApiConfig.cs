@@ -39,18 +39,41 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost
             Mapper.CreateMap<Task, ActivityDto>()
                 .ForMember(a => a.Details, opt => opt.MapFrom(t => t.Description))
                 .ReverseMap()
-                .ForMember(t => t.Description, opt => opt.MapFrom(a => a.Details));
+                .ForMember(t => t.Description, opt => opt.MapFrom(a => a.Details))
+                .AfterMap((a, t) =>
+                {
+                    if(t.RegardingObjectId != null)
+                    {
+                        t.RegardingObjectId.LogicalName = Contact.EntityLogicalName;
+                    }
+                });
 
             Mapper.CreateMap<PhoneCall, ActivityDto>()
                 .ForMember(a => a.Details, opt => opt.MapFrom(p => p.Description))
                 .ReverseMap()
-                .ForMember(p => p.Description, opt => opt.MapFrom(a => a.Details));
+                .ForMember(p => p.Description, opt => opt.MapFrom(a => a.Details))
+                .AfterMap((a, p) =>
+                {
+                    if (p.RegardingObjectId != null)
+                    {
+                        p.RegardingObjectId.LogicalName = Contact.EntityLogicalName;
+                    }
+                });
 
             Mapper.CreateMap<Appointment, ActivityDto>()
                 .ForMember(a => a.Details, opt => opt.MapFrom(ap => ap.Description))
                 .ReverseMap()
-                .ForMember(ap => ap.Description, opt => opt.MapFrom(a => a.Details));
+                .ForMember(ap => ap.Description, opt => opt.MapFrom(a => a.Details))
+                .AfterMap((a, ap) =>
+                {
+                    if (ap.RegardingObjectId != null)
+                    {
+                        ap.RegardingObjectId.LogicalName = Contact.EntityLogicalName;
+                    }
+                });
         }
+
+        
     }
 }
 
