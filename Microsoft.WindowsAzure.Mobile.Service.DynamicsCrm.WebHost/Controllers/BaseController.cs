@@ -7,8 +7,15 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Controllers
         where TDto : class, ITableData
         where TEntity : Entity
     {
-        public BaseController() : base(new AutoMapperEntityMapper<TDto, TEntity>())
+        public BaseController()
+            : this(false)
         {
+        }
+
+        public BaseController(bool enableSoftDelete)
+            : base(new AutoMapperEntityMapper<TDto, TEntity>(enableSoftDelete))
+        {
+
         }
     }
 }

@@ -19,6 +19,11 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Controllers
     [AuthorizeLevel(AuthorizationLevel.User)]
     public class ContactController : BaseController<ContactDto, Contact>
     {
+        public ContactController() : base(true)
+        {
+
+        }
+
         [HttpGet]
         public async Task<IEnumerable<ContactDto>> Get(ODataQueryOptions<ContactDto> query)
         {

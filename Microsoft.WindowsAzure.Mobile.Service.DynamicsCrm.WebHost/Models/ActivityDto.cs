@@ -13,7 +13,8 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost.Models
 
         public String Subject { get; set; }
         public DateTime? ActualEnd { get; set; }
-        public String Description { get; set; }
+        public String Details { get; set; }
         public String ActivityTypeCode { get; set; }
+        public Guid? RegardingObjectId { get; set; }
     }
 }
