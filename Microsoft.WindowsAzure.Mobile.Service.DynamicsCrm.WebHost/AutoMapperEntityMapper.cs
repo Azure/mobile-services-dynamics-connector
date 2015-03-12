@@ -80,6 +80,13 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost
 
             data.UpdatedAt = entity.GetAttributeValue<DateTime?>("modifiedon");
             data.CreatedAt = entity.GetAttributeValue<DateTime?>("createdon");
+
+            // Upper case guids are currently required by the Azure Mobile Services
+            // client libraries because they create new records with Guids as uppercase strings.
+            // They will not match against records returned from the service unless
+            // the strings are identical.
+            data.Id = entity.Id.ToString().ToUpperInvariant();
+
             if (EnableSoftDelete)
             {
                 var optionSetValue = entity.GetAttributeValue<Microsoft.Xrm.Sdk.OptionSetValue>("statecode");
