@@ -102,12 +102,18 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
         {
             var entity = Map.Map(data);
             entity.Id = OrganizationService.Create(entity);
-            return Task.FromResult(Map.Map(entity));
+            return Task.FromResult(Lookup(entity.Id));
         }
 
         public override SingleResult<TTableData> Lookup(string id)
         {
             throw new NotImplementedException();
+        }
+
+        protected TTableData Lookup(Guid id)
+        {
+            var result = OrganizationService.Retrieve(EntityLogicalName, id, new ColumnSet(true));
+            return Map.Map(result.ToEntity<TEntity>());
         }
 
         public override  Task<SingleResult<TTableData>> LookupAsync(string id)
@@ -116,10 +122,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
             if (!Guid.TryParse(id, out entityId))
                 return Task.FromResult(SingleResult.Create(new List<TTableData>().AsQueryable()));
 
-            var result = OrganizationService.Retrieve(EntityLogicalName, entityId, new ColumnSet(true));
-            var mappedResult = Map.Map(result.ToEntity<TEntity>());
-
-            return Task.FromResult(SingleResult.Create(new List<TTableData> { mappedResult }.AsQueryable()));
+            return Task.FromResult(SingleResult.Create(new List<TTableData> { Lookup(entityId) }.AsQueryable()));
         }
 
         public override IQueryable<TTableData> Query()
@@ -127,20 +130,31 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
             throw new NotImplementedException();
         }
 
-        public override Task<IEnumerable<TTableData>> QueryAsync(ODataQueryOptions query)
+        public Task<IEnumerable<TTableData>> QueryAsync(ODataQueryOptions query, Action<QueryExpression> queryModifier)
         {
             var builder = new QueryExpressionBuilder<TTableData, TEntity>(this.EntityLogicalName, query, this.Map);
             var crmQuery = builder.GetQueryExpression();
 
+            if(queryModifier != null)
+            {
+                queryModifier(crmQuery);
+            }
+
             var entityCollection = this.OrganizationService.RetrieveMultiple(crmQuery);
-            var dataObjects = entityCollection.Entities.Cast<TEntity>().Select(Map.Map);
-            return Task.FromResult(dataObjects);
+            var dataObjects = new List<TTableData>();
+            return Task.FromResult(entityCollection.Entities.Cast<TEntity>().Select(Map.Map));
+        }
+
+        public override Task<IEnumerable<TTableData>> QueryAsync(ODataQueryOptions query)
+        {
+            return QueryAsync(query, null);
         }
 
         public override Task<TTableData> ReplaceAsync(string id, TTableData data)
         {
-            OrganizationService.Update(Map.Map(data));
-            return Task.FromResult(data);
+            TEntity entity = Map.Map(data);
+            OrganizationService.Update(entity);
+            return Task.FromResult(Lookup(entity.Id));
         }
 
         public override Task<TTableData> UpdateAsync(string id, System.Web.Http.OData.Delta<TTableData> patch)

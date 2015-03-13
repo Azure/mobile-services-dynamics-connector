@@ -27,34 +27,46 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost
         where TTableData : class, ITableData
         where TEntity : Entity
     {
-        protected Dictionary<String, IMemberAccessor> PropertyMap { get; set; }
+        protected Dictionary<String, string> PropertyMap { get; set; }
+        protected bool EnableSoftDelete { get; set; }
 
-        public AutoMapperEntityMapper()
+        public AutoMapperEntityMapper(bool enableSoftDelete)
         {
+            this.EnableSoftDelete = enableSoftDelete;
+
             var map = Mapper.FindTypeMapFor<TTableData, TEntity>();
             if (map == null) throw new InvalidOperationException(String.Format("Could not find a map from {0} to {1}.", typeof(TTableData), typeof(TEntity)));
 
-            this.PropertyMap = new Dictionary<string, IMemberAccessor>(StringComparer.OrdinalIgnoreCase);
+            this.PropertyMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             var propertyMaps = map.GetPropertyMaps();
             foreach (var m in propertyMaps)
             {
                 if (m.SourceMember != null)
                 {
-                    this.PropertyMap.Add(m.SourceMember.Name, m.DestinationProperty);
+                    this.PropertyMap.Add(m.SourceMember.Name, m.DestinationProperty.Name.ToLowerInvariant());
                 }
             }
+
+            PropertyMap["createdat"] = "createdon";
+            PropertyMap["updatedat"] = "modifiedon";
         }
 
         public string GetAttributeName(string propertyName)
         {
-            return this.PropertyMap[propertyName].Name.ToLowerInvariant();
+            return this.PropertyMap[propertyName];
         }
-
 
         public IEnumerable<string> GetAttributeNames()
         {
-            return from p in PropertyMap.Values
-                   select p.Name.ToLowerInvariant();
+            var names = new HashSet<String>(PropertyMap.Values);
+            
+            names.Add("modifiedon");
+            names.Add("createdon");
+            
+            if(EnableSoftDelete)
+                names.Add("statecode");
+            
+            return names;
         }
 
         public TEntity Map(TTableData data)
@@ -62,9 +74,29 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm.WebHost
             return Mapper.Map<TTableData, TEntity>(data);
         }
 
-        public TTableData Map(TEntity data)
+        public TTableData Map(TEntity entity)
         {
-            return Mapper.Map<TEntity, TTableData>(data);
+            var data = Mapper.Map<TEntity, TTableData>(entity);
+
+            data.UpdatedAt = entity.GetAttributeValue<DateTime?>("modifiedon");
+            data.CreatedAt = entity.GetAttributeValue<DateTime?>("createdon");
+
+            // Upper case guids are currently required by the Azure Mobile Services
+            // client libraries because they create new records with Guids as uppercase strings.
+            // They will not match against records returned from the service unless
+            // the strings are identical.
+            data.Id = entity.Id.ToString().ToUpperInvariant();
+
+            if (EnableSoftDelete)
+            {
+                var optionSetValue = entity.GetAttributeValue<Microsoft.Xrm.Sdk.OptionSetValue>("statecode");
+                if (optionSetValue != null)
+                {
+                    data.Deleted = optionSetValue.Value != 0;
+                }
+            }
+
+            return data;
         }
     }
 }
