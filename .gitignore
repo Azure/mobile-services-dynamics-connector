@@ -197,3 +197,4 @@ FakesAssemblies/
 
 # Conflict resolution
 *.orig
+Azure Activity Logger/Azure Activity Logger.xcworkspace/xcshareddata
