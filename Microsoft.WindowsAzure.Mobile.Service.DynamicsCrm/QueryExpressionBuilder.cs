@@ -316,7 +316,11 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
             }
             else
             {
-                pagingInfo.PageNumber = skip.Value / pagingInfo.Count + 1;
+                // When syncing for offline, the client will always request a page immediately after
+                // the last record.  So if there are only 7 records, it will request with $top=50 and
+                // $skip=7.  To handle these cases when $skip is not evenly divisible by $top, we round
+                // up, which will send back an empty result set on the last page and complete the sync.
+                pagingInfo.PageNumber = (int)Math.Ceiling((double)skip.Value / pagingInfo.Count) + 1;
             }
         }
 
