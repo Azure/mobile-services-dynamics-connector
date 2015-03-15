@@ -53,6 +53,8 @@
     activitiesList.dataSource = self;
     activitiesList.delegate = self;
     activitiesList.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+
+    [self refreshObject];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -62,7 +64,13 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self refreshObject];
+
+    [self refreshActivities];
+    [activitiesList reloadData];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
 }
 
 - (void)refreshObject {
@@ -72,7 +80,9 @@
     addressLabel.text = [NSString dashesForEmpty:displayObject.addressInfo];
     phoneLabel.text = [NSString dashesForEmpty:displayObject.mainPhone];
     emailLabel.text = [NSString dashesForEmpty:displayObject.mainEmail];
+}
 
+- (void)refreshActivities {
     self.relatedActivities = [[DataAccessor sharedAccessor] getActivitiesSatisfyingPredicate:[NSPredicate predicateWithFormat:@"regardingObjectId = %@", displayObject.id]];
     self.relatedActivities = [self.relatedActivities sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"actualEnd" ascending:NO] ]];
 
