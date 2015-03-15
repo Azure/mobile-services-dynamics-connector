@@ -127,8 +127,16 @@
         task[@"detail"] = notesView.text;
     }
 
-    [[AzureConnector sharedConnector] insertTask:[task copy]];
-    [self.navigationController popViewControllerAnimated:YES];
+    [[AzureConnector sharedConnector] insertTask:[task copy] completion:^(NSDictionary *item, NSError *error) {
+        if (error) {
+            NSLog(@"Error inserting task : %@\n%@", error.localizedDescription, error.localizedFailureReason);
+            return;
+        }
+        NSLog(@"Inserted item : %@", item);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+    }];
 }
 
 #pragma mark - Keyboard Notifications

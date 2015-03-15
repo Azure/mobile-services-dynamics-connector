@@ -28,6 +28,6 @@ extern NSString *const AzureConnectorSyncFailedMessagesKey;
 
 - (void)logout;
 
-- (void)insertTask:(NSDictionary *)task;
+- (void)insertTask:(NSDictionary *)task completion:(MSSyncItemBlock)completion;
 
 @end

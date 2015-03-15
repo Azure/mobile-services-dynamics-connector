@@ -237,15 +237,9 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
 
 #pragma mark - Insert methods
 
-- (void)insertTask:(NSDictionary *)task {
+- (void)insertTask:(NSDictionary *)task completion:(MSSyncItemBlock)completion {
     MSSyncTable *taskTable = [self.syncTables filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name LIKE[cd] %@", @"Task"]].firstObject;
-    [taskTable insert:task completion:^(NSDictionary *item, NSError *error) {
-        if (error) {
-            NSLog(@"Error inserting task : %@\n%@", error.localizedDescription, error.localizedFailureReason);
-            return;
-        }
-        NSLog(@"Inserted item : %@", item);
-    }];
+    [taskTable insert:task completion:completion];
 }
 
 #pragma mark - Instance property accessor/setters
