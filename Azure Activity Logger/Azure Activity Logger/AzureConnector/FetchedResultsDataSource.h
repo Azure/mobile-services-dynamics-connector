@@ -12,6 +12,9 @@ typedef void (^FetchedResultsDidChangeBlock)();
 @property (nonatomic, copy) CellConfigureBlock cellConfigureBlock;
 @property (nonatomic, copy) FetchedResultsDidChangeBlock resultsDidChangeBlock;
 
+@property (nonatomic, copy) NSString *emptyResultsText;
+@property (nonatomic, copy) NSString *sectionHeader;
+
 - (instancetype)initWithFetchedResultsController:(NSFetchedResultsController *)controller;
 
 - (id)itemAtIndexPath:(NSIndexPath *)indexPath;
