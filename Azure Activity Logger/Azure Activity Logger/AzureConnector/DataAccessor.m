@@ -1,5 +1,8 @@
 #import "DataAccessor.h"
 #import "CoreDataHelper.h"
+#import "Contact.h"
+
+NSString * const kAzureConnectorRecentContactsKey = @"AzureConnectorRecentContactsKey";
 
 @implementation DataAccessor
 
@@ -12,6 +15,33 @@
     return sharedAccessor;
 }
 
+- (void)addContactToRecents:(Contact *)contact {
+    NSMutableOrderedSet *recents = [NSMutableOrderedSet orderedSetWithArray:[self recentContacts]];
+    
+    if (!recents) {
+        recents = [NSMutableOrderedSet orderedSet];
+    }
+    [recents removeObject:contact.id];
+    [recents insertObject:contact.id atIndex:0];
+    
+    if (recents.count > 10) {
+        [recents removeObjectAtIndex:10];
+    }
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:[recents copy]] forKey:kAzureConnectorRecentContactsKey];
+}
+
+- (NSArray *)recentContacts {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSData *recentsData = [defaults dataForKey:kAzureConnectorRecentContactsKey];
+    NSOrderedSet *recents = [NSKeyedUnarchiver unarchiveObjectWithData:recentsData];
+    if (!recents) {
+        recents = [NSOrderedSet orderedSet];
+    }
+    return [recents array];
+}
+
 - (NSFetchedResultsController *)fetchedResultsControllerForObject:(NSString *)object withPredicate:(NSPredicate *)predicate sortDescriptors:(NSArray *)descriptors {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:object];
     request.sortDescriptors = descriptors;
@@ -21,6 +51,13 @@
                                                                                  managedObjectContext:[CoreDataHelper getContext]
                                                                                    sectionNameKeyPath:nil cacheName:nil];
     return controller;
+}
+
+- (NSFetchedResultsController *)recentContactsFetchedResultsController {
+    NSArray *recents = [self recentContacts];
+    return [self fetchedResultsControllerForObject:@"Contact"
+                                     withPredicate:[NSPredicate predicateWithFormat:@"id IN %@", recents]
+                                   sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES]]];
 }
 
 - (NSFetchedResultsController *)contactsFetchedResultsController {
