@@ -9,6 +9,12 @@
 #import "SettingsViewController.h"
 #import "ObjectDetailsViewController.h"
 
+typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
+{
+    HomeViewDisplayRecents,
+    HomeViewDisplaySearch
+};
+
 @interface HomeViewController () <UISearchBarDelegate, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UISearchBar *theSearchBar;
@@ -23,6 +29,7 @@
 
 @property (strong, nonatomic) UIView *syncingOverlayView;
 
+@property (nonatomic) HomeViewDisplayMode displayMode;
 @property (nonatomic, strong) FetchedResultsDataSource *contactsDataSource;
 
 @end
@@ -38,7 +45,8 @@
     self.resultsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.resultsTableView registerNib:[UINib nibWithNibName:@"SubtitleTableViewCell" bundle:nil] forCellReuseIdentifier:@"CELL"];
 
-    [self configureContactsResultController:[[DataAccessor sharedAccessor] contactsFetchedResultsController]];
+    self.displayMode = HomeViewDisplayRecents;
+    
     self.resultsTableView.delegate = self;
 
     self.theSearchBar.delegate = self;
@@ -57,6 +65,11 @@
     [super viewWillAppear:animated];
 
     [self updateSyncLabels];
+    
+    if (self.displayMode == HomeViewDisplayRecents) {
+        [self configureContactsResultController:[[DataAccessor sharedAccessor] recentContactsFetchedResultsController] displayMode:HomeViewDisplayRecents];
+    }
+    
     [self setupNotifications];
 }
 
@@ -93,7 +106,7 @@
     self.syncCountLabel.text = [NSString stringWithFormat:@"%@ %@ to sync", @(pendingSyncs), itemText];
 }
 
-- (void)configureContactsResultController:(NSFetchedResultsController *)controller {
+- (void)configureContactsResultController:(NSFetchedResultsController *)controller displayMode:(HomeViewDisplayMode)mode {
     self.contactsDataSource = [[FetchedResultsDataSource alloc] initWithFetchedResultsController:controller];
 
     __weak typeof(self) weakSelf = self;
@@ -114,6 +127,19 @@
             [strongSelf.resultsTableView reloadData];
         });
     };
+    
+    switch (mode) {
+        case HomeViewDisplayRecents:
+            self.contactsDataSource.sectionHeader = @"RECENT CONTACTS";
+            self.contactsDataSource.emptyResultsText = @"You haven't viewed any records on this device.";
+            break;
+        case HomeViewDisplaySearch:
+            self.contactsDataSource.sectionHeader = @"SEARCH RESULTS";
+            self.contactsDataSource.emptyResultsText = @"No records match that search term.";
+            break;
+        default:
+            break;
+    }
 
 
     self.resultsTableView.dataSource = self.contactsDataSource;
@@ -192,6 +218,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Contact *theContact = [self.contactsDataSource itemAtIndexPath:indexPath];
+    
+    [[DataAccessor sharedAccessor] addContactToRecents:theContact];
 
     ObjectDetailsViewController *detailsView = [[ObjectDetailsViewController alloc] initWithNibName:@"ObjectDetailsView" bundle:nil];
     detailsView.displayObject = theContact;
@@ -199,19 +227,39 @@
     [self.navigationController pushViewController:detailsView animated:YES];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 40.0;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, [tableView.delegate tableView:tableView heightForHeaderInSection:section])];
+    header.backgroundColor = [UIColor whiteColor];
+    
+    UILabel *textLabel = [[UILabel alloc] init];
+    textLabel.text = [tableView.dataSource tableView:tableView titleForHeaderInSection:section];
+    textLabel.textColor = DARK_GREY;
+    textLabel.font = [textLabel.font fontWithSize:12.0];
+    [textLabel sizeToFit];
+    textLabel.frame = CGRectMake(50, 18.0, textLabel.frame.size.width, textLabel.frame.size.height);
+    [header addSubview:textLabel];
+    
+    UIView *separatorView = [[UIView alloc] initWithFrame:CGRectMake(50, header.frame.size.height - 1.0, header.frame.size.width, 1.0 / [UIScreen mainScreen].nativeScale)];
+    separatorView.backgroundColor = [UIColor colorWithRed:221.0/255.0 green:221.0/255.0 blue:221.0/255.0 alpha:1.0];
+    [header addSubview:separatorView];
+    
+    return header;
+}
+
 #pragma mark - UISearchBarDelegate methods
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    self.displayMode = HomeViewDisplaySearch;
     [searchBar setShowsCancelButton:YES animated:YES];
-}
-
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-    [self configureContactsResultController:[[DataAccessor sharedAccessor] contactsFetchedResultsController]];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     if (searchText.length == 0) {
-        [self configureContactsResultController:[[DataAccessor sharedAccessor] contactsFetchedResultsController]];
+        [self configureContactsResultController:[[DataAccessor sharedAccessor] contactsFetchedResultsController] displayMode:HomeViewDisplaySearch];
         return;
     }
 
@@ -219,12 +267,13 @@
     NSPredicate *lastNamePredicate = [NSPredicate predicateWithFormat:@"lastName CONTAINS[cd] %@", searchText];
     NSPredicate *jobTitlePredicate = [NSPredicate predicateWithFormat:@"jobTitle CONTAINS[cd] %@", searchText];
 
-    [self configureContactsResultController:[[DataAccessor sharedAccessor] fetchedResultsControllerForObject:@"Contact" withPredicate:[NSCompoundPredicate orPredicateWithSubpredicates:@[ firstNamePredicate, lastNamePredicate, jobTitlePredicate ]] sortDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES] ]]];
+    [self configureContactsResultController:[[DataAccessor sharedAccessor] fetchedResultsControllerForObject:@"Contact" withPredicate:[NSCompoundPredicate orPredicateWithSubpredicates:@[ firstNamePredicate, lastNamePredicate, jobTitlePredicate ]] sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES]]] displayMode:HomeViewDisplaySearch];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     searchBar.text = @"";
-    [self configureContactsResultController:[[DataAccessor sharedAccessor] contactsFetchedResultsController]];
+    self.displayMode = HomeViewDisplayRecents;
+    [self configureContactsResultController:[[DataAccessor sharedAccessor] recentContactsFetchedResultsController] displayMode:HomeViewDisplayRecents];
     [searchBar setShowsCancelButton:NO animated:YES];
     [searchBar resignFirstResponder];
 }
