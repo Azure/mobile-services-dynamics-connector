@@ -167,8 +167,15 @@ typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
         animation.duration = 0.75;
         [self.syncingLabel.layer addAnimation:animation forKey:@"kCATransitionFade"];
         
+        NSString *syncResultText;
+        if ([theNotification.userInfo[AzureConnectorSyncSuccessKey] boolValue]) {
+            syncResultText = @"Sync complete";
+        } else {
+            syncResultText = @"Sync failed";
+        }
+        
         // This will fade:
-        self.syncingLabel.text = @"Sync complete";
+        self.syncingLabel.text = syncResultText;
         
         [UIView animateWithDuration:0.5 animations:^{
             self.syncingOverlayView.alpha = 0.0;
