@@ -14,6 +14,7 @@
                 <outlet property="syncActivityIndicator" destination="2f7-YY-BzS" id="GTn-OE-Leb"/>
                 <outlet property="syncButton" destination="04q-wK-NWw" id="KeR-is-RKb"/>
                 <outlet property="syncCountLabel" destination="EfM-qb-gyQ" id="Frm-FH-dPN"/>
+                <outlet property="syncingLabel" destination="ogG-Wm-Olx" id="WKf-qd-r4x"/>
                 <outlet property="syncingLabelContainerView" destination="z0I-xE-2R0" id="Cvv-Yc-6QX"/>
                 <outlet property="theSearchBar" destination="IgG-g2-Txw" id="5qh-5v-gX9"/>
                 <outlet property="view" destination="iN0-l3-epB" id="EWC-1V-Crk"/>

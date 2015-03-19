@@ -25,6 +25,7 @@ typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
 @property (weak, nonatomic) IBOutlet UIView *standardLabelsContainerView;
 @property (weak, nonatomic) IBOutlet UILabel *lastSyncLabel;
 @property (weak, nonatomic) IBOutlet UILabel *syncCountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *syncingLabel;
 @property (weak, nonatomic) IBOutlet UIView *syncingLabelContainerView;
 
 @property (strong, nonatomic) UIView *syncingOverlayView;
@@ -158,19 +159,43 @@ typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
 
 - (void)syncCompleted:(NSNotification *)theNotification {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.syncingOverlayView removeFromSuperview];
-        self.syncingOverlayView = nil;
-
-        [self.syncActivityIndicator stopAnimating];
-        self.syncActivityIndicator.hidden = YES;
-
-        self.syncingLabelContainerView.hidden = YES;
+        CATransition *animation = [CATransition animation];
+        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        animation.type = kCATransitionFade;
+        animation.duration = 0.75;
+        [self.syncingLabel.layer addAnimation:animation forKey:@"kCATransitionFade"];
+        
+        // This will fade:
+        self.syncingLabel.text = @"Sync complete";
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            self.syncingOverlayView.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            [self.syncingOverlayView removeFromSuperview];
+            self.syncingOverlayView = nil;
+            
+            [self.syncActivityIndicator stopAnimating];
+            self.syncActivityIndicator.hidden = YES;
+        }];
+    });
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         self.standardLabelsContainerView.hidden = NO;
-
-        self.syncButton.enabled = YES;
+        self.standardLabelsContainerView.alpha = 0.0;
         self.syncButton.hidden = NO;
+        self.syncButton.alpha = 0.0;
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            self.syncingLabelContainerView.alpha = 0.0;
+            self.standardLabelsContainerView.alpha = 1.0;
+            self.syncButton.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            self.syncingLabelContainerView.hidden = YES;
+            
+            self.syncButton.enabled = YES;
 
-        [self updateSyncLabels];
+            [self updateSyncLabels];
+        }];
     });
 }
 
@@ -182,6 +207,8 @@ typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
 }
 
 - (IBAction)syncButtonTapped:(id)sender {
+    self.syncingLabel.text = @"Sync in progress ...";
+    
     self.syncingOverlayView = [[UIView alloc] initWithFrame:self.navigationController.view.frame];
     CGRect shadedViewFrame = self.navigationController.view.frame;
     shadedViewFrame.size.height = shadedViewFrame.size.height - 44.0;
@@ -194,6 +221,7 @@ typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
     [self.syncActivityIndicator startAnimating];
     self.syncActivityIndicator.hidden = NO;
 
+    self.syncingLabelContainerView.alpha = 1.0;
     self.syncingLabelContainerView.hidden = NO;
     self.standardLabelsContainerView.hidden = YES;
 
