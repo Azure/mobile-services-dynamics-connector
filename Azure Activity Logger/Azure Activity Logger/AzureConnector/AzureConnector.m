@@ -1,6 +1,8 @@
 #import "AzureConnector.h"
 #import "CoreDataHelper.h"
 #import "ADAuthenticationContext.h"
+#import "ADAuthenticationSettings.h"
+#import "ADKeychainTokenCacheStore.h"
 #import "SSKeychain.h"
 
 NSString *const AzureConnectorSyncStarted = @"AzureConnectorSyncStarted";
@@ -46,14 +48,8 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
     self = [super init];
     if (self) {
         self.client = [self setupClient];
+        self.syncTables = [self setupSyncTables];
         [self loadAuthInfo];
-
-        self.syncTables = @[
-            [self.client syncTableWithName:@"Contact"],
-            [self.client syncTableWithName:@"Task"],
-            [self.client syncTableWithName:@"PhoneCall"],
-            [self.client syncTableWithName:@"Appointment"]
-        ];
     }
     return self;
 }
@@ -64,6 +60,15 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
     client.syncContext = [[MSSyncContext alloc] initWithDelegate:nil dataSource:dataStore callback:nil];
 
     return client;
+}
+
+- (NSArray *)setupSyncTables {
+    return @[
+        [self.client syncTableWithName:@"Contact"],
+        [self.client syncTableWithName:@"Task"],
+        [self.client syncTableWithName:@"PhoneCall"],
+        [self.client syncTableWithName:@"Appointment"]
+    ];
 }
 
 - (NSDate *)lastSyncDate {
@@ -101,8 +106,8 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
             if (error) {
                 [self clearAuthInfo];
                 [self loginWithController:[[[UIApplication sharedApplication] keyWindow] rootViewController] completion:^(MSUser *user, NSError *error) {}];
+                NSLog(@"error : %@", error);
             }
-            NSLog(@"error : %@", error);
         }];
     }
 }
@@ -111,6 +116,25 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
     NSString *userId = [[SSKeychain accountsForService:@"AzureMobileServiceTutorial"][0] valueForKey:@"acct"];
     [SSKeychain deletePasswordForService:@"AzureMobileServiceTutorial" account:userId];
     self.client.currentUser.mobileServiceAuthenticationToken = nil;
+    
+    id<ADTokenCacheStoring> cache = [ADAuthenticationSettings sharedInstance].defaultTokenCacheStore;
+    [cache removeAllWithError:nil];
+    [ADAuthenticationSettings sharedInstance].defaultTokenCacheStore = [ADKeychainTokenCacheStore new];
+    
+    for(NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies]) {
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
+    }
+    
+    NSString *logoutUrl = @"https://login.windows.net/common/oauth2/logout";
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *logoutTask = [session dataTaskWithURL:[NSURL URLWithString:logoutUrl] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (!error) {
+            NSLog(@"Success logging out");
+        } else {
+            NSLog(@"Error logging out : %@", error);
+        }
+    }];
+    [logoutTask resume];
 }
 
 - (ADAuthenticationContext *)authenticationContext {
@@ -120,6 +144,7 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
 - (void)loginWithController:(UIViewController *)controller completion:(MSClientLoginBlock)completion {
     if (!self.client) {
         self.client = [self setupClient];
+        self.syncTables = [self setupSyncTables];
     }
 
     if (self.client.currentUser && self.client.currentUser.mobileServiceAuthenticationToken) {
@@ -165,7 +190,7 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
             // syncing again.
             if (response && response.statusCode == 401) {
                 // we need to try authing again
-                [self clearAuthInfo];
+                [self logout];
                 [self loginWithController:nil completion:^(MSUser *user, NSError *error) {
                     [self syncWithCompletion:completion];
                 }];
@@ -230,6 +255,13 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
 - (void)logout {
     [self clearAuthInfo];
 
+    for (MSSyncTable *table in self.syncTables) {
+        [table forcePurgeWithCompletion:^(NSError *error) {
+            if (error) {
+                NSLog(@"Error purging table : %@", table);
+            }
+        }];
+    }
     [self.client logout];
     self.client = nil;
     self.lastSyncDate = nil;

@@ -18,6 +18,8 @@
                 <outletCollection property="containerViews" destination="71t-Dz-ywf" id="wJh-5Q-EQS"/>
                 <outletCollection property="containerViews" destination="0qG-9Y-6sJ" id="2GN-zY-Brx"/>
                 <outletCollection property="containerViews" destination="kEt-c4-nRX" id="HqI-tp-xkG"/>
+                <outletCollection property="buttons" destination="HTH-ie-mSd" id="78n-1b-zlq"/>
+                <outletCollection property="buttons" destination="JtE-2Y-xT8" id="Ngn-hX-7z5"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -123,7 +125,7 @@
                         <action selector="loginButtonTapped:" destination="-1" eventType="touchUpInside" id="qRZ-UY-u19"/>
                     </connections>
                 </button>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JtE-2Y-xT8">
+                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JtE-2Y-xT8">
                     <rect key="frame" x="25" y="207" width="270" height="30"/>
                     <state key="normal" title="Log out"/>
                     <connections>

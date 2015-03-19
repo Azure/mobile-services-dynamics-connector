@@ -35,7 +35,10 @@ NSString * const kAzureConnectorRecentContactsKey = @"AzureConnectorRecentContac
 - (NSArray *)recentContacts {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSData *recentsData = [defaults dataForKey:kAzureConnectorRecentContactsKey];
-    NSOrderedSet *recents = [NSKeyedUnarchiver unarchiveObjectWithData:recentsData];
+    NSOrderedSet *recents = nil;
+    if (recentsData) {
+        recents = [NSKeyedUnarchiver unarchiveObjectWithData:recentsData];
+    }
     if (!recents) {
         recents = [NSOrderedSet orderedSet];
     }
