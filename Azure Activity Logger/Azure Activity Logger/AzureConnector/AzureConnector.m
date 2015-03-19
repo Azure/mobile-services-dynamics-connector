@@ -164,6 +164,7 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
     [context acquireTokenWithResource:resourceURI clientId:clientID redirectUri:[NSURL URLWithString:@"ms-app://s-1-15-2-2478766528-319279558-2094806392-3380066906-3630131337-54439661-3135774793"] completionBlock:^(ADAuthenticationResult *result) {
         if (result.status != AD_SUCCEEDED) {
             NSLog(@"Error authenticating: %@\n%@", result.error.localizedDescription, result.error.localizedFailureReason);
+            completion(nil, result.error);
             return;
         }
 
@@ -215,6 +216,10 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
 
     if (self.client.currentUser == nil) {
         [self loginWithController:[[[UIApplication sharedApplication] keyWindow] rootViewController] completion:^(MSUser *user, NSError *error) {
+            if (error) {
+                finalCompletion(error);
+                return;
+            }
             [self syncWithCompletion:completion];
         }];
         return;

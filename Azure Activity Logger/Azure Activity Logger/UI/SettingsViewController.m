@@ -2,6 +2,7 @@
 #import "ColorsAndFonts.h"
 
 #import "AzureConnector.h"
+#import "ADAuthenticationError.h"
 
 @interface SettingsViewController ()
 
@@ -83,7 +84,15 @@
         __strong typeof(self) strongSelf = weakSelf;
 
         if (error) {
-            NSLog(@"There was an error logging in : %@\n%@", error.localizedDescription, error.localizedFailureReason);
+            NSString *detailsString = @"";
+            if ([error isKindOfClass:[ADAuthenticationError class]]) {
+                detailsString = ((ADAuthenticationError *)error).errorDetails;
+            }
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Sync Error" message:[NSString stringWithFormat:@"There was an error syncing, please try again later.\n%@", detailsString] preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okay = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
+            [alert addAction:okay];
+            
+            [strongSelf presentViewController:alert animated:YES completion:nil];
             return;
         }
 

@@ -9,6 +9,8 @@
 #import "SettingsViewController.h"
 #import "ObjectDetailsViewController.h"
 
+#import "ADAuthenticationError.h"
+
 typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
 {
     HomeViewDisplayRecents,
@@ -233,7 +235,11 @@ typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
         __strong typeof(weakSelf) strongSelf = weakSelf;
 
         if (error) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Sync Error" message:[NSString stringWithFormat:@"There was an error syncing, please try again later.\n%@", error.localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
+            NSString *detailsString = @"";
+            if ([error isKindOfClass:[ADAuthenticationError class]]) {
+                detailsString = ((ADAuthenticationError *)error).errorDetails;
+            }
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Sync Error" message:[NSString stringWithFormat:@"There was an error syncing, please try again later.\n%@", detailsString] preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *okay = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
             [alert addAction:okay];
 

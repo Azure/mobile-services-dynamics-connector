@@ -38,8 +38,10 @@
     id <NSFetchedResultsSectionInfo> sectionInfo = [self.resultsController.sections objectAtIndex:section];
     if ([sectionInfo numberOfObjects] == 0) {
         tableView.separatorColor = [UIColor clearColor];
+        tableView.allowsSelection = NO;
         return 1;
     } else {
+        tableView.allowsSelection = YES;
         tableView.separatorColor = [UIColor lightGrayColor];
     }
     
