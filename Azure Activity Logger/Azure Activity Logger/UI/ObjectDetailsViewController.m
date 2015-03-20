@@ -140,6 +140,12 @@
                 MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:mapPlacemark];
                 mapItem.name = [self.displayObject resultLine1];
                 [mapItem openInMapsWithLaunchOptions:@{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving}];
+            } else {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Address Error" message:@"There was a problem locating this Contact's address." preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *okay = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
+                [alert addAction:okay];
+                
+                [self presentViewController:alert animated:YES completion:nil];
             }
         }];
     }
