@@ -176,6 +176,7 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
     NSString *resourceURI = self.resourceURI;
     NSString *clientID = self.clientID;
 
+    // Use ADAL to authenticate AAD first
     ADAuthenticationContext *context = [self authenticationContext];
     if (!context) {
         NSLog(@"Error getting authentication context");
@@ -189,6 +190,8 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
             return;
         }
 
+        // With a successful authentication to AAD, it is possible to now authenticate
+        // against MWS
         NSDictionary *tokenDict = @{ @"access_token" : result.accessToken };
 
         void (^finalCompletion)(MSUser *, NSError *) = ^void(MSUser *user, NSError *error) {

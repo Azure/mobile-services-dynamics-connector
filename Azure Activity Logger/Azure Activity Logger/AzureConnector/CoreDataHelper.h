@@ -6,6 +6,11 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+/**
+ * This class is intended just to separate the Core Data stack
+ * from the application's delegate.
+ */
+
 @interface CoreDataHelper : NSObject
 
 @property (strong) NSManagedObjectModel *managedObjectModel;

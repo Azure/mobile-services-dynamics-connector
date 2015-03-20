@@ -6,6 +6,10 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+/**
+ * Simple protocol to generalize the display of an Activity.
+ */
+
 @protocol ActivityDisplayable <NSObject>
 
 @property (nonatomic, strong) NSString *subject;

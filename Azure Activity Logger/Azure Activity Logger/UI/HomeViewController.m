@@ -16,6 +16,8 @@
 
 #import "ADAuthenticationError.h"
 
+NSString *const SubtitleTableViewCellIdentifier = @"SubtitleTableViewCellIdentifier";
+
 typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
 {
     HomeViewDisplayRecents,
@@ -51,7 +53,7 @@ typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
     self.title = @"Activity Logger";
 
     self.resultsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.resultsTableView registerNib:[UINib nibWithNibName:@"SubtitleTableViewCell" bundle:nil] forCellReuseIdentifier:@"CELL"];
+    [self.resultsTableView registerNib:[UINib nibWithNibName:@"SubtitleTableViewCell" bundle:nil] forCellReuseIdentifier:SubtitleTableViewCellIdentifier];
 
     self.displayMode = HomeViewDisplayRecents;
     
@@ -120,7 +122,7 @@ typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
     __weak typeof(self) weakSelf = self;
     self.contactsDataSource.cellConfigureBlock = ^UITableViewCell *(Contact *theContact, NSIndexPath *indexPath) {
         __strong typeof(self) strongSelf = weakSelf;
-        UITableViewCell *cell = [strongSelf.resultsTableView dequeueReusableCellWithIdentifier:@"CELL" forIndexPath:indexPath];
+        UITableViewCell *cell = [strongSelf.resultsTableView dequeueReusableCellWithIdentifier:SubtitleTableViewCellIdentifier forIndexPath:indexPath];
         cell.textLabel.text = theContact.resultLine1;
         cell.detailTextLabel.text = theContact.resultLine2;
         cell.imageView.image = [UIImage imageNamed:@"icon-contact"];
@@ -156,6 +158,7 @@ typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
 
 #pragma mark - Notification methods
 
+// Need to listen for completed syncs so we can update the display.
 - (void)setupNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncCompleted:) name:AzureConnectorSyncCompleted object:nil];
 }

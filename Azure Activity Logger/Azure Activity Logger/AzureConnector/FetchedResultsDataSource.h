@@ -6,8 +6,14 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-typedef UITableViewCell *(^CellConfigureBlock)(id object, NSIndexPath *indexPath);
+/**
+ * The `FetchedResultsDataSource` class is for abstracting out a standard
+ * table view datasource from a view controller. It takes advantage of
+ * the features available to the `NSFetchedResultsController` and its
+ * delegate.
+ */
 
+typedef UITableViewCell *(^CellConfigureBlock)(id object, NSIndexPath *indexPath);
 typedef void (^FetchedResultsDidChangeBlock)();
 
 @class NSFetchedResultsController;
