@@ -33,6 +33,7 @@
 		294CEA881AAF9C8900858B09 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 294CEA861AAF9C8900858B09 /* Task.m */; };
 		294CEA8B1AAF9C8900858B09 /* Appointment.m in Sources */ = {isa = PBXBuildFile; fileRef = 294CEA8A1AAF9C8900858B09 /* Appointment.m */; };
 		294CEA8C1AAF9C8900858B09 /* Appointment.m in Sources */ = {isa = PBXBuildFile; fileRef = 294CEA8A1AAF9C8900858B09 /* Appointment.m */; };
+		297C9AAA1ABC9665001B4594 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 297C9AA91ABC9665001B4594 /* MapKit.framework */; };
 		29A508941AB24E560058EB34 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A508921AB24E560058EB34 /* Crashlytics.framework */; };
 		29A508951AB24E560058EB34 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A508931AB24E560058EB34 /* Fabric.framework */; };
 		29C261BB1AADF3C000606DAF /* NewActivityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29C261B81AADF3C000606DAF /* NewActivityView.xib */; };
@@ -88,6 +89,7 @@
 		294CEA891AAF9C8900858B09 /* Appointment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appointment.h; sourceTree = "<group>"; };
 		294CEA8A1AAF9C8900858B09 /* Appointment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appointment.m; sourceTree = "<group>"; };
 		294CEA8D1AAF9F6900858B09 /* ObjectDisplayable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectDisplayable.h; sourceTree = "<group>"; };
+		297C9AA91ABC9665001B4594 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		29A508921AB24E560058EB34 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
 		29A508931AB24E560058EB34 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
 		29C261B81AADF3C000606DAF /* NewActivityView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewActivityView.xib; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 			files = (
 				29336D821AAA430600EB3F33 /* WindowsAzureMobileServices.framework in Frameworks */,
 				29A508941AB24E560058EB34 /* Crashlytics.framework in Frameworks */,
+				297C9AAA1ABC9665001B4594 /* MapKit.framework in Frameworks */,
 				650EDFE83A6542E97BD50E5E /* libPods.a in Frameworks */,
 				29A508951AB24E560058EB34 /* Fabric.framework in Frameworks */,
 			);
@@ -220,6 +223,7 @@
 		29C692411AAA310F003855FD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				297C9AA91ABC9665001B4594 /* MapKit.framework */,
 				29A508921AB24E560058EB34 /* Crashlytics.framework */,
 				29A508931AB24E560058EB34 /* Fabric.framework */,
 				29C692421AAA3116003855FD /* WindowsAzureMobileServices.framework */,
@@ -328,6 +332,11 @@
 					29C692111AAA2FEF003855FD = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = ZV9NBBH9QE;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					29C6922D1AAA2FEF003855FD = {
 						CreatedOnToolsVersion = 6.1.1;

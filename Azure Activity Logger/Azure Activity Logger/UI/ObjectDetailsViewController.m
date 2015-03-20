@@ -3,6 +3,8 @@
 //  Azure Activity Logger
 //
 
+#import <MapKit/MapKit.h>
+
 #import "ObjectDetailsViewController.h"
 #import "NSString+StringFormatting.h"
 #import "ColorsAndFonts.h"
@@ -24,6 +26,7 @@
 }
 
 @property (nonatomic, strong) NSArray *relatedActivities;
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @end
 
@@ -34,7 +37,6 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-
     }
     return self;
 }
@@ -76,6 +78,11 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+
+    if ([CLLocationManager locationServicesEnabled] && [CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
+        self.locationManager = [[CLLocationManager alloc] init];
+        [self.locationManager requestWhenInUseAuthorization];
+    }
 }
 
 - (void)refreshObject {
@@ -124,11 +131,18 @@
         return;
     }
 
-    NSString *addressString = [addressLabel.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-
-    NSURL *mapsURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://maps.apple.com?q=%@", addressString]];
-
-    [[UIApplication sharedApplication] openURL:mapsURL];
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse) {
+        CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
+        [geoCoder geocodeAddressString:[displayObject addressInfo] completionHandler:^(NSArray *placemarks, NSError *error) {
+            if (!error) {
+                CLPlacemark *placemark = [placemarks firstObject];
+                MKPlacemark *mapPlacemark = [[MKPlacemark alloc] initWithPlacemark:placemark];
+                MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:mapPlacemark];
+                mapItem.name = [self.displayObject resultLine1];
+                [mapItem openInMapsWithLaunchOptions:@{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving}];
+            }
+        }];
+    }
 }
 
 - (IBAction)phoneClick:(id)sender {
