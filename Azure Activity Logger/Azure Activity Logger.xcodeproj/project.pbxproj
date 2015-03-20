@@ -331,7 +331,6 @@
 				TargetAttributes = {
 					29C692111AAA2FEF003855FD = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = ZV9NBBH9QE;
 						SystemCapabilities = {
 							com.apple.Maps.iOS = {
 								enabled = 1;
@@ -604,7 +603,7 @@
 				INFOPLIST_FILE = "Azure Activity Logger/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "d6a2bc05-3ba1-438a-9407-1ff0b6ab9a0f";
+				PROVISIONING_PROFILE = "";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/Pods\"/**";
 			};
@@ -632,7 +631,7 @@
 				INFOPLIST_FILE = "Azure Activity Logger/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "d6a2bc05-3ba1-438a-9407-1ff0b6ab9a0f";
+				PROVISIONING_PROFILE = "";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/Pods\"/**";
 			};
