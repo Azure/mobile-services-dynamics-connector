@@ -10,24 +10,40 @@
 #import "ADKeychainTokenCacheStore.h"
 #import "SSKeychain.h"
 
+/**
+ * The following constants are meant for consumers to use to determine the status
+ * of the sync process. The key constants are for consumers to determine the
+ * overall success/failure of the sync process.
+ */
+/// Sync status notification names.
 NSString *const AzureConnectorSyncStarted = @"AzureConnectorSyncStarted";
 NSString *const AzureConnectorSyncCompleted = @"AzureConnectorSyncCompleted";
 
-/// Private key for use with NSUserDefaults to store the last successful sync date
-NSString *const kAzureConnectorSyncCompletedDateKey = @"AzureConnectorSyncCompletedDateKey";
-
-/// Private keys for use with NSUserDefaults to store application strings
-NSString *const kAzureConnectorAuthorityKey = @"AzureConnectorAuthorityKey";
-NSString *const kDefaultAzureAuthority = @"https://login.windows.net/sonomap.onmicrosoft.com";
-NSString *const kAzureConnectorApplicationURLKey = @"AzureConnectorApplicationURLKey";
-NSString *const kDefaultAzureConnectorApplicationURL = @"https://sonoma-azure-demo.azure-mobile.net/";
-NSString *const kAzureConnectorResourceURIKey = @"AzureConnectorResourceURIKey";
-NSString *const kDefaultAzureConnectorResourceURI = @"https://sonoma-azure-demo.azure-mobile.net/login/aad";
-NSString *const kAzureConnectorClientIDKey = @"AzureConnectorClientIDKey";
-NSString *const kDefaultAzureConnectorClientID = @"23bff0e9-7ce7-433a-9d4f-4fb93098c0d3";
-
+/// Sync success/failure notification user info keys.
 NSString *const AzureConnectorSyncSuccessKey = @"AzureConnectorSyncSuccessKey";
 NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailedMessagesKey";
+
+/**
+ * The following keys are private to this class and not intended for use elsewhere.
+ * These keys setup the basic defaults the app will use. The app allows the user to
+ * enter new values for these keys within the settings view.
+ */
+/// Private key for use with NSUserDefaults to store the last successful sync date.
+NSString *const kAzureConnectorSyncCompletedDateKey = @"AzureConnectorSyncCompletedDateKey";
+
+/// Private keys for use with NSUserDefaults to store application strings.
+NSString *const kAzureConnectorApplicatonKey = @"kAzureConnectorApplicatonKey";
+NSString *const kDefaultAzureConnectorApplicatonKey = @"UzOuYZAOxIRZzDdHYqeMGifuSqGwYu15";
+NSString *const kAzureConnectorAuthorityKey = @"kAzureConnectorAuthorityKey";
+NSString *const kDefaultAzureConnectorAuthority = @"https://login.windows.net/sonomap.onmicrosoft.com";
+NSString *const kAzureConnectorApplicationURLKey = @"kAzureConnectorApplicationURLKey";
+NSString *const kDefaultAzureConnectorApplicationURL = @"https://sonoma-azure-demo.azure-mobile.net/";
+NSString *const kAzureConnectorResourceURIKey = @"kAzureConnectorResourceURIKey";
+NSString *const kDefaultAzureConnectorResourceURI = @"https://sonoma-azure-demo.azure-mobile.net/login/aad";
+NSString *const kAzureConnectorClientIDKey = @"kAzureConnectorClientIDKey";
+NSString *const kDefaultAzureConnectorClientID = @"23bff0e9-7ce7-433a-9d4f-4fb93098c0d3";
+NSString *const kAzureConnectorRedirectURIKey = @"kAzureConnectorRedirectURIKey";
+NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-2478766528-319279558-2094806392-3380066906-3630131337-54439661-3135774793";
 
 @interface AzureConnector ()
 
@@ -166,7 +182,7 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
         return;
     }
 
-    [context acquireTokenWithResource:resourceURI clientId:clientID redirectUri:[NSURL URLWithString:@"ms-app://s-1-15-2-2478766528-319279558-2094806392-3380066906-3630131337-54439661-3135774793"] completionBlock:^(ADAuthenticationResult *result) {
+    [context acquireTokenWithResource:resourceURI clientId:clientID redirectUri:[NSURL URLWithString:kDefaultAzureConnectorRedirectURI] completionBlock:^(ADAuthenticationResult *result) {
         if (result.status != AD_SUCCEEDED) {
             NSLog(@"Error authenticating: %@\n%@", result.error.localizedDescription, result.error.localizedFailureReason);
             completion(nil, result.error);
@@ -195,7 +211,7 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
             // If the auth token is no longer valid, try reauthenticating and then
             // syncing again.
             if (response && response.statusCode == 401) {
-                // we need to try authing again
+                // Need to try authing again
                 [self logout];
                 [self loginWithController:nil completion:^(MSUser *user, NSError *error) {
                     [self syncWithCompletion:completion];
@@ -219,6 +235,8 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
         [[NSNotificationCenter defaultCenter] postNotificationName:AzureConnectorSyncCompleted object:nil userInfo:userInfo];
     };
 
+    // It is possible that the user may try to sync before being logged in, which
+    // we need to check and redirect to the log in page.
     if (self.client.currentUser == nil) {
         [self loginWithController:[[[UIApplication sharedApplication] keyWindow] rootViewController] completion:^(MSUser *user, NSError *error) {
             if (error) {
@@ -235,6 +253,7 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
     [self syncTables:self.syncTables WithTotalCompletion:finalCompletion];
 }
 
+// This method will recursively sync all tables that are in the `syncTables` property.
 - (void)syncTables:(NSArray *)tables WithTotalCompletion:(MSSyncBlock)completion {
     if (tables.count == 0) {
         completion(nil);
@@ -255,16 +274,10 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
     }];
 }
 
-- (void)readTable:(MSSyncTable *)table {
-    [table readWithCompletion:^(MSQueryResult *result, NSError *error) {
-        NSLog(@"%@", result);
-        NSLog(@"%@", result.items);
-    }];
-}
-
 - (void)logout {
     [self clearAuthInfo];
 
+    // On logout there is the assumption that all data should be deleted.
     for (MSSyncTable *table in self.syncTables) {
         [table forcePurgeWithCompletion:^(NSError *error) {
             if (error) {
@@ -290,7 +303,7 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *authority = [defaults valueForKey:kAzureConnectorAuthorityKey];
     if (!authority) {
-        authority = kDefaultAzureAuthority;
+        authority = kDefaultAzureConnectorAuthority;
         self.authority = authority;
     }
     return authority;
@@ -313,10 +326,6 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
 }
 
 - (void)setApplicationURL:(NSString *)applicationURL {
-    // We need to reset the client so that the next attempt to use it will cause
-    // a new log in.
-    //    self.client = nil;
-
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:applicationURL forKey:kAzureConnectorApplicationURLKey];
     [defaults synchronize];
