@@ -1,3 +1,8 @@
+//
+//  HomeViewController.m
+//  Azure Activity Logger
+//
+
 #import "HomeViewController.h"
 #import "AzureConnector.h"
 #import "FetchedResultsDataSource.h"

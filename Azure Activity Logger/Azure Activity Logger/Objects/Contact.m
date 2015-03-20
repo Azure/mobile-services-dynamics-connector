@@ -1,3 +1,8 @@
+//
+//  Contact.m
+//  Azure Activity Logger
+//
+
 #import "Contact.h"
 #import "NSString+StringFormatting.h"
 

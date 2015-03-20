@@ -1,3 +1,8 @@
+//
+//  AzureConnector.m
+//  Azure Activity Logger
+//
+
 #import "AzureConnector.h"
 #import "CoreDataHelper.h"
 #import "ADAuthenticationContext.h"

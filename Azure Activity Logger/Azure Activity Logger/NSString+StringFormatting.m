@@ -1,3 +1,8 @@
+//
+//  NSString+StringFormatting.m
+//  Azure Activity Logger
+//
+
 #import "NSString+StringFormatting.h"
 
 @implementation NSString (StringFormatting)

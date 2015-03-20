@@ -1,3 +1,8 @@
+//
+//  NewActivityViewController.m
+//  Azure Activity Logger
+//
+
 #import "NewActivityViewController.h"
 #import "ColorsAndFonts.h"
 #import "AzureConnector.h"

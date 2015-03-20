@@ -1,3 +1,8 @@
+//
+//  ActivityDisplayable.h
+//  Azure Activity Logger
+//
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 

@@ -1,3 +1,8 @@
+//
+//  AppDelegate.m
+//  Azure Activity Logger
+//
+
 #import "AppDelegate.h"
 #import "ColorsAndFonts.h"
 

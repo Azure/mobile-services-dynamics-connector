@@ -1,3 +1,8 @@
+//
+//  ObjectDetailsViewController.m
+//  Azure Activity Logger
+//
+
 #import "ObjectDetailsViewController.h"
 #import "NSString+StringFormatting.h"
 #import "ColorsAndFonts.h"

@@ -1,3 +1,8 @@
+//
+//  DataAccessor.m
+//  Azure Activity Logger
+//
+
 #import "DataAccessor.h"
 #import "CoreDataHelper.h"
 #import "Contact.h"

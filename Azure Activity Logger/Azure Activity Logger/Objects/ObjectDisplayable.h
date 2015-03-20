@@ -1,3 +1,8 @@
+//
+//  ObjectDisplayable.h
+//  Azure Activity Logger
+//
+
 #import <Foundation/Foundation.h>
 
 @protocol ObjectDisplayable <NSObject>

@@ -1,3 +1,8 @@
+//
+//  AppDelegate.h
+//  Azure Activity Logger
+//
+
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 

@@ -1,3 +1,8 @@
+//
+//  Task.h
+//  Azure Activity Logger
+//
+
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "ActivityDisplayable.h"

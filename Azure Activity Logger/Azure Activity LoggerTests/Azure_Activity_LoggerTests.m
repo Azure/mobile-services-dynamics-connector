@@ -1,3 +1,8 @@
+//
+//  Azure_Activity_LoggerTests.m
+//  Azure Activity Logger
+//
+
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 

@@ -1,3 +1,8 @@
+//
+//  NewActivityViewController.h
+//  Azure Activity Logger
+//
+
 #import <UIKit/UIKit.h>
 #import "Contact.h"
 

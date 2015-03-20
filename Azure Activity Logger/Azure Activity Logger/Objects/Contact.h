@@ -1,3 +1,8 @@
+//
+//  Contact.h
+//  Azure Activity Logger
+//
+
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "ObjectDisplayable.h"

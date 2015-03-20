@@ -1,3 +1,8 @@
+//
+//  CoreDataHelper.m
+//  Azure Activity Logger
+//
+
 #import "CoreDataHelper.h"
 
 NSString *const ConstDatabaseFileName = @"Azure_Activity_Logger.sqlite";
