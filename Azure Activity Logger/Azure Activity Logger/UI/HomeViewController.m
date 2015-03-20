@@ -120,9 +120,8 @@ typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
     self.contactsDataSource = [[FetchedResultsDataSource alloc] initWithFetchedResultsController:controller];
 
     __weak typeof(self) weakSelf = self;
-    self.contactsDataSource.cellConfigureBlock = ^UITableViewCell *(Contact *theContact, NSIndexPath *indexPath) {
-        __strong typeof(self) strongSelf = weakSelf;
-        UITableViewCell *cell = [strongSelf.resultsTableView dequeueReusableCellWithIdentifier:SubtitleTableViewCellIdentifier forIndexPath:indexPath];
+    self.contactsDataSource.cellConfigureBlock = ^UITableViewCell *(UITableView *tableView, Contact *theContact, NSIndexPath *indexPath) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:SubtitleTableViewCellIdentifier forIndexPath:indexPath];
         cell.textLabel.text = theContact.resultLine1;
         cell.detailTextLabel.text = theContact.resultLine2;
         cell.imageView.image = [UIImage imageNamed:@"icon-contact"];
@@ -226,6 +225,7 @@ typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
 - (IBAction)syncButtonTapped:(id)sender {
     self.syncingLabel.text = @"Sync in progress ...";
     
+    // Setup the gray overlay.
     self.syncingOverlayView = [[UIView alloc] initWithFrame:self.navigationController.view.frame];
     CGRect shadedViewFrame = self.navigationController.view.frame;
     shadedViewFrame.size.height = shadedViewFrame.size.height - 44.0;
@@ -249,6 +249,7 @@ typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
     [[AzureConnector sharedConnector] syncWithCompletion:^(NSError *error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
 
+        // If there was an error, display it to the user in a useful manner.
         if (error) {
             NSString *detailsString = @"";
             if ([error isKindOfClass:[ADAuthenticationError class]]) {
@@ -315,8 +316,12 @@ typedef NS_ENUM(NSInteger, HomeViewDisplayMode)
     NSPredicate *firstNamePredicate = [NSPredicate predicateWithFormat:@"firstName CONTAINS[cd] %@", searchText];
     NSPredicate *lastNamePredicate = [NSPredicate predicateWithFormat:@"lastName CONTAINS[cd] %@", searchText];
     NSPredicate *jobTitlePredicate = [NSPredicate predicateWithFormat:@"jobTitle CONTAINS[cd] %@", searchText];
+    NSPredicate *textSearchPredicate = [NSCompoundPredicate orPredicateWithSubpredicates:@[firstNamePredicate, lastNamePredicate, jobTitlePredicate]];
 
-    [self configureContactsResultController:[[DataAccessor sharedAccessor] fetchedResultsControllerForObject:@"Contact" withPredicate:[NSCompoundPredicate orPredicateWithSubpredicates:@[ firstNamePredicate, lastNamePredicate, jobTitlePredicate ]] sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES]]] displayMode:HomeViewDisplaySearch];
+    [self configureContactsResultController:[[DataAccessor sharedAccessor] fetchedResultsControllerForObject:@"Contact"
+                                                                                               withPredicate:textSearchPredicate
+                                                                                             sortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES]]]
+                                displayMode:HomeViewDisplaySearch];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {

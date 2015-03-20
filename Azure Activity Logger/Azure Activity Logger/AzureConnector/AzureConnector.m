@@ -122,6 +122,9 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
         self.client.currentUser = [[MSUser alloc] initWithUserId:userid];
         self.client.currentUser.mobileServiceAuthenticationToken = [SSKeychain passwordForService:@"AzureMobileServiceTutorial" account:userid];
 
+        // To ensure that the user is still authenticated, it is necessary to attempt to connect
+        // with MWS in some way. The simplest is a single read operation that will fail if
+        // authentication fails. In that case, prompt the user to reauthenticate.
         MSTable *contactTestTable = [self.client tableWithName:@"Contact"];
         [contactTestTable readWithQueryString:@"$top=1" completion:^(MSQueryResult *result, NSError *error) {
             if (error) {
@@ -168,6 +171,8 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
         self.syncTables = [self setupSyncTables];
     }
 
+    // Short circuit the login prompt if MWS is able to generate a complete
+    // current user.
     if (self.client.currentUser && self.client.currentUser.mobileServiceAuthenticationToken) {
         completion(self.client.currentUser, nil);
         return;
@@ -214,9 +219,11 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
             // If the auth token is no longer valid, try reauthenticating and then
             // syncing again.
             if (response && response.statusCode == 401) {
-                // Need to try authing again
+                // Need to authenticate again
                 [self logout];
                 [self loginWithController:nil completion:^(MSUser *user, NSError *error) {
+                    // If the authentication attempt was successful, attempt
+                    // to sync again.
                     [self syncWithCompletion:completion];
                 }];
                 return;

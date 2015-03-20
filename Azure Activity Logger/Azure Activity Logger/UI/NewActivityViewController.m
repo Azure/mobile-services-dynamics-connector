@@ -132,6 +132,9 @@
         task[@"detail"] = notesView.text;
     }
 
+    // It is necessary to use an async method to insert the task because MWS
+    // does not guarantee that the insert will complete by the time the method
+    // returns.
     [[AzureConnector sharedConnector] insertTask:[task copy] completion:^(NSDictionary *item, NSError *error) {
         if (error) {
             NSLog(@"Error inserting task : %@\n%@", error.localizedDescription, error.localizedFailureReason);

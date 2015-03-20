@@ -85,7 +85,7 @@
     
     if (self.cellConfigureBlock) {
         NSManagedObject *theObject = [self.resultsController objectAtIndexPath:indexPath];
-        return self.cellConfigureBlock(theObject, indexPath);
+        return self.cellConfigureBlock(tableView, theObject, indexPath);
     }
 
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TEST"];

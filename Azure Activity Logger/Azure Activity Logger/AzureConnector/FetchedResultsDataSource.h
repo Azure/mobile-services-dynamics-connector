@@ -13,7 +13,12 @@
  * delegate.
  */
 
-typedef UITableViewCell *(^CellConfigureBlock)(id object, NSIndexPath *indexPath);
+/// The configuration block is called inside `tableView:cellForRowAtIndexPath:` and allows
+/// the consumer to define how to setup the cell.
+typedef UITableViewCell *(^CellConfigureBlock)(UITableView* tableView, id object, NSIndexPath *indexPath);
+/// The change block is to allow the consumer to update itself whenever the
+/// `NSFectedResultsController` is updated automatically. This removes the need for the
+/// consumer to be the `NSFetchedResultsController`'s delegate.
 typedef void (^FetchedResultsDidChangeBlock)();
 
 @class NSFetchedResultsController;
@@ -23,6 +28,7 @@ typedef void (^FetchedResultsDidChangeBlock)();
 @property (nonatomic, copy) CellConfigureBlock cellConfigureBlock;
 @property (nonatomic, copy) FetchedResultsDidChangeBlock resultsDidChangeBlock;
 
+/// These methods provide simple customization for table view properties.
 @property (nonatomic, copy) NSString *emptyResultsText;
 @property (nonatomic, copy) NSString *sectionHeader;
 
