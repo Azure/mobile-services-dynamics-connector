@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0"
+       lastSavedToolsVersion="6751" systemVersion="14C1510" minimumToolsVersion="Automatic" macOSVersion="Automatic"
+       iOSVersion="Automatic">
+    <entity name="Appointment" representedClassName="Appointment" syncable="YES">
+        <attribute name="activityTypeCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="actualEnd" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="detail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ms_createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="ms_updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="ms_version" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="regardingObjectId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Contact" representedClassName="Contact" syncable="YES">
+        <attribute name="address1_City" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="address1_Line1" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="address1_PostalCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="address1_StateOrProvince" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eMailAddress1" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="jobTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ms_createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="ms_updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="ms_version" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="telephone1" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="MS_TableConfig" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="keyType" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="table" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="MS_TableOperationErrors" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="operationId" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="tableKind" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="MS_TableOperations" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="itemId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="table" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tableKind" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="PhoneCall" representedClassName="PhoneCall" syncable="YES">
+        <attribute name="activityTypeCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="actualEnd" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="detail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ms_createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="ms_updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="ms_version" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="regardingObjectId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Task" representedClassName="Task" syncable="YES">
+        <attribute name="activityTypeCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="actualEnd" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="detail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ms_createdAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="ms_updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="ms_version" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="regardingObjectId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Appointment" positionX="27" positionY="144" width="128" height="180"/>
+        <element name="Contact" positionX="-27" positionY="18" width="128" height="238"/>
+        <element name="MS_TableConfig" positionX="18" positionY="153" width="128" height="120"/>
+        <element name="MS_TableOperationErrors" positionX="18" positionY="135" width="128" height="103"/>
+        <element name="MS_TableOperations" positionX="54" positionY="180" width="128" height="120"/>
+        <element name="PhoneCall" positionX="36" positionY="153" width="128" height="178"/>
+        <element name="Task" positionX="18" positionY="135" width="128" height="178"/>
+    </elements>
+</model>
