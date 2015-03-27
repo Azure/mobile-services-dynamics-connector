@@ -105,6 +105,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WindowsAzure.MobileServices.Backend.1.0.450\lib\net45\Microsoft.WindowsAzure.Mobile.Service.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Mobile.Service.Security">
+      <HintPath>..\packages\WindowsAzure.MobileServices.Backend.Security.1.0.450\lib\net45\Microsoft.WindowsAzure.Mobile.Service.Security.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.WindowsAzure.Mobile.Service.Tables, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WindowsAzure.MobileServices.Backend.Tables.1.0.450\lib\net45\Microsoft.WindowsAzure.Mobile.Service.Tables.dll</HintPath>
