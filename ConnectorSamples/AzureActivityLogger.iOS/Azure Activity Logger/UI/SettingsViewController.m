@@ -13,10 +13,10 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UIButton *logoutButton;
+@property (weak, nonatomic) IBOutlet UILabel *editableInfoLabel;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
 
 @property (weak, nonatomic) IBOutlet UITextField *applicationURLTextField;
-@property (weak, nonatomic) IBOutlet UITextField *resourceURITextField;
 @property (weak, nonatomic) IBOutlet UITextField *clientIDTextField;
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
 
@@ -40,7 +40,6 @@
     self.title = @"Settings";
 
     self.applicationURLTextField.text = [AzureConnector sharedConnector].applicationURL;
-    self.resourceURITextField.text = [AzureConnector sharedConnector].resourceURI;
     self.clientIDTextField.text = [AzureConnector sharedConnector].clientID;
 
     [self updateViewForLoggedIn:[[AzureConnector sharedConnector] isLoggedIn]];
@@ -75,13 +74,13 @@
     self.loginButton.hidden = loggedIn;
     self.logoutButton.enabled = loggedIn;
     self.logoutButton.hidden = !loggedIn;
+    self.editableInfoLabel.hidden = !loggedIn;
 }
 
 #pragma mark - Action methods
 
 - (IBAction)loginButtonTapped:(id)sender {
     [AzureConnector sharedConnector].applicationURL = self.applicationURLTextField.text;
-    [AzureConnector sharedConnector].resourceURI = self.resourceURITextField.text;
     [AzureConnector sharedConnector].clientID = self.clientIDTextField.text;
 
     __weak typeof(self) weakSelf = self;
