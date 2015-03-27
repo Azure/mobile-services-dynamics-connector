@@ -7,13 +7,9 @@
 
 #import <CoreData/CoreData.h>
 
-@class Contact;
-
 @interface DataAccessor : NSObject
 
 + (DataAccessor *)sharedAccessor;
-
-- (void)addContactToRecents:(Contact *)contact;
 
 /**
  * The following methods are intended to simplify the creation of
@@ -21,8 +17,6 @@
  * `FetchedResultsDataSource` object.
  */
 - (NSFetchedResultsController *)fetchedResultsControllerForObject:(NSString *)object withPredicate:(NSPredicate *)predicate sortDescriptors:(NSArray *)descriptors;
-/// Convenience method for getting recent contacts.
-- (NSFetchedResultsController *)recentContactsFetchedResultsController;
 /// Convenience method for getting all contacts.
 - (NSFetchedResultsController *)contactsFetchedResultsController;
 
