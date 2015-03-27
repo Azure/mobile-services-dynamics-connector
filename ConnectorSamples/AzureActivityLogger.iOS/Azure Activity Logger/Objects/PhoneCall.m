@@ -9,7 +9,6 @@
 
 @dynamic ms_createdAt;
 @dynamic ms_updatedAt;
-@dynamic ms_version;
 @dynamic id;
 @dynamic subject;
 @dynamic actualEnd;

@@ -19,7 +19,6 @@
 @dynamic jobTitle;
 @dynamic ms_createdAt;
 @dynamic ms_updatedAt;
-@dynamic ms_version;
 @dynamic telephone1;
 
 - (NSString *)resultLine1 {
