@@ -98,9 +98,11 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 }
 
 - (void)setLastSyncDate:(NSDate *)date {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setValue:date forKey:kAzureConnectorSyncCompletedDateKey];
-    [defaults synchronize];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setValue:date forKey:kAzureConnectorSyncCompletedDateKey];
+        [defaults synchronize];
+    });
 }
 
 - (NSUInteger)pendingSyncCount {
