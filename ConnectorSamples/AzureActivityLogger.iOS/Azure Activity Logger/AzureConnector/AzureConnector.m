@@ -196,7 +196,7 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
             completion(user, error);
         };
 
-        [self.client loginWithProvider:@"windowsazureactivedirectory" token:tokenDict completion:finalCompletion];
+        [self.client loginWithProvider:@"aad" token:tokenDict completion:finalCompletion];
     }];
 }
 
