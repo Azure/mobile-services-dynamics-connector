@@ -121,18 +121,6 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
         NSLog(@"userid: %@", userid);
         self.client.currentUser = [[MSUser alloc] initWithUserId:userid];
         self.client.currentUser.mobileServiceAuthenticationToken = [SSKeychain passwordForService:@"AzureMobileServiceTutorial" account:userid];
-
-        // To ensure that the user is still authenticated, it is necessary to attempt to connect
-        // with Mobile Services in some way. The simplest is a single read operation that will fail if
-        // authentication fails. In that case, prompt the user to reauthenticate.
-        MSTable *contactTestTable = [self.client tableWithName:@"Contact"];
-        [contactTestTable readWithQueryString:@"$top=1" completion:^(MSQueryResult *result, NSError *error) {
-            if (error) {
-                [self clearAuthInfo];
-                [self loginWithController:[[[UIApplication sharedApplication] keyWindow] rootViewController] completion:^(MSUser *user, NSError *error) {}];
-                NSLog(@"error : %@", error);
-            }
-        }];
     }
 }
 
