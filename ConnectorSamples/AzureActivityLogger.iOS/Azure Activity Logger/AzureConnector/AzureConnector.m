@@ -50,6 +50,10 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 @property (nonatomic, strong) NSString *authority;
 
 @property (nonatomic, strong) MSClient *client;
+@property (nonatomic, strong) MSSyncTable *contactTable;
+@property (nonatomic, strong) MSSyncTable *taskTable;
+@property (nonatomic, strong) MSSyncTable *phoneCallTable;
+@property (nonatomic, strong) MSSyncTable *appointmentTable;
 @property (nonatomic, strong) NSArray *syncTables;
 
 @end
@@ -83,13 +87,15 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
     return client;
 }
 
+// This function returns the list of table names so that later, when syncing
+// the necessary table can be created as needed.
 - (NSArray *)setupSyncTables {
-    return @[
-        [self.client syncTableWithName:@"Contact"],
-        [self.client syncTableWithName:@"Task"],
-        [self.client syncTableWithName:@"PhoneCall"],
-        [self.client syncTableWithName:@"Appointment"]
-    ];
+    self.contactTable = [self.client syncTableWithName:@"Contact"];
+    self.taskTable = [self.client syncTableWithName:@"Task"];
+    self.phoneCallTable = [self.client syncTableWithName:@"PhoneCall"];
+    self.appointmentTable = [self.client syncTableWithName:@"Appointment"];
+    
+    return @[@"Contact", @"Task", @"PhoneCall", @"Appointment"];
 }
 
 - (NSDate *)lastSyncDate {
@@ -251,17 +257,20 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 
     [[NSNotificationCenter defaultCenter] postNotificationName:AzureConnectorSyncStarted object:nil];
 
-    [self syncTables:self.syncTables WithTotalCompletion:finalCompletion];
+    [self syncTables:self.syncTables withTotalCompletion:finalCompletion];
 }
 
 // This method will recursively sync all tables that are in the `syncTables` property.
-- (void)syncTables:(NSArray *)tables WithTotalCompletion:(MSSyncBlock)completion {
+// The reason for a recursive design is so that there is less overhead in tracking which
+// operations are started but not yet completed. Additionally it allows for short
+// circuiting the execution if there is an error.
+- (void)syncTables:(NSArray *)tables withTotalCompletion:(MSSyncBlock)completion {
     if (tables.count == 0) {
         completion(nil);
         return;
     }
 
-    MSSyncTable *curTable = [tables firstObject];
+    MSSyncTable *curTable = [self.client syncTableWithName:[tables firstObject]];
     MSQuery *curQuery = [curTable query];
     [curTable pullWithQuery:curQuery queryId:nil completion:^(NSError *error) {
         if (error) {
@@ -271,14 +280,16 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 
         NSMutableArray *mutableTables = [NSMutableArray arrayWithArray:tables];
         [mutableTables removeObjectAtIndex:0];
-        [self syncTables:[mutableTables copy] WithTotalCompletion:completion];
+        [self syncTables:[mutableTables copy] withTotalCompletion:completion];
     }];
 }
 
 - (void)logout {
     [self clearAuthInfo];
 
-    // On logout there is the assumption that all data should be deleted.
+    // On logout there is the assumption that all data should be deleted. Here there
+    // is no need for recursion as the only concern is that all data is removed, not
+    // the order of execution or if one completes before another.
     for (MSSyncTable *table in self.syncTables) {
         [table forcePurgeWithCompletion:^(NSError *error) {
             if (error) {
@@ -293,9 +304,10 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 
 #pragma mark - Insert methods
 
+// Wrap up the insert to a specific table. This allows the consumer to be independent
+// of any work that goes in to inserting the object.
 - (void)insertTask:(NSDictionary *)task completion:(MSSyncItemBlock)completion {
-    MSSyncTable *taskTable = [self.syncTables filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name LIKE[cd] %@", @"Task"]].firstObject;
-    [taskTable insert:task completion:completion];
+    [self.taskTable insert:task completion:completion];
 }
 
 #pragma mark - Instance property accessor/setters
