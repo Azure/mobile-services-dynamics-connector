@@ -1,0 +1,723 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		29336D771AAA38A000EB3F33 /* SettingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29336D741AAA38A000EB3F33 /* SettingsView.xib */; };
+		29336D781AAA38A000EB3F33 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D761AAA38A000EB3F33 /* SettingsViewController.m */; };
+		29336D7D1AAA3AB900EB3F33 /* AzureConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D7B1AAA3AB900EB3F33 /* AzureConnector.m */; };
+		29336D801AAA3D8200EB3F33 /* CoreDataHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D7F1AAA3D8200EB3F33 /* CoreDataHelper.m */; };
+		29336D811AAA3D8200EB3F33 /* CoreDataHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D7F1AAA3D8200EB3F33 /* CoreDataHelper.m */; };
+		29336D821AAA430600EB3F33 /* WindowsAzureMobileServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29C692421AAA3116003855FD /* WindowsAzureMobileServices.framework */; };
+		29336D841AAA43AD00EB3F33 /* AzureConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D7B1AAA3AB900EB3F33 /* AzureConnector.m */; };
+		29336D8B1AAA4DCD00EB3F33 /* DataAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D8A1AAA4DCD00EB3F33 /* DataAccessor.m */; };
+		29336D8C1AAA4DCD00EB3F33 /* DataAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D8A1AAA4DCD00EB3F33 /* DataAccessor.m */; };
+		29336D8F1AAA526700EB3F33 /* FetchedResultsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D8E1AAA526700EB3F33 /* FetchedResultsDataSource.m */; };
+		29336D901AAA526700EB3F33 /* FetchedResultsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D8E1AAA526700EB3F33 /* FetchedResultsDataSource.m */; };
+		29336D951AAA53FB00EB3F33 /* SubtitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29336D941AAA53FB00EB3F33 /* SubtitleTableViewCell.xib */; };
+		29336D961AAA53FB00EB3F33 /* SubtitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29336D941AAA53FB00EB3F33 /* SubtitleTableViewCell.xib */; };
+		29336D9A1AAA5C6700EB3F33 /* ObjectDetailsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29336D971AAA5C6700EB3F33 /* ObjectDetailsView.xib */; };
+		29336D9B1AAA5C6700EB3F33 /* ObjectDetailsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29336D971AAA5C6700EB3F33 /* ObjectDetailsView.xib */; };
+		29336D9C1AAA5C6700EB3F33 /* ObjectDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D991AAA5C6700EB3F33 /* ObjectDetailsViewController.m */; };
+		29336D9D1AAA5C6700EB3F33 /* ObjectDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D991AAA5C6700EB3F33 /* ObjectDetailsViewController.m */; };
+		29336DA01AAA5DF000EB3F33 /* NSString+StringFormatting.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D9F1AAA5DF000EB3F33 /* NSString+StringFormatting.m */; };
+		29336DA11AAA5DF000EB3F33 /* NSString+StringFormatting.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D9F1AAA5DF000EB3F33 /* NSString+StringFormatting.m */; };
+		293AAA2E1AB246B100BFE794 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 29C692251AAA2FEF003855FD /* Images.xcassets */; };
+		294CEA831AAF9C8800858B09 /* PhoneCall.m in Sources */ = {isa = PBXBuildFile; fileRef = 294CEA821AAF9C8800858B09 /* PhoneCall.m */; };
+		294CEA841AAF9C8800858B09 /* PhoneCall.m in Sources */ = {isa = PBXBuildFile; fileRef = 294CEA821AAF9C8800858B09 /* PhoneCall.m */; };
+		294CEA871AAF9C8900858B09 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 294CEA861AAF9C8900858B09 /* Task.m */; };
+		294CEA881AAF9C8900858B09 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 294CEA861AAF9C8900858B09 /* Task.m */; };
+		294CEA8B1AAF9C8900858B09 /* Appointment.m in Sources */ = {isa = PBXBuildFile; fileRef = 294CEA8A1AAF9C8900858B09 /* Appointment.m */; };
+		294CEA8C1AAF9C8900858B09 /* Appointment.m in Sources */ = {isa = PBXBuildFile; fileRef = 294CEA8A1AAF9C8900858B09 /* Appointment.m */; };
+		297C9AAA1ABC9665001B4594 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 297C9AA91ABC9665001B4594 /* MapKit.framework */; };
+		29A508941AB24E560058EB34 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A508921AB24E560058EB34 /* Crashlytics.framework */; };
+		29A508951AB24E560058EB34 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A508931AB24E560058EB34 /* Fabric.framework */; };
+		29C261BB1AADF3C000606DAF /* NewActivityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29C261B81AADF3C000606DAF /* NewActivityView.xib */; };
+		29C261BC1AADF3C000606DAF /* NewActivityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29C261B81AADF3C000606DAF /* NewActivityView.xib */; };
+		29C261BD1AADF3C000606DAF /* NewActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C261BA1AADF3C000606DAF /* NewActivityViewController.m */; };
+		29C261BE1AADF3C000606DAF /* NewActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C261BA1AADF3C000606DAF /* NewActivityViewController.m */; };
+		29C692181AAA2FEF003855FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C692171AAA2FEF003855FD /* main.m */; };
+		29C6921B1AAA2FEF003855FD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C6921A1AAA2FEF003855FD /* AppDelegate.m */; };
+		29C6921E1AAA2FEF003855FD /* Azure_Activity_Logger.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 29C6921C1AAA2FEF003855FD /* Azure_Activity_Logger.xcdatamodeld */; };
+		29C692351AAA2FEF003855FD /* Azure_Activity_LoggerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C692341AAA2FEF003855FD /* Azure_Activity_LoggerTests.m */; };
+		29C692471AAA3252003855FD /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C692461AAA3252003855FD /* Contact.m */; };
+		29C692481AAA3252003855FD /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C692461AAA3252003855FD /* Contact.m */; };
+		29C6924C1AAA3352003855FD /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C6924B1AAA3352003855FD /* HomeViewController.m */; };
+		29C6924D1AAA3352003855FD /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C6924B1AAA3352003855FD /* HomeViewController.m */; };
+		29C6924F1AAA3367003855FD /* HomeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29C6924E1AAA3367003855FD /* HomeView.xib */; };
+		29C692501AAA3367003855FD /* HomeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29C6924E1AAA3367003855FD /* HomeView.xib */; };
+		650EDFE83A6542E97BD50E5E /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7086014E74FB4687C30010F4 /* libPods.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		29C6922F1AAA2FEF003855FD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29C6920A1AAA2FEE003855FD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 29C692111AAA2FEF003855FD;
+			remoteInfo = "Azure Activity Logger";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		29313E931AAFDF0200692B23 /* ActivityDisplayable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityDisplayable.h; sourceTree = "<group>"; };
+		29336D741AAA38A000EB3F33 /* SettingsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsView.xib; sourceTree = "<group>"; };
+		29336D751AAA38A000EB3F33 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		29336D761AAA38A000EB3F33 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		29336D7A1AAA3AB900EB3F33 /* AzureConnector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AzureConnector.h; sourceTree = "<group>"; };
+		29336D7B1AAA3AB900EB3F33 /* AzureConnector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AzureConnector.m; sourceTree = "<group>"; };
+		29336D7E1AAA3D8200EB3F33 /* CoreDataHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataHelper.h; sourceTree = "<group>"; };
+		29336D7F1AAA3D8200EB3F33 /* CoreDataHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataHelper.m; sourceTree = "<group>"; };
+		29336D891AAA4DCD00EB3F33 /* DataAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataAccessor.h; sourceTree = "<group>"; };
+		29336D8A1AAA4DCD00EB3F33 /* DataAccessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataAccessor.m; sourceTree = "<group>"; };
+		29336D8D1AAA526700EB3F33 /* FetchedResultsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetchedResultsDataSource.h; sourceTree = "<group>"; };
+		29336D8E1AAA526700EB3F33 /* FetchedResultsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FetchedResultsDataSource.m; sourceTree = "<group>"; };
+		29336D941AAA53FB00EB3F33 /* SubtitleTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SubtitleTableViewCell.xib; sourceTree = "<group>"; };
+		29336D971AAA5C6700EB3F33 /* ObjectDetailsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ObjectDetailsView.xib; sourceTree = "<group>"; };
+		29336D981AAA5C6700EB3F33 /* ObjectDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectDetailsViewController.h; sourceTree = "<group>"; };
+		29336D991AAA5C6700EB3F33 /* ObjectDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectDetailsViewController.m; sourceTree = "<group>"; };
+		29336D9E1AAA5DF000EB3F33 /* NSString+StringFormatting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+StringFormatting.h"; sourceTree = "<group>"; };
+		29336D9F1AAA5DF000EB3F33 /* NSString+StringFormatting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+StringFormatting.m"; sourceTree = "<group>"; };
+		294CEA811AAF9C8800858B09 /* PhoneCall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneCall.h; sourceTree = "<group>"; };
+		294CEA821AAF9C8800858B09 /* PhoneCall.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneCall.m; sourceTree = "<group>"; };
+		294CEA851AAF9C8900858B09 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
+		294CEA861AAF9C8900858B09 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
+		294CEA891AAF9C8900858B09 /* Appointment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appointment.h; sourceTree = "<group>"; };
+		294CEA8A1AAF9C8900858B09 /* Appointment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appointment.m; sourceTree = "<group>"; };
+		294CEA8D1AAF9F6900858B09 /* ObjectDisplayable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectDisplayable.h; sourceTree = "<group>"; };
+		297C9AA91ABC9665001B4594 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		29A508921AB24E560058EB34 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
+		29A508931AB24E560058EB34 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
+		29C261B81AADF3C000606DAF /* NewActivityView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewActivityView.xib; sourceTree = "<group>"; };
+		29C261B91AADF3C000606DAF /* NewActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewActivityViewController.h; sourceTree = "<group>"; };
+		29C261BA1AADF3C000606DAF /* NewActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewActivityViewController.m; sourceTree = "<group>"; };
+		29C692121AAA2FEF003855FD /* Azure Activity Logger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Azure Activity Logger.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		29C692161AAA2FEF003855FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		29C692171AAA2FEF003855FD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29C692191AAA2FEF003855FD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		29C6921A1AAA2FEF003855FD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		29C6921D1AAA2FEF003855FD /* Azure_Activity_Logger.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Azure_Activity_Logger.xcdatamodel; sourceTree = "<group>"; };
+		29C692251AAA2FEF003855FD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		29C692281AAA2FEF003855FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		29C6922E1AAA2FEF003855FD /* Azure Activity LoggerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Azure Activity LoggerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		29C692331AAA2FEF003855FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		29C692341AAA2FEF003855FD /* Azure_Activity_LoggerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Azure_Activity_LoggerTests.m; sourceTree = "<group>"; };
+		29C692421AAA3116003855FD /* WindowsAzureMobileServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WindowsAzureMobileServices.framework; sourceTree = "<group>"; };
+		29C692451AAA3252003855FD /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
+		29C692461AAA3252003855FD /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
+		29C6924A1AAA3352003855FD /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		29C6924B1AAA3352003855FD /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		29C6924E1AAA3367003855FD /* HomeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeView.xib; sourceTree = "<group>"; };
+		29C692511AAA34F1003855FD /* ColorsAndFonts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorsAndFonts.h; sourceTree = "<group>"; };
+		53B190B37018A56BD2EE32B9 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		7086014E74FB4687C30010F4 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		900C63C5C71966300BBA4114 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		29C6920F1AAA2FEF003855FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29336D821AAA430600EB3F33 /* WindowsAzureMobileServices.framework in Frameworks */,
+				29A508941AB24E560058EB34 /* Crashlytics.framework in Frameworks */,
+				297C9AAA1ABC9665001B4594 /* MapKit.framework in Frameworks */,
+				650EDFE83A6542E97BD50E5E /* libPods.a in Frameworks */,
+				29A508951AB24E560058EB34 /* Fabric.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29C6922B1AAA2FEF003855FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		29336D791AAA3A6F00EB3F33 /* AzureConnector */ = {
+			isa = PBXGroup;
+			children = (
+				29336D8D1AAA526700EB3F33 /* FetchedResultsDataSource.h */,
+				29336D8E1AAA526700EB3F33 /* FetchedResultsDataSource.m */,
+				29336D7E1AAA3D8200EB3F33 /* CoreDataHelper.h */,
+				29336D7F1AAA3D8200EB3F33 /* CoreDataHelper.m */,
+				29336D7A1AAA3AB900EB3F33 /* AzureConnector.h */,
+				29336D7B1AAA3AB900EB3F33 /* AzureConnector.m */,
+				29336D891AAA4DCD00EB3F33 /* DataAccessor.h */,
+				29336D8A1AAA4DCD00EB3F33 /* DataAccessor.m */,
+			);
+			path = AzureConnector;
+			sourceTree = "<group>";
+		};
+		29C692091AAA2FEE003855FD = {
+			isa = PBXGroup;
+			children = (
+				29C692411AAA310F003855FD /* Frameworks */,
+				29C692141AAA2FEF003855FD /* Azure Activity Logger */,
+				29C692311AAA2FEF003855FD /* Azure Activity LoggerTests */,
+				29C692131AAA2FEF003855FD /* Products */,
+				443A96F26361E00CDC4BCDA4 /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		29C692131AAA2FEF003855FD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				29C692121AAA2FEF003855FD /* Azure Activity Logger.app */,
+				29C6922E1AAA2FEF003855FD /* Azure Activity LoggerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29C692141AAA2FEF003855FD /* Azure Activity Logger */ = {
+			isa = PBXGroup;
+			children = (
+				29336D791AAA3A6F00EB3F33 /* AzureConnector */,
+				29C692491AAA3352003855FD /* UI */,
+				29C692441AAA312F003855FD /* Objects */,
+				29C692191AAA2FEF003855FD /* AppDelegate.h */,
+				29C6921A1AAA2FEF003855FD /* AppDelegate.m */,
+				29C692511AAA34F1003855FD /* ColorsAndFonts.h */,
+				29336D9E1AAA5DF000EB3F33 /* NSString+StringFormatting.h */,
+				29336D9F1AAA5DF000EB3F33 /* NSString+StringFormatting.m */,
+				29C692251AAA2FEF003855FD /* Images.xcassets */,
+				29C692271AAA2FEF003855FD /* LaunchScreen.xib */,
+				29C692151AAA2FEF003855FD /* Supporting Files */,
+			);
+			path = "Azure Activity Logger";
+			sourceTree = "<group>";
+		};
+		29C692151AAA2FEF003855FD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				29C692161AAA2FEF003855FD /* Info.plist */,
+				29C692171AAA2FEF003855FD /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		29C692311AAA2FEF003855FD /* Azure Activity LoggerTests */ = {
+			isa = PBXGroup;
+			children = (
+				29C692341AAA2FEF003855FD /* Azure_Activity_LoggerTests.m */,
+				29C692321AAA2FEF003855FD /* Supporting Files */,
+			);
+			path = "Azure Activity LoggerTests";
+			sourceTree = "<group>";
+		};
+		29C692321AAA2FEF003855FD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				29C692331AAA2FEF003855FD /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		29C692411AAA310F003855FD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				297C9AA91ABC9665001B4594 /* MapKit.framework */,
+				29A508921AB24E560058EB34 /* Crashlytics.framework */,
+				29A508931AB24E560058EB34 /* Fabric.framework */,
+				29C692421AAA3116003855FD /* WindowsAzureMobileServices.framework */,
+				7086014E74FB4687C30010F4 /* libPods.a */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
+		29C692441AAA312F003855FD /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				29C692451AAA3252003855FD /* Contact.h */,
+				29C692461AAA3252003855FD /* Contact.m */,
+				29C6921C1AAA2FEF003855FD /* Azure_Activity_Logger.xcdatamodeld */,
+				294CEA891AAF9C8900858B09 /* Appointment.h */,
+				294CEA8A1AAF9C8900858B09 /* Appointment.m */,
+				294CEA851AAF9C8900858B09 /* Task.h */,
+				294CEA861AAF9C8900858B09 /* Task.m */,
+				294CEA811AAF9C8800858B09 /* PhoneCall.h */,
+				294CEA821AAF9C8800858B09 /* PhoneCall.m */,
+				294CEA8D1AAF9F6900858B09 /* ObjectDisplayable.h */,
+				29313E931AAFDF0200692B23 /* ActivityDisplayable.h */,
+			);
+			path = Objects;
+			sourceTree = "<group>";
+		};
+		29C692491AAA3352003855FD /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				29C261B81AADF3C000606DAF /* NewActivityView.xib */,
+				29C261B91AADF3C000606DAF /* NewActivityViewController.h */,
+				29C261BA1AADF3C000606DAF /* NewActivityViewController.m */,
+				29336D971AAA5C6700EB3F33 /* ObjectDetailsView.xib */,
+				29336D981AAA5C6700EB3F33 /* ObjectDetailsViewController.h */,
+				29336D991AAA5C6700EB3F33 /* ObjectDetailsViewController.m */,
+				29336D741AAA38A000EB3F33 /* SettingsView.xib */,
+				29336D751AAA38A000EB3F33 /* SettingsViewController.h */,
+				29336D761AAA38A000EB3F33 /* SettingsViewController.m */,
+				29C6924E1AAA3367003855FD /* HomeView.xib */,
+				29C6924A1AAA3352003855FD /* HomeViewController.h */,
+				29C6924B1AAA3352003855FD /* HomeViewController.m */,
+				29336D941AAA53FB00EB3F33 /* SubtitleTableViewCell.xib */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		443A96F26361E00CDC4BCDA4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				53B190B37018A56BD2EE32B9 /* Pods.debug.xcconfig */,
+				900C63C5C71966300BBA4114 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		29C692111AAA2FEF003855FD /* Azure Activity Logger */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 29C692381AAA2FEF003855FD /* Build configuration list for PBXNativeTarget "Azure Activity Logger" */;
+			buildPhases = (
+				AE91C499FF3BFB5CB8212586 /* Check Pods Manifest.lock */,
+				29C6920E1AAA2FEF003855FD /* Sources */,
+				29C6920F1AAA2FEF003855FD /* Frameworks */,
+				29C692101AAA2FEF003855FD /* Resources */,
+				0F9E1E174FE208276B560EB2 /* Copy Pods Resources */,
+				29A508911AB24E2C0058EB34 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Azure Activity Logger";
+			productName = "Azure Activity Logger";
+			productReference = 29C692121AAA2FEF003855FD /* Azure Activity Logger.app */;
+			productType = "com.apple.product-type.application";
+		};
+		29C6922D1AAA2FEF003855FD /* Azure Activity LoggerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 29C6923B1AAA2FEF003855FD /* Build configuration list for PBXNativeTarget "Azure Activity LoggerTests" */;
+			buildPhases = (
+				29C6922A1AAA2FEF003855FD /* Sources */,
+				29C6922B1AAA2FEF003855FD /* Frameworks */,
+				29C6922C1AAA2FEF003855FD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				29C692301AAA2FEF003855FD /* PBXTargetDependency */,
+			);
+			name = "Azure Activity LoggerTests";
+			productName = "Azure Activity LoggerTests";
+			productReference = 29C6922E1AAA2FEF003855FD /* Azure Activity LoggerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29C6920A1AAA2FEE003855FD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Sonoma Partners";
+				TargetAttributes = {
+					29C692111AAA2FEF003855FD = {
+						CreatedOnToolsVersion = 6.1.1;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+					29C6922D1AAA2FEF003855FD = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = 29C692111AAA2FEF003855FD;
+					};
+				};
+			};
+			buildConfigurationList = 29C6920D1AAA2FEE003855FD /* Build configuration list for PBXProject "Azure Activity Logger" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 29C692091AAA2FEE003855FD;
+			productRefGroup = 29C692131AAA2FEF003855FD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				29C692111AAA2FEF003855FD /* Azure Activity Logger */,
+				29C6922D1AAA2FEF003855FD /* Azure Activity LoggerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		29C692101AAA2FEF003855FD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				293AAA2E1AB246B100BFE794 /* Images.xcassets in Resources */,
+				29336D771AAA38A000EB3F33 /* SettingsView.xib in Resources */,
+				29336D9A1AAA5C6700EB3F33 /* ObjectDetailsView.xib in Resources */,
+				29C261BB1AADF3C000606DAF /* NewActivityView.xib in Resources */,
+				29336D951AAA53FB00EB3F33 /* SubtitleTableViewCell.xib in Resources */,
+				29C6924F1AAA3367003855FD /* HomeView.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29C6922C1AAA2FEF003855FD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29C692501AAA3367003855FD /* HomeView.xib in Resources */,
+				29336D961AAA53FB00EB3F33 /* SubtitleTableViewCell.xib in Resources */,
+				29C261BC1AADF3C000606DAF /* NewActivityView.xib in Resources */,
+				29336D9B1AAA5C6700EB3F33 /* ObjectDetailsView.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0F9E1E174FE208276B560EB2 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		29A508911AB24E2C0058EB34 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run df25e06f6c37ecc5de901fc9506ddc24bb1bcacb ad93eb76d78537dffb429878cc9245d7c436e3453b98e676988e8ea03d02b103";
+		};
+		AE91C499FF3BFB5CB8212586 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		29C6920E1AAA2FEF003855FD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29336D841AAA43AD00EB3F33 /* AzureConnector.m in Sources */,
+				29336D9C1AAA5C6700EB3F33 /* ObjectDetailsViewController.m in Sources */,
+				294CEA831AAF9C8800858B09 /* PhoneCall.m in Sources */,
+				29C6924C1AAA3352003855FD /* HomeViewController.m in Sources */,
+				29C261BD1AADF3C000606DAF /* NewActivityViewController.m in Sources */,
+				29C6921E1AAA2FEF003855FD /* Azure_Activity_Logger.xcdatamodeld in Sources */,
+				29C6921B1AAA2FEF003855FD /* AppDelegate.m in Sources */,
+				294CEA8B1AAF9C8900858B09 /* Appointment.m in Sources */,
+				29336D781AAA38A000EB3F33 /* SettingsViewController.m in Sources */,
+				29336D8B1AAA4DCD00EB3F33 /* DataAccessor.m in Sources */,
+				29C692471AAA3252003855FD /* Contact.m in Sources */,
+				294CEA871AAF9C8900858B09 /* Task.m in Sources */,
+				29336D801AAA3D8200EB3F33 /* CoreDataHelper.m in Sources */,
+				29C692181AAA2FEF003855FD /* main.m in Sources */,
+				29336D8F1AAA526700EB3F33 /* FetchedResultsDataSource.m in Sources */,
+				29336DA01AAA5DF000EB3F33 /* NSString+StringFormatting.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29C6922A1AAA2FEF003855FD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				294CEA841AAF9C8800858B09 /* PhoneCall.m in Sources */,
+				29C6924D1AAA3352003855FD /* HomeViewController.m in Sources */,
+				29336D901AAA526700EB3F33 /* FetchedResultsDataSource.m in Sources */,
+				294CEA8C1AAF9C8900858B09 /* Appointment.m in Sources */,
+				29336D8C1AAA4DCD00EB3F33 /* DataAccessor.m in Sources */,
+				294CEA881AAF9C8900858B09 /* Task.m in Sources */,
+				29336D7D1AAA3AB900EB3F33 /* AzureConnector.m in Sources */,
+				29336D9D1AAA5C6700EB3F33 /* ObjectDetailsViewController.m in Sources */,
+				29C692481AAA3252003855FD /* Contact.m in Sources */,
+				29C261BE1AADF3C000606DAF /* NewActivityViewController.m in Sources */,
+				29336D811AAA3D8200EB3F33 /* CoreDataHelper.m in Sources */,
+				29C692351AAA2FEF003855FD /* Azure_Activity_LoggerTests.m in Sources */,
+				29336DA11AAA5DF000EB3F33 /* NSString+StringFormatting.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		29C692301AAA2FEF003855FD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 29C692111AAA2FEF003855FD /* Azure Activity Logger */;
+			targetProxy = 29C6922F1AAA2FEF003855FD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		29C692271AAA2FEF003855FD /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				29C692281AAA2FEF003855FD /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		29C692361AAA2FEF003855FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 53B190B37018A56BD2EE32B9 /* Pods.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Frameworks";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		29C692371AAA2FEF003855FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 900C63C5C71966300BBA4114 /* Pods.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Frameworks";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		29C692391AAA2FEF003855FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 53B190B37018A56BD2EE32B9 /* Pods.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/ADALiOS\"",
+				);
+				INFOPLIST_FILE = "Azure Activity Logger/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/Pods\"/**";
+			};
+			name = Debug;
+		};
+		29C6923A1AAA2FEF003855FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 900C63C5C71966300BBA4114 /* Pods.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+					"$(PROJECT_DIR)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/ADALiOS\"",
+				);
+				INFOPLIST_FILE = "Azure Activity Logger/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/Pods\"/**";
+			};
+			name = Release;
+		};
+		29C6923C1AAA2FEF003855FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 53B190B37018A56BD2EE32B9 /* Pods.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Azure Activity LoggerTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Azure Activity Logger.app/Azure Activity Logger";
+			};
+			name = Debug;
+		};
+		29C6923D1AAA2FEF003855FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 900C63C5C71966300BBA4114 /* Pods.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Azure Activity LoggerTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Azure Activity Logger.app/Azure Activity Logger";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		29C6920D1AAA2FEE003855FD /* Build configuration list for PBXProject "Azure Activity Logger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29C692361AAA2FEF003855FD /* Debug */,
+				29C692371AAA2FEF003855FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		29C692381AAA2FEF003855FD /* Build configuration list for PBXNativeTarget "Azure Activity Logger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29C692391AAA2FEF003855FD /* Debug */,
+				29C6923A1AAA2FEF003855FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		29C6923B1AAA2FEF003855FD /* Build configuration list for PBXNativeTarget "Azure Activity LoggerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29C6923C1AAA2FEF003855FD /* Debug */,
+				29C6923D1AAA2FEF003855FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		29C6921C1AAA2FEF003855FD /* Azure_Activity_Logger.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				29C6921D1AAA2FEF003855FD /* Azure_Activity_Logger.xcdatamodel */,
+			);
+			currentVersion = 29C6921D1AAA2FEF003855FD /* Azure_Activity_Logger.xcdatamodel */;
+			name = Azure_Activity_Logger.xcdatamodeld;
+			path = ../Azure_Activity_Logger.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 29C6920A1AAA2FEE003855FD /* Project object */;
+}
