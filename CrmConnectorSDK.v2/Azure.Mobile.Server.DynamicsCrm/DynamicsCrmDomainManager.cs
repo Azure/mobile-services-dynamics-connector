@@ -2,6 +2,7 @@
 using Microsoft.Azure.Mobile.Server;
 using Microsoft.Azure.Mobile.Server.Security;
 using Microsoft.Azure.Mobile.Server.Tables;
+using Microsoft.Azure.Mobile.Server.AppService;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Query;
@@ -72,7 +73,7 @@ namespace Microsoft.Azure.Mobile.Server.DynamicsCrm
 
                     var user = this.Request.GetRequestContext().Principal as ServiceUser;
 
-                    var creds = user.Identities.OfType<AzureActiveDirectoryCredentials>().FirstOrDefault();
+                    var creds = user.GetIdentityAsync < AzureActiveDirectoryCredentials>().Result;
                     AuthenticationContext ac = new AuthenticationContext(authorityUrl, false);
                     var ar = ac.AcquireToken(crmUrl,
                         new ClientCredential(settings.AzureActiveDirectoryClientId, clientSecret),
