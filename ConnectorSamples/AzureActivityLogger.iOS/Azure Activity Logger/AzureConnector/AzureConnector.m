@@ -76,7 +76,7 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 }
 
 - (MSClient *)setupClient {
-    MSClient *client = [MSClient clientWithApplicationURLString:self.applicationURL applicationKey:@"UzOuYZAOxIRZzDdHYqeMGifuSqGwYu15"];
+    MSClient *client = [MSClient clientWithApplicationURLString:self.applicationURL applicationKey:kDefaultAzureConnectorApplicatonKey];
     MSCoreDataStore *dataStore = [[MSCoreDataStore alloc] initWithManagedObjectContext:[CoreDataHelper getContext]];
     client.syncContext = [[MSSyncContext alloc] initWithDelegate:nil dataSource:dataStore callback:nil];
 
@@ -180,6 +180,7 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 
     NSString *resourceURI = self.resourceURI;
     NSString *clientID = self.clientID;
+    NSURL *redirectURI = [NSURL URLWithString:[self redirectURI]];
 
     // Use ADAL to authenticate AAD first
     ADAuthenticationContext *context = [self authenticationContext];
@@ -188,7 +189,7 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
         return;
     }
 
-    [context acquireTokenWithResource:resourceURI clientId:clientID redirectUri:[NSURL URLWithString:kDefaultAzureConnectorRedirectURI] completionBlock:^(ADAuthenticationResult *result) {
+    [context acquireTokenWithResource:resourceURI clientId:clientID redirectUri:redirectURI completionBlock:^(ADAuthenticationResult *result) {
         if (result.status != AD_SUCCEEDED) {
             NSLog(@"Error authenticating: %@\n%@", result.error.localizedDescription, result.error.localizedFailureReason);
             completion(nil, result.error);
@@ -342,19 +343,19 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 }
 
 - (NSString *)resourceURI {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *uri = [defaults valueForKey:kAzureConnectorResourceURIKey];
-    if (!uri) {
-        uri = kDefaultAzureConnectorResourceURI;
-        self.resourceURI = uri;
-    }
-    return uri;
+    NSString *uri = [self applicationURL];
+    return [uri stringByAppendingString:@"/login/aad"];
 }
 
 - (void)setResourceURI:(NSString *)resourceURI {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:resourceURI forKey:kAzureConnectorResourceURIKey];
     [defaults synchronize];
+}
+
+- (NSString *)redirectURI {
+    NSString *uri = [self applicationURL];
+    return [uri stringByAppendingString:@"/login/done"];
 }
 
 - (NSString *)clientID {
