@@ -272,7 +272,7 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 
     MSSyncTable *curTable = [self.client syncTableWithName:[tables firstObject]];
     MSQuery *curQuery = [curTable query];
-    [curTable pullWithQuery:curQuery queryId:nil completion:^(NSError *error) {
+    [curTable pullWithQuery:curQuery queryId:@"AllItems" completion:^(NSError *error) {
         if (error) {
             completion(error);
             return;
