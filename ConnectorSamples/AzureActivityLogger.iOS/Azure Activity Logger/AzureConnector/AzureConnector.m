@@ -50,6 +50,10 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 @property (nonatomic, strong) NSString *authority;
 
 @property (nonatomic, strong) MSClient *client;
+@property (nonatomic, strong) MSSyncTable *contactTable;
+@property (nonatomic, strong) MSSyncTable *taskTable;
+@property (nonatomic, strong) MSSyncTable *phoneCallTable;
+@property (nonatomic, strong) MSSyncTable *appointmentTable;
 @property (nonatomic, strong) NSArray *syncTables;
 
 @end
@@ -76,20 +80,22 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 }
 
 - (MSClient *)setupClient {
-    MSClient *client = [MSClient clientWithApplicationURLString:self.applicationURL applicationKey:@"UzOuYZAOxIRZzDdHYqeMGifuSqGwYu15"];
+    MSClient *client = [MSClient clientWithApplicationURLString:self.applicationURL applicationKey:kDefaultAzureConnectorApplicatonKey];
     MSCoreDataStore *dataStore = [[MSCoreDataStore alloc] initWithManagedObjectContext:[CoreDataHelper getContext]];
     client.syncContext = [[MSSyncContext alloc] initWithDelegate:nil dataSource:dataStore callback:nil];
 
     return client;
 }
 
+// This function returns the list of table names so that later, when syncing
+// the necessary table can be created as needed.
 - (NSArray *)setupSyncTables {
-    return @[
-        [self.client syncTableWithName:@"Contact"],
-        [self.client syncTableWithName:@"Task"],
-        [self.client syncTableWithName:@"PhoneCall"],
-        [self.client syncTableWithName:@"Appointment"]
-    ];
+    self.contactTable = [self.client syncTableWithName:@"Contact"];
+    self.taskTable = [self.client syncTableWithName:@"Task"];
+    self.phoneCallTable = [self.client syncTableWithName:@"PhoneCall"];
+    self.appointmentTable = [self.client syncTableWithName:@"Appointment"];
+    
+    return @[@"Contact", @"Task", @"PhoneCall", @"Appointment"];
 }
 
 - (NSDate *)lastSyncDate {
@@ -98,9 +104,11 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 }
 
 - (void)setLastSyncDate:(NSDate *)date {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setValue:date forKey:kAzureConnectorSyncCompletedDateKey];
-    [defaults synchronize];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setValue:date forKey:kAzureConnectorSyncCompletedDateKey];
+        [defaults synchronize];
+    });
 }
 
 - (NSUInteger)pendingSyncCount {
@@ -121,18 +129,6 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
         NSLog(@"userid: %@", userid);
         self.client.currentUser = [[MSUser alloc] initWithUserId:userid];
         self.client.currentUser.mobileServiceAuthenticationToken = [SSKeychain passwordForService:@"AzureMobileServiceTutorial" account:userid];
-
-        // To ensure that the user is still authenticated, it is necessary to attempt to connect
-        // with MWS in some way. The simplest is a single read operation that will fail if
-        // authentication fails. In that case, prompt the user to reauthenticate.
-        MSTable *contactTestTable = [self.client tableWithName:@"Contact"];
-        [contactTestTable readWithQueryString:@"$top=1" completion:^(MSQueryResult *result, NSError *error) {
-            if (error) {
-                [self clearAuthInfo];
-                [self loginWithController:[[[UIApplication sharedApplication] keyWindow] rootViewController] completion:^(MSUser *user, NSError *error) {}];
-                NSLog(@"error : %@", error);
-            }
-        }];
     }
 }
 
@@ -171,7 +167,7 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
         self.syncTables = [self setupSyncTables];
     }
 
-    // Short circuit the login prompt if MWS is able to generate a complete
+    // Short circuit the login prompt if Mobile Services is able to generate a complete
     // current user.
     if (self.client.currentUser && self.client.currentUser.mobileServiceAuthenticationToken) {
         completion(self.client.currentUser, nil);
@@ -180,6 +176,7 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 
     NSString *resourceURI = self.resourceURI;
     NSString *clientID = self.clientID;
+    NSURL *redirectURI = [NSURL URLWithString:[self redirectURI]];
 
     // Use ADAL to authenticate AAD first
     ADAuthenticationContext *context = [self authenticationContext];
@@ -188,7 +185,7 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
         return;
     }
 
-    [context acquireTokenWithResource:resourceURI clientId:clientID redirectUri:[NSURL URLWithString:kDefaultAzureConnectorRedirectURI] completionBlock:^(ADAuthenticationResult *result) {
+    [context acquireTokenWithResource:resourceURI clientId:clientID redirectUri:redirectURI completionBlock:^(ADAuthenticationResult *result) {
         if (result.status != AD_SUCCEEDED) {
             NSLog(@"Error authenticating: %@\n%@", result.error.localizedDescription, result.error.localizedFailureReason);
             completion(nil, result.error);
@@ -196,7 +193,7 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
         }
 
         // With a successful authentication to AAD, it is possible to now authenticate
-        // against MWS
+        // against Mobile Services
         NSDictionary *tokenDict = @{ @"access_token" : result.accessToken };
 
         void (^finalCompletion)(MSUser *, NSError *) = ^void(MSUser *user, NSError *error) {
@@ -207,7 +204,7 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
             completion(user, error);
         };
 
-        [self.client loginWithProvider:@"windowsazureactivedirectory" token:tokenDict completion:finalCompletion];
+        [self.client loginWithProvider:@"aad" token:tokenDict completion:finalCompletion];
     }];
 }
 
@@ -260,19 +257,22 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 
     [[NSNotificationCenter defaultCenter] postNotificationName:AzureConnectorSyncStarted object:nil];
 
-    [self syncTables:self.syncTables WithTotalCompletion:finalCompletion];
+    [self syncTables:self.syncTables withTotalCompletion:finalCompletion];
 }
 
 // This method will recursively sync all tables that are in the `syncTables` property.
-- (void)syncTables:(NSArray *)tables WithTotalCompletion:(MSSyncBlock)completion {
+// The reason for a recursive design is so that there is less overhead in tracking which
+// operations are started but not yet completed. Additionally it allows for short
+// circuiting the execution if there is an error.
+- (void)syncTables:(NSArray *)tables withTotalCompletion:(MSSyncBlock)completion {
     if (tables.count == 0) {
         completion(nil);
         return;
     }
 
-    MSSyncTable *curTable = [tables firstObject];
+    MSSyncTable *curTable = [self.client syncTableWithName:[tables firstObject]];
     MSQuery *curQuery = [curTable query];
-    [curTable pullWithQuery:curQuery queryId:nil completion:^(NSError *error) {
+    [curTable pullWithQuery:curQuery queryId:@"AllItems" completion:^(NSError *error) {
         if (error) {
             completion(error);
             return;
@@ -280,14 +280,16 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 
         NSMutableArray *mutableTables = [NSMutableArray arrayWithArray:tables];
         [mutableTables removeObjectAtIndex:0];
-        [self syncTables:[mutableTables copy] WithTotalCompletion:completion];
+        [self syncTables:[mutableTables copy] withTotalCompletion:completion];
     }];
 }
 
 - (void)logout {
     [self clearAuthInfo];
 
-    // On logout there is the assumption that all data should be deleted.
+    // On logout there is the assumption that all data should be deleted. Here there
+    // is no need for recursion as the only concern is that all data is removed, not
+    // the order of execution or if one completes before another.
     for (MSSyncTable *table in self.syncTables) {
         [table forcePurgeWithCompletion:^(NSError *error) {
             if (error) {
@@ -302,9 +304,10 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 
 #pragma mark - Insert methods
 
+// Wrap up the insert to a specific table. This allows the consumer to be independent
+// of any work that goes in to inserting the object.
 - (void)insertTask:(NSDictionary *)task completion:(MSSyncItemBlock)completion {
-    MSSyncTable *taskTable = [self.syncTables filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"name LIKE[cd] %@", @"Task"]].firstObject;
-    [taskTable insert:task completion:completion];
+    [self.taskTable insert:task completion:completion];
 }
 
 #pragma mark - Instance property accessor/setters
@@ -342,19 +345,19 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 }
 
 - (NSString *)resourceURI {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *uri = [defaults valueForKey:kAzureConnectorResourceURIKey];
-    if (!uri) {
-        uri = kDefaultAzureConnectorResourceURI;
-        self.resourceURI = uri;
-    }
-    return uri;
+    NSString *uri = [self applicationURL];
+    return [uri stringByAppendingString:@"/login/aad"];
 }
 
 - (void)setResourceURI:(NSString *)resourceURI {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:resourceURI forKey:kAzureConnectorResourceURIKey];
     [defaults synchronize];
+}
+
+- (NSString *)redirectURI {
+    NSString *uri = [self applicationURL];
+    return [uri stringByAppendingString:@"/login/done"];
 }
 
 - (NSString *)clientID {

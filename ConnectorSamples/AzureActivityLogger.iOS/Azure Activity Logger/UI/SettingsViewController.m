@@ -13,10 +13,11 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UIButton *logoutButton;
+@property (weak, nonatomic) IBOutlet UILabel *editableInfoLabel;
+@property (weak, nonatomic) IBOutlet UIButton *resetToDefaultsButton;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
 
 @property (weak, nonatomic) IBOutlet UITextField *applicationURLTextField;
-@property (weak, nonatomic) IBOutlet UITextField *resourceURITextField;
 @property (weak, nonatomic) IBOutlet UITextField *clientIDTextField;
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
 
@@ -39,10 +40,7 @@
 
     self.title = @"Settings";
 
-    self.applicationURLTextField.text = [AzureConnector sharedConnector].applicationURL;
-    self.resourceURITextField.text = [AzureConnector sharedConnector].resourceURI;
-    self.clientIDTextField.text = [AzureConnector sharedConnector].clientID;
-
+    [self updateTextFields];
     [self updateViewForLoggedIn:[[AzureConnector sharedConnector] isLoggedIn]];
 
     for (UIView *view in self.containerViews) {
@@ -75,13 +73,20 @@
     self.loginButton.hidden = loggedIn;
     self.logoutButton.enabled = loggedIn;
     self.logoutButton.hidden = !loggedIn;
+    self.editableInfoLabel.hidden = !loggedIn;
+    
+    self.resetToDefaultsButton.enabled = !loggedIn;
+}
+
+- (void)updateTextFields {
+    self.applicationURLTextField.text = [AzureConnector sharedConnector].applicationURL;
+    self.clientIDTextField.text = [AzureConnector sharedConnector].clientID;
 }
 
 #pragma mark - Action methods
 
 - (IBAction)loginButtonTapped:(id)sender {
     [AzureConnector sharedConnector].applicationURL = self.applicationURLTextField.text;
-    [AzureConnector sharedConnector].resourceURI = self.resourceURITextField.text;
     [AzureConnector sharedConnector].clientID = self.clientIDTextField.text;
 
     __weak typeof(self) weakSelf = self;
@@ -131,29 +136,11 @@
     [self updateViewForLoggedIn:[[AzureConnector sharedConnector] isLoggedIn]];
 }
 
-- (IBAction)syncButtonTapped:(id)sender {
-    __weak typeof(self) weakSelf = self;
-    [[AzureConnector sharedConnector] syncWithCompletion:^(NSError *error) {
-        __strong typeof(self) strongSelf = weakSelf;
-
-        if (error) {
-            NSLog(@"There was an error syncing : %@\n%@", error.localizedDescription, error.localizedFailureReason);
-            return;
-        }
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            // re-enable now that we are done syncing
-            strongSelf.logoutButton.enabled = YES;
-
-            if (strongSelf.presentedViewController) {
-                [strongSelf dismissViewControllerAnimated:YES completion:nil];
-            }
-
-            [strongSelf.navigationController popViewControllerAnimated:YES];
-        });
-    }];
+- (IBAction)resetToDefaultsButtonTapped:(id)sender {
+    [AzureConnector sharedConnector].applicationURL = nil;
+    [AzureConnector sharedConnector].clientID = nil;
+    
+    [self updateTextFields];
 }
 
-- (IBAction)textFields:(id)sender {
-}
 @end

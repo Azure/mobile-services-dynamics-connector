@@ -20,7 +20,6 @@
 @property (nonatomic, strong) NSString *jobTitle;
 @property (nonatomic, strong) NSDate *ms_createdAt;
 @property (nonatomic, strong) NSDate *ms_updatedAt;
-@property (nonatomic, strong) NSString *ms_version;
 @property (nonatomic, strong) NSString *telephone1;
 
 - (NSString *)addressInfo;
