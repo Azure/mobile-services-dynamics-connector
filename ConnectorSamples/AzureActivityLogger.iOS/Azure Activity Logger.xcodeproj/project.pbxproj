@@ -26,6 +26,8 @@
 		29336D9D1AAA5C6700EB3F33 /* ObjectDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D991AAA5C6700EB3F33 /* ObjectDetailsViewController.m */; };
 		29336DA01AAA5DF000EB3F33 /* NSString+StringFormatting.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D9F1AAA5DF000EB3F33 /* NSString+StringFormatting.m */; };
 		29336DA11AAA5DF000EB3F33 /* NSString+StringFormatting.m in Sources */ = {isa = PBXBuildFile; fileRef = 29336D9F1AAA5DF000EB3F33 /* NSString+StringFormatting.m */; };
+		29366DFA1AD2FE00003F1951 /* QSFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 29366DF91AD2FE00003F1951 /* QSFilter.m */; };
+		29366DFB1AD2FE00003F1951 /* QSFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 29366DF91AD2FE00003F1951 /* QSFilter.m */; };
 		293AAA2E1AB246B100BFE794 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 29C692251AAA2FEF003855FD /* Images.xcassets */; };
 		294CEA831AAF9C8800858B09 /* PhoneCall.m in Sources */ = {isa = PBXBuildFile; fileRef = 294CEA821AAF9C8800858B09 /* PhoneCall.m */; };
 		294CEA841AAF9C8800858B09 /* PhoneCall.m in Sources */ = {isa = PBXBuildFile; fileRef = 294CEA821AAF9C8800858B09 /* PhoneCall.m */; };
@@ -82,6 +84,8 @@
 		29336D991AAA5C6700EB3F33 /* ObjectDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectDetailsViewController.m; sourceTree = "<group>"; };
 		29336D9E1AAA5DF000EB3F33 /* NSString+StringFormatting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+StringFormatting.h"; sourceTree = "<group>"; };
 		29336D9F1AAA5DF000EB3F33 /* NSString+StringFormatting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+StringFormatting.m"; sourceTree = "<group>"; };
+		29366DF81AD2FE00003F1951 /* QSFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QSFilter.h; sourceTree = "<group>"; };
+		29366DF91AD2FE00003F1951 /* QSFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QSFilter.m; sourceTree = "<group>"; };
 		294CEA811AAF9C8800858B09 /* PhoneCall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneCall.h; sourceTree = "<group>"; };
 		294CEA821AAF9C8800858B09 /* PhoneCall.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneCall.m; sourceTree = "<group>"; };
 		294CEA851AAF9C8900858B09 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
@@ -144,6 +148,8 @@
 		29336D791AAA3A6F00EB3F33 /* AzureConnector */ = {
 			isa = PBXGroup;
 			children = (
+				29366DF81AD2FE00003F1951 /* QSFilter.h */,
+				29366DF91AD2FE00003F1951 /* QSFilter.m */,
 				29336D8D1AAA526700EB3F33 /* FetchedResultsDataSource.h */,
 				29336D8E1AAA526700EB3F33 /* FetchedResultsDataSource.m */,
 				29336D7E1AAA3D8200EB3F33 /* CoreDataHelper.h */,
@@ -454,6 +460,7 @@
 				294CEA871AAF9C8900858B09 /* Task.m in Sources */,
 				29336D801AAA3D8200EB3F33 /* CoreDataHelper.m in Sources */,
 				29C692181AAA2FEF003855FD /* main.m in Sources */,
+				29366DFA1AD2FE00003F1951 /* QSFilter.m in Sources */,
 				29336D8F1AAA526700EB3F33 /* FetchedResultsDataSource.m in Sources */,
 				29336DA01AAA5DF000EB3F33 /* NSString+StringFormatting.m in Sources */,
 			);
@@ -472,6 +479,7 @@
 				29336D7D1AAA3AB900EB3F33 /* AzureConnector.m in Sources */,
 				29336D9D1AAA5C6700EB3F33 /* ObjectDetailsViewController.m in Sources */,
 				29C692481AAA3252003855FD /* Contact.m in Sources */,
+				29366DFB1AD2FE00003F1951 /* QSFilter.m in Sources */,
 				29C261BE1AADF3C000606DAF /* NewActivityViewController.m in Sources */,
 				29336D811AAA3D8200EB3F33 /* CoreDataHelper.m in Sources */,
 				29C692351AAA2FEF003855FD /* Azure_Activity_LoggerTests.m in Sources */,
