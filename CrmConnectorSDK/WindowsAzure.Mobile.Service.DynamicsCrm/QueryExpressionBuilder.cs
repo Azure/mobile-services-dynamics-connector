@@ -292,8 +292,11 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
                 foreach (var item in selectExpand.SelectExpandClause.SelectedItems.OfType<PathSelectItem>())
                 {
                     var pathItem = item.SelectedPath.OfType<PropertySegment>().Single();
-                    var attributeName = EntityMapper.GetAttributeName(pathItem.Property.Name);
-                    columnSet.AddColumn(attributeName);
+                    if(pathItem.Property.Name != "Deleted")
+                    {
+                        var attributeName = EntityMapper.GetAttributeName(pathItem.Property.Name);
+                        columnSet.AddColumn(attributeName);
+                    }
                 }
             }
 
