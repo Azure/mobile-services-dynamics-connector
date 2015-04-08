@@ -186,7 +186,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
         {
             var preExisting = Lookup(data.Id).Queryable.First();
 
-            if (preExisting.Version.SequenceEqual(data.Version))
+            if (!preExisting.Version.SequenceEqual(data.Version))
             {
                 throw new HttpResponseException(HttpStatusCode.Conflict);
             }
