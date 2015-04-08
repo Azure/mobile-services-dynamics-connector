@@ -184,6 +184,13 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
 
         public override Task<TTableData> ReplaceAsync(string id, TTableData data)
         {
+            var preExisting = Lookup(data.Id).Queryable.First();
+
+            if (preExisting.Version.SequenceEqual(data.Version))
+            {
+                throw new HttpResponseException(HttpStatusCode.Conflict);
+            }
+
             TEntity entity = Map.Map(data);
             OrganizationService.Update(entity);
             return Task.FromResult(Lookup(entity.Id));
