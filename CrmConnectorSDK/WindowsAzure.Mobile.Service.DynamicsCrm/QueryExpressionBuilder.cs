@@ -236,7 +236,14 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
             switch (queryNode.Kind)
             {
                 case QueryNodeKind.Constant:
-                    return ((ConstantNode)queryNode).Value;
+                    object value = ((ConstantNode)queryNode).Value;
+
+                    if (value is DateTimeOffset)
+                    {
+                        value = ((DateTimeOffset)value).UtcDateTime;
+                    }
+                    
+                    return value;
 
                 case QueryNodeKind.Convert:
                     return GetValue(((ConvertNode)queryNode).Source);
