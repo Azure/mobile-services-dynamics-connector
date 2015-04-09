@@ -75,7 +75,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
 
                 var creds = (await user.GetIdentitiesAsync()).OfType<AzureActiveDirectoryCredentials>().FirstOrDefault();
                 AuthenticationContext ac = new AuthenticationContext(authorityUrl, false);
-                var ar = ac.AcquireToken(crmUrl,
+                var ar = await ac.AcquireTokenAsync(crmUrl,
                     new ClientCredential(settings.AzureActiveDirectoryClientId, clientSecret),
                     new UserAssertion(creds.AccessToken));
 
