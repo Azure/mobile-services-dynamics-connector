@@ -22,7 +22,7 @@ namespace ActivityLoggerBackend
             HttpConfiguration config = ServiceConfig.Initialize(new ConfigBuilder(options));
 
             // enforce user authentication even when debugging locally
-            //config.SetIsHosted(true);
+            config.SetIsHosted(true);
 
             // To display errors in the browser during development, uncomment the following
             // line. Comment it out again when you deploy your service for production use.
