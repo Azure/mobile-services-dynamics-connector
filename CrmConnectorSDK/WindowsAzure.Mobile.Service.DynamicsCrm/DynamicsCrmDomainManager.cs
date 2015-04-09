@@ -54,55 +54,54 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
         }
 
         private IOrganizationService _organizationService;
-        protected IOrganizationService OrganizationService 
+        protected async Task<IOrganizationService> GetOrganizationServiceAsync() 
         { 
-            get
+            if(_organizationService == null)
             {
-                if(_organizationService == null)
-                {
-                    var settings = this.Services.Settings;
+                var settings = this.Services.Settings;
 
-                    string crmUrl = settings[CrmUrlSettingsKey];
-                    string servicePath = "/XRMServices/2011/Organization.svc/web";
-                    string version = "7.0.0.0";
-                    string authorityUrl = settings[CrmAuthorityUrlSettingsKey];
-                    string clientSecret = settings[CrmClientSecretSettingsKey];
-                    string serviceUri = String.Concat(crmUrl, servicePath, "?SdkClientVersion=", version);
+                string crmUrl = settings[CrmUrlSettingsKey];
+                string servicePath = "/XRMServices/2011/Organization.svc/web";
+                string version = "7.0.0.0";
+                string authorityUrl = settings[CrmAuthorityUrlSettingsKey];
+                string clientSecret = settings[CrmClientSecretSettingsKey];
+                string serviceUri = String.Concat(crmUrl, servicePath, "?SdkClientVersion=", version);
 
-                    var user = this.Request.GetRequestContext().Principal as ServiceUser;
+                var user = this.Request.GetRequestContext().Principal as ServiceUser;
 
-                    var creds = user.GetIdentitiesAsync().Result.OfType<AzureActiveDirectoryCredentials>().FirstOrDefault();
-                    AuthenticationContext ac = new AuthenticationContext(authorityUrl, false);
-                    var ar = ac.AcquireToken(crmUrl,
-                        new ClientCredential(settings.AzureActiveDirectoryClientId, clientSecret),
-                        new UserAssertion(creds.AccessToken));
+                var creds = (await user.GetIdentitiesAsync()).OfType<AzureActiveDirectoryCredentials>().FirstOrDefault();
+                AuthenticationContext ac = new AuthenticationContext(authorityUrl, false);
+                var ar = ac.AcquireToken(crmUrl,
+                    new ClientCredential(settings.AzureActiveDirectoryClientId, clientSecret),
+                    new UserAssertion(creds.AccessToken));
 
-                    var orgService = new OrganizationWebProxyClient(new Uri(crmUrl + servicePath), true);
-                    orgService.HeaderToken = ar.AccessToken;
-                    orgService.SdkClientVersion = version;
+                var orgService = new OrganizationWebProxyClient(new Uri(crmUrl + servicePath), true);
+                orgService.HeaderToken = ar.AccessToken;
+                orgService.SdkClientVersion = version;
 
-                    _organizationService = orgService;
-                }
-
-                return _organizationService;
+                _organizationService = orgService;
             }
+
+            return _organizationService;
         }
 
-        public override Task<bool> DeleteAsync(string id)
+        public override async Task<bool> DeleteAsync(string id)
         {
             Guid entityId;
             if (!Guid.TryParse(id, out entityId))
-                return Task.FromResult(false);
+                return false;
 
-            OrganizationService.Delete(EntityLogicalName, entityId);
-            return Task.FromResult(true);
+            var orgService = await GetOrganizationServiceAsync();
+            orgService.Delete(EntityLogicalName, entityId);
+            return true;
         }
 
-        public override Task<TTableData> InsertAsync(TTableData data)
+        public override async Task<TTableData> InsertAsync(TTableData data)
         {
             var entity = Map.Map(data);
-            entity.Id = OrganizationService.Create(entity);
-            return Task.FromResult(Lookup(entity.Id));
+            var orgService = await GetOrganizationServiceAsync();
+            entity.Id = orgService.Create(entity);
+            return await LookupAsync(entity.Id);
         }
 
         public override SingleResult<TTableData> Lookup(string id)
@@ -110,19 +109,25 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
             throw new NotImplementedException();
         }
 
-        protected TTableData Lookup(Guid id)
+        protected async Task<TTableData> LookupAsync(Guid id)
         {
-            var result = OrganizationService.Retrieve(EntityLogicalName, id, new ColumnSet(true));
+            var orgService = await GetOrganizationServiceAsync();
+
+            var result = orgService.Retrieve(EntityLogicalName, id, new ColumnSet(true));
             return Map.Map(result.ToEntity<TEntity>());
         }
 
-        public override  Task<SingleResult<TTableData>> LookupAsync(string id)
+        public override async Task<SingleResult<TTableData>> LookupAsync(string id)
         {
-            Guid entityId;
-            if (!Guid.TryParse(id, out entityId))
-                return Task.FromResult(SingleResult.Create(new List<TTableData>().AsQueryable()));
+            var results = new List<TTableData>();
 
-            return Task.FromResult(SingleResult.Create(new List<TTableData> { Lookup(entityId) }.AsQueryable()));
+            Guid entityId;
+            if (Guid.TryParse(id, out entityId))
+            {
+                results.Add(await LookupAsync(entityId));
+            }
+
+            return SingleResult.Create(results.AsQueryable());
         }
 
         public override IQueryable<TTableData> Query()
@@ -130,7 +135,7 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<TTableData>> QueryAsync(ODataQueryOptions query, Action<QueryExpression> queryModifier)
+        public async Task<IEnumerable<TTableData>> QueryAsync(ODataQueryOptions query, Action<QueryExpression> queryModifier)
         {
             var builder = new QueryExpressionBuilder<TTableData, TEntity>(this.EntityLogicalName, query, this.Map);
             var crmQuery = builder.GetQueryExpression();
@@ -140,9 +145,10 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
                 queryModifier(crmQuery);
             }
 
-            var entityCollection = this.OrganizationService.RetrieveMultiple(crmQuery);
+            var orgService = await GetOrganizationServiceAsync();
+            var entityCollection = orgService.RetrieveMultiple(crmQuery);
             var dataObjects = new List<TTableData>();
-            return Task.FromResult(entityCollection.Entities.Cast<TEntity>().Select(Map.Map));
+            return entityCollection.Entities.Cast<TEntity>().Select(Map.Map);
         }
 
         public override Task<IEnumerable<TTableData>> QueryAsync(ODataQueryOptions query)
@@ -150,11 +156,12 @@ namespace Microsoft.WindowsAzure.Mobile.Service.DynamicsCrm
             return QueryAsync(query, null);
         }
 
-        public override Task<TTableData> ReplaceAsync(string id, TTableData data)
+        public override async Task<TTableData> ReplaceAsync(string id, TTableData data)
         {
             TEntity entity = Map.Map(data);
-            OrganizationService.Update(entity);
-            return Task.FromResult(Lookup(entity.Id));
+            var orgService = await GetOrganizationServiceAsync();
+            orgService.Update(entity);
+            return await LookupAsync(entity.Id);
         }
 
         public override Task<TTableData> UpdateAsync(string id, System.Web.Http.OData.Delta<TTableData> patch)
