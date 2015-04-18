@@ -9,6 +9,7 @@
 #import "ADAuthenticationSettings.h"
 #import "ADKeychainTokenCacheStore.h"
 #import "SSKeychain.h"
+#import "QSFilter.h"
 
 /**
  * The following constants are meant for consumers to use to determine the status
@@ -81,6 +82,9 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 
 - (MSClient *)setupClient {
     MSClient *client = [MSClient clientWithApplicationURLString:self.applicationURL applicationKey:kDefaultAzureConnectorApplicatonKey];
+    QSFilter *filter = [[QSFilter alloc] init];
+    client = [client clientWithFilter:filter];
+    filter.client = client;
     MSCoreDataStore *dataStore = [[MSCoreDataStore alloc] initWithManagedObjectContext:[CoreDataHelper getContext]];
     client.syncContext = [[MSSyncContext alloc] initWithDelegate:nil dataSource:dataStore callback:nil];
 
@@ -167,13 +171,6 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
         self.syncTables = [self setupSyncTables];
     }
 
-    // Short circuit the login prompt if Mobile Services is able to generate a complete
-    // current user.
-    if (self.client.currentUser && self.client.currentUser.mobileServiceAuthenticationToken) {
-        completion(self.client.currentUser, nil);
-        return;
-    }
-
     NSString *resourceURI = self.resourceURI;
     NSString *clientID = self.clientID;
     NSURL *redirectURI = [NSURL URLWithString:[self redirectURI]];
@@ -210,23 +207,6 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 
 - (void)syncWithCompletion:(MSSyncBlock)completion {
     void (^finalCompletion)(NSError *) = ^void(NSError *error) {
-        if (error) {
-            NSHTTPURLResponse *response = error.userInfo[MSErrorResponseKey];
-
-            // If the auth token is no longer valid, try reauthenticating and then
-            // syncing again.
-            if (response && response.statusCode == 401) {
-                // Need to authenticate again
-                [self logout];
-                [self loginWithController:nil completion:^(MSUser *user, NSError *error) {
-                    // If the authentication attempt was successful, attempt
-                    // to sync again.
-                    [self syncWithCompletion:completion];
-                }];
-                return;
-            }
-        }
-
         completion(error);
 
         if (!error) {
@@ -241,19 +221,6 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 
         [[NSNotificationCenter defaultCenter] postNotificationName:AzureConnectorSyncCompleted object:nil userInfo:userInfo];
     };
-
-    // It is possible that the user may try to sync before being logged in, which
-    // we need to check and redirect to the log in page.
-    if (self.client.currentUser == nil) {
-        [self loginWithController:[[[UIApplication sharedApplication] keyWindow] rootViewController] completion:^(MSUser *user, NSError *error) {
-            if (error) {
-                finalCompletion(error);
-                return;
-            }
-            [self syncWithCompletion:completion];
-        }];
-        return;
-    }
 
     [[NSNotificationCenter defaultCenter] postNotificationName:AzureConnectorSyncStarted object:nil];
 
@@ -290,7 +257,8 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
     // On logout there is the assumption that all data should be deleted. Here there
     // is no need for recursion as the only concern is that all data is removed, not
     // the order of execution or if one completes before another.
-    for (MSSyncTable *table in self.syncTables) {
+    for (NSString *tableName in self.syncTables) {
+        MSSyncTable *table = [self.client syncTableWithName:tableName];
         [table forcePurgeWithCompletion:^(NSError *error) {
             if (error) {
                 NSLog(@"Error purging table : %@", table);
@@ -346,7 +314,7 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 
 - (NSString *)resourceURI {
     NSString *uri = [self applicationURL];
-    return [uri stringByAppendingString:@"/login/aad"];
+    return [uri stringByAppendingString:@"login/aad"];
 }
 
 - (void)setResourceURI:(NSString *)resourceURI {
@@ -356,8 +324,14 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 }
 
 - (NSString *)redirectURI {
-    NSString *uri = [self applicationURL];
-    return [uri stringByAppendingString:@"/login/done"];
+//    NSString *uri = [self applicationURL];
+//    return [uri stringByAppendingString:@"login/done"];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *uri = [defaults valueForKey:kAzureConnectorRedirectURIKey];
+    if (!uri) {
+        uri = kDefaultAzureConnectorRedirectURI;
+    }
+    return uri;
 }
 
 - (NSString *)clientID {

@@ -38,8 +38,10 @@ namespace ActivityLoggerBackend
 
             Mapper.CreateMap<Task, ActivityDto>()
                 .ForMember(a => a.Details, opt => opt.MapFrom(t => t.Description))
+                .ForMember(a => a.ActivityTypeCode, opt => opt.MapFrom(t => t.ActivityTypeCode))
                 .ReverseMap()
                 .ForMember(t => t.Description, opt => opt.MapFrom(a => a.Details))
+                .ForMember(t => t.ActivityTypeCode, opt => opt.MapFrom(a => a.ActivityTypeCode))
                 .AfterMap((a, t) =>
                 {
                     if(t.RegardingObjectId != null)
@@ -50,8 +52,10 @@ namespace ActivityLoggerBackend
 
             Mapper.CreateMap<PhoneCall, ActivityDto>()
                 .ForMember(a => a.Details, opt => opt.MapFrom(p => p.Description))
+                .ForMember(a => a.ActivityTypeCode, opt => opt.MapFrom(p => p.ActivityTypeCode))
                 .ReverseMap()
                 .ForMember(p => p.Description, opt => opt.MapFrom(a => a.Details))
+                .ForMember(p => p.ActivityTypeCode, opt => opt.MapFrom(a => a.ActivityTypeCode))
                 .AfterMap((a, p) =>
                 {
                     if (p.RegardingObjectId != null)
@@ -62,8 +66,10 @@ namespace ActivityLoggerBackend
 
             Mapper.CreateMap<Appointment, ActivityDto>()
                 .ForMember(a => a.Details, opt => opt.MapFrom(ap => ap.Description))
+                .ForMember(a => a.ActivityTypeCode, opt => opt.MapFrom(ap => ap.ActivityTypeCode))
                 .ReverseMap()
                 .ForMember(ap => ap.Description, opt => opt.MapFrom(a => a.Details))
+                .ForMember(ap => ap.ActivityTypeCode, opt => opt.MapFrom(a => a.ActivityTypeCode))
                 .AfterMap((a, ap) =>
                 {
                     if (ap.RegardingObjectId != null)

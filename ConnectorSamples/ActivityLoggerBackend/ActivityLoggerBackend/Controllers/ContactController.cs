@@ -25,7 +25,7 @@ namespace ActivityLoggerBackend.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ContactDto>> Get(ODataQueryOptions<ContactDto> query)
+        public async Task<IEnumerable<ContactDto>> Get(ODataQueryOptions query)
         {
             return await QueryAsync(query, qe => qe.Criteria.AddCondition("ownerid", ConditionOperator.EqualUserId));
         }

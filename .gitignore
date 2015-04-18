@@ -198,3 +198,7 @@ FakesAssemblies/
 # Conflict resolution
 *.orig
 Azure Activity Logger/Azure Activity Logger.xcworkspace/xcshareddata
+Azure Activity Logger/Azure Activity Logger.xcodeproj/xcuserdata
+Azure Activity Logger/Azure Activity Logger.xcworkspace/xcuserdata
+Azure Activity Logger/Pods
+ConnectorSamples/AzureActivityLogger.iOS/Azure Activity Logger.xcworkspace/xcshareddata

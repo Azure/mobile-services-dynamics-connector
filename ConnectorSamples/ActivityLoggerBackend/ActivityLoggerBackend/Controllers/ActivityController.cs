@@ -12,7 +12,7 @@ namespace ActivityLoggerBackend.Controllers
         where TEntity : Entity
     {
         [HttpGet]
-        public Task<IEnumerable<ActivityDto>> Get(ODataQueryOptions<ActivityDto> query)
+        public Task<IEnumerable<ActivityDto>> Get(ODataQueryOptions query)
         {
             return QueryAsync(query, qe =>
                 qe.AddLink("contact", "regardingobjectid", "contactid").LinkCriteria.AddCondition("ownerid", ConditionOperator.EqualUserId));
