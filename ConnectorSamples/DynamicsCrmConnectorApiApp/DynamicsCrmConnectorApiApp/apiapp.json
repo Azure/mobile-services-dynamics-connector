@@ -5,8 +5,8 @@
     "gateway": "2015-01-14",
     "version": "1.0.0",
     "title": "DynamicsCrmConnectorApiApp",
-    "summary": "",
-    "author": "",
+    "summary": "Microsoft Dynamics CRM Connector",
+    "author": "Microsoft Corporation",
     "endpoints": {
         "apiDefinition": "/swagger/docs/v1",
         "status": null
