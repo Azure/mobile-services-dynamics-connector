@@ -1,0 +1,332 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "hendersondynamic"
+  },
+  "host": "microsoft-apiappd0e568f1269b4afb8d55f971fc018cba.azurewebsites.net",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/tables/Appointment": {
+      "get": {
+        "tags": [
+          "Appointment"
+        ],
+        "operationId": "Appointment_Get",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ActivityDto"
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/tables/Contact": {
+      "get": {
+        "tags": [
+          "Contact"
+        ],
+        "operationId": "Contact_GetAllContact",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ContactDto"
+              }
+            }
+          }
+        },
+        "deprecated": false
+      },
+      "post": {
+        "tags": [
+          "Contact"
+        ],
+        "operationId": "Contact_Post",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ContactDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Object"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/tables/Incident": {
+      "get": {
+        "tags": [
+          "Incident"
+        ],
+        "operationId": "Incident_GetAllIncident",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/IncidentDto"
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/tables/Incident/{id}": {
+      "patch": {
+        "tags": [
+          "Incident"
+        ],
+        "operationId": "Incident_PatchIncident",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "patch",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/IncidentDto"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/tables/Task": {
+      "post": {
+        "tags": [
+          "Task"
+        ],
+        "operationId": "Task_Post",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ActivityDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ActivityDto"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "definitions": {
+    "ActivityDto": {
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string"
+        },
+        "Deleted": {
+          "type": "boolean"
+        },
+        "Id": {
+          "type": "string"
+        },
+        "UpdatedAt": {
+          "type": "string"
+        },
+        "Version": {
+          "type": "string"
+        },
+        "Subject": {
+          "type": "string"
+        },
+        "ActualEnd": {
+          "type": "string"
+        },
+        "Details": {
+          "type": "string"
+        },
+        "ActivityTypeCode": {
+          "type": "string"
+        },
+        "RegardingObjectId": {
+          "type": "string"
+        }
+      }
+    },
+    "ContactDto": {
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string"
+        },
+        "Deleted": {
+          "type": "boolean"
+        },
+        "Id": {
+          "type": "string"
+        },
+        "UpdatedAt": {
+          "type": "string"
+        },
+        "Version": {
+          "type": "string"
+        },
+        "FirstName": {
+          "type": "string"
+        },
+        "LastName": {
+          "type": "string"
+        },
+        "Address1_Line1": {
+          "type": "string"
+        },
+        "Address1_City": {
+          "type": "string"
+        },
+        "Address1_StateOrProvince": {
+          "type": "string"
+        },
+        "Address1_PostalCode": {
+          "type": "string"
+        },
+        "EMailAddress1": {
+          "type": "string"
+        },
+        "JobTitle": {
+          "type": "string"
+        },
+        "Telephone1": {
+          "type": "string"
+        }
+      }
+    },
+    "Object": {
+      "type": "object",
+      "properties": {}
+    },
+    "IncidentDto": {
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string"
+        },
+        "Deleted": {
+          "type": "boolean"
+        },
+        "Id": {
+          "type": "string"
+        },
+        "UpdatedAt": {
+          "type": "string"
+        },
+        "Version": {
+          "type": "string"
+        },
+        "Text": {
+          "type": "string"
+        },
+        "Complete": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

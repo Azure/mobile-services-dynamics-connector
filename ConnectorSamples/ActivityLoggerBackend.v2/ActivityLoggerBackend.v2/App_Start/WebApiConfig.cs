@@ -33,6 +33,20 @@ namespace ActivityLoggerBackend
             Mapper.CreateMap<Contact, ContactDto>()
                 .ReverseMap();
 
+            Mapper.CreateMap<Incident, IncidentDto>()
+                .ForMember(a => a.Complete, opt => opt.MapFrom(t => (t.StatusCode.Value == 1)) )
+                .ForMember(a => a.Text, opt => opt.MapFrom(t => t.Title))
+                .ReverseMap()
+                .ForMember(t => t.ActivitiesComplete, opt => opt.MapFrom(a => a.Complete))
+                .ForMember(t => t.Title, opt => opt.MapFrom(a => a.Text))
+                /*.AfterMap((a, t) =>
+                {
+                    if (t.RegardingObjectId != null)
+                    {
+                        t.RegardingObjectId.LogicalName = Incident.EntityLogicalName;
+                    }
+                })*/;
+
             Mapper.CreateMap<Task, ActivityDto>()
                 .ForMember(a => a.Details, opt => opt.MapFrom(t => t.Description))
                 .ReverseMap()

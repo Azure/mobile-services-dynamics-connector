@@ -258,6 +258,7 @@
     <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
+    <Compile Include="Controllers\IncidentController.cs" />
     <Compile Include="Controllers\PhoneCallController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Global.asax.cs">
@@ -266,6 +267,7 @@
     <Compile Include="Models\ActivityDto.cs" />
     <Compile Include="Models\ContactDto.cs" />
     <Compile Include="Models\Entities.cs" />
+    <Compile Include="Models\IncidentDto.cs" />
     <Compile Include="Models\UppercaseGuidConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -286,6 +288,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\donnamActivityLoggerV2-code.pubxml" />
+    <None Include="Properties\PublishProfiles\dynamics123-code - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\dynamics123-code - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\CrmConnectorSDK.v2\Azure.Mobile.Server.DynamicsCrm\Azure.Mobile.Server.DynamicsCrm.csproj">
