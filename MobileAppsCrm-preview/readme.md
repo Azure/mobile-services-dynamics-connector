@@ -17,6 +17,22 @@ To deploy this sample, you will follow these steps:
 2. In Visual Studio, build and deploy the project **ActivityLoggerBackend-preview.sln**.
 3. Configure the Azure Active Directory authentication settings to enable on-behalf-of access between a mobile client application and the CRM backend.
 
+## AAD configuration overview
+
+- You will create two Active Directory application entries:
+  - One for the iOS client app, called `ActivityLoggerNative`
+  - One for the Azure Mobile App backend, called `ActivityLoggerBackend`
+
+- The native app AAD registration `ActivityLoggerNative` will have the following permissions
+  - Azure Active Directory: **Enable sign-on and read users' profiles**
+  - ActivityLoggerBackend: **Access ActivityLoggerBackend**
+
+- The Azure Mobile App backend AAD registration `ActivityLoggerBackend` will have the following permissions:
+  - Azure Active Directory: **Enable sign-on and read users' profiles**
+  - Dynamics CRM Online: **Access CRM Online as organization users**
+
+Note that the native client app does not need direct permissions to Dynamics CRM. Instead, it will retrieve an authentication token from AAD for the specific logged-in user. Then, this token is passed to the Azure Mobile App backend as part of the XXX TODO method. Since the Azure Mobile App backend has access to AAD and has delegated access to Dynamics CRM Online, it can use this user authentication token to securely take actions in Dynamics CRM on-behalf-of the logged in user in the native client application.
+
 ## 1. Provision a new Azure Mobile App
 
 - Follow the steps in the tutorial TODO to provision a new Azure Mobile App.
