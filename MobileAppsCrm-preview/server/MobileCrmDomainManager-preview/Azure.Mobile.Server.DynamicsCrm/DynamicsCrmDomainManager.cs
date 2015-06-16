@@ -70,13 +70,14 @@ namespace Microsoft.Azure.Mobile.Server.DynamicsCrm
                 string serviceUri = String.Concat(crmUrl, servicePath, "?SdkClientVersion=", version);
 
                 var user = this.Request.GetRequestContext().Principal as ServiceUser;
-
+                  
                 var creds = await user.GetIdentityAsync<AzureActiveDirectoryCredentials>();
-                AuthenticationContext ac = new AuthenticationContext(authorityUrl, false);
 
-                var ar = ac.AcquireToken(crmUrl, 
-                            new ClientCredential(settings["AzureActiveDirectoryClientId"], clientSecret), 
-                            new UserAssertion(creds.AccessToken));
+                // create authentication context with no token cache. 
+                AuthenticationContext ac = new AuthenticationContext(authorityUrl, validateAuthority: false, tokenCache: null);
+                var ar = await ac.AcquireTokenAsync(crmUrl,
+                    new ClientCredential(settings["AzureActiveDirectoryClientId"], clientSecret),
+                    new UserAssertion(creds.AccessToken));
 
                 var orgService = new OrganizationWebProxyClient(new Uri(crmUrl + servicePath), true);
                 orgService.HeaderToken = ar.AccessToken;
