@@ -125,14 +125,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WindowsAzure.MobileServices.Backend.1.0.450\lib\net45\Microsoft.WindowsAzure.Mobile.Service.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Mobile.Service.Entity">
-      <HintPath>..\packages\WindowsAzure.MobileServices.Backend.Entity.1.0.405\lib\net45\Microsoft.WindowsAzure.Mobile.Service.Entity.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAzure.Mobile.Service.Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WindowsAzure.MobileServices.Backend.Entity.1.0.450\lib\net45\Microsoft.WindowsAzure.Mobile.Service.Entity.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Mobile.Service.Security">
       <HintPath>..\packages\WindowsAzure.MobileServices.Backend.Security.1.0.450\lib\net45\Microsoft.WindowsAzure.Mobile.Service.Security.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Mobile.Service.Tables">
-      <HintPath>..\packages\WindowsAzure.MobileServices.Backend.Tables.1.0.405\lib\net45\Microsoft.WindowsAzure.Mobile.Service.Tables.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAzure.Mobile.Service.Tables, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WindowsAzure.MobileServices.Backend.Tables.1.0.450\lib\net45\Microsoft.WindowsAzure.Mobile.Service.Tables.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Client, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -258,7 +260,9 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\mobile-donnam-dynamics-connector.pubxml" />
@@ -267,7 +271,7 @@
     <None Include="Properties\PublishProfiles\sonoma-azure-demo - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\CrmConnectorSDK\WindowsAzure.Mobile.Service.DynamicsCrm\WindowsAzure.Mobile.Service.DynamicsCrm.csproj">
+    <ProjectReference Include="..\MobileCrmDomainManager\WindowsAzure.Mobile.Service.DynamicsCrm\WindowsAzure.Mobile.Service.DynamicsCrm.csproj">
       <Project>{3e035011-6ba4-4de8-92e4-86fb19b8134f}</Project>
       <Name>WindowsAzure.Mobile.Service.DynamicsCrm</Name>
     </ProjectReference>

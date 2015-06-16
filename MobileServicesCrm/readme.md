@@ -1,0 +1,1 @@
+This is the Azure Mobile Services version of the Dynamics CRM sample backend and SDK
