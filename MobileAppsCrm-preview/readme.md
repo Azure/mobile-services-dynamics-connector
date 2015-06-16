@@ -87,7 +87,7 @@ To deploy this sample, you will follow these steps:
 
 2. Under Configure, scroll down to Keys. You will obtain a Client Secret by generating a new key. Note once you create a key and leave the page, there is no way to get it out of the portal again. Upon creation you must copy and save this value in a secure location. Select a duration for your key, then click save, and copy out the resulting value.
 
-3. In the Mobile App Code section of the Management Portal, navigate to the Configure tab, and scroll down to App Settings. Here you can provide a key-value pair to help you reference the necessary credentials.
+3. Navigate to your Mobile App code site in the preview management portal and click App Settings. Here you can provide a key-value pair to help you reference the necessary credentials.
 
 * Set CrmAuthorityUrl to be the authority endpoint for your AAD tenant. This should be the same as the authority value used for your client app. It will be of the form `https://login.windows.net/contoso.onmicrosoft.com`
 
