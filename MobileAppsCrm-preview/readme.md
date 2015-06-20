@@ -1,6 +1,6 @@
 # Azure Mobile Apps Dynamics CRM Domain Manager and sample
 
-This folder contains a DomainManager extension to Azure Mobile Apps for connecting to Dynamics CRM Online. There is also a sample Azure Mobile App backend project, **ActivityLoggerBackend**. This project that sets up the 'tables' endpoints for several built-in CRM entities, such as Activities, Contacts, and Tasks and enables offline sync with the Azure Mobile client SDKs.
+This folder contains a DomainManager extension to Azure Mobile Apps for connecting to Dynamics CRM Online. There is also a sample Azure Mobile App backend project, **ActivityLoggerBackend-preview**. This project sets up the 'tables' endpoints for several built-in CRM entities, such as Activities, Contacts, and Tasks and enables offline sync with the Azure Mobile client SDKs.
 
 ## Prerequisites 
 
@@ -31,7 +31,7 @@ To deploy this sample, you will follow these steps:
   - Azure Active Directory: **Enable sign-on and read users' profiles**
   - Dynamics CRM Online: **Access CRM Online as organization users**
 
-Note that the native client app does not need direct permissions to Dynamics CRM. Instead, it will retrieve an authentication token from AAD for the specific logged-in user. Then, this token is passed to the Azure Mobile App backend as part of the XXX TODO method. Since the Azure Mobile App backend has access to AAD and has delegated access to Dynamics CRM Online, it can use this user authentication token to securely take actions in Dynamics CRM on-behalf-of the logged in user in the native client application.
+Note that the native client app does not need direct permissions to Dynamics CRM. Instead, it will retrieve an authentication token from AAD for the specific logged-in user. Then, this token is passed to the Azure Mobile App backend as part of the `LoginAsync` method. Since the Azure Mobile App backend has access to AAD and has delegated access to Dynamics CRM Online, it can use this user authentication token to securely take actions in Dynamics CRM on-behalf-of the logged in user in the native client application.
 
 ## 1. Provision a new Azure Mobile App
 
