@@ -17,7 +17,7 @@ To deploy this sample, you will follow these steps:
 2. In Visual Studio, build and deploy the project **ActivityLoggerBackend.sln** to your Mobile Service.
 3. Configure the Azure Active Directory authentication settings to enable on-behalf-of access between your Windows mobile client application and the CRM backend.
 
-## AAD configuration overview
+## Overview: Azure Active Directory configuration
 
 - You will create two Active Directory application entries:
   - One for the Windows client app, called `ActivityLoggerNative`
@@ -85,7 +85,7 @@ In order for your mobile service backend application to be able to access Dynami
 
 5. In the **Sign-on URL** box, paste the app URL value you copied from your mobile service. Enter the same unique value in the **App ID URI** box, then click to continue.
  
-    ![Set the AAD app properties](./readme-files/mobile-services-how-to-register-active-directory-authentication/mobile-services-add-app-wizard-2-waad-auth.png)
+    ![Set the AAD app properties](./readme-files/mobile-services-add-app-wizard-2-waad-auth.png)
 
 6. After the application **ActivityLoggerBackend** has been added, click the **Configure** tab. Edit the **Reply URL** value under **Single Sign-on** to be the URL of your mobile service appended with the path, _signin-aad_. For example,  `https://my-mobile-service.azure-mobile.net/signin-aad`. Make sure that you are using the HTTPS scheme.
 
@@ -123,7 +123,7 @@ Now you need to retrieve your package SID which will be configured with the nati
 
 2. Copy your package SID from the **App Settings** section. It will begin with the prefix `ms-app://`
 
-    ![][./readme-files/package-sid.png]
+    ![Package SID][./readme-files/package-sid.png]
 
 
 ## 5. Register the native client application with Azure Active Directory
