@@ -31,13 +31,14 @@ namespace ActivityLoggerBackend.Controllers
         {
             this.Services.Log.Info("inside the query\n");
             this.Services.Log.Info("Query is: " + this.Request.RequestUri.ToString());
+
             IEnumerable<IncidentDto> incidents = await this.QueryAsync(query);
             foreach (var incident in incidents)
             {
                 this.Services.Log.Info("Incident " + incident.Id + ", '" + incident.Text + "', completed: " + incident.Complete.ToString());
             }
 
-            return incidents; //, qe => qe.Criteria.AddCondition("ownerid", ConditionOperator.EqualUserId));
+            return incidents; 
         }
     }
 }
