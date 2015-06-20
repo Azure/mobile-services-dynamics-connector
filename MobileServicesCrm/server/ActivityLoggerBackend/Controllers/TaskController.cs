@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.OData.Query;
+using Microsoft.WindowsAzure.Mobile.Service.Security;
 
 namespace ActivityLoggerBackend.Controllers
 {
+    [AuthorizeLevel(AuthorizationLevel.User)]
     public class TaskController : ActivityController<Task>
     {
         [HttpPost]

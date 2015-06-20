@@ -235,6 +235,7 @@
     <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
+    <Compile Include="Controllers\IncidentController.cs" />
     <Compile Include="Controllers\PhoneCallController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Models\ActivityDto.cs" />
@@ -243,6 +244,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\IncidentDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\UppercaseGuidConverter.cs" />
   </ItemGroup>
