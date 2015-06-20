@@ -123,7 +123,7 @@ Now you need to retrieve your package SID which will be configured with the nati
 
 2. Copy your package SID from the **App Settings** section. It will begin with the prefix `ms-app://`
 
-    ![Package SID][./readme-files/package-sid.png]
+    ![Package SID](./readme-files/package-sid.png)
 
 
 ## 5. Register the native client application with Azure Active Directory
@@ -173,17 +173,21 @@ These values will be used in the ActivityLogger backend code using `ApiServices.
 
     - **ActivityLoggerBackend** (Mobile Service registration)
         - DYNAMICS CRM ONLINE
-          Access CRM Online as organization usersHelp
+
+          Access CRM Online as organization users
 
         - WINDOWS AZURE ACTIVE DIRECTORY
+
           Enable sign-on and read users' profiles
 
     - **ActivityLoggerNativeApp** (native mobile client app registration)
 
         - ACTIVITYLOGGERBACKEND
+
           Access ActivityLoggerBackend
 
         - WINDOWS AZURE ACTIVE DIRECTORY
+
           Enable sign-on and read users' profiles
 
 
