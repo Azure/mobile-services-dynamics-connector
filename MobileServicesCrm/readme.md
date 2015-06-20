@@ -167,7 +167,24 @@ These values will be used in the ActivityLogger backend code using `ApiServices.
 
 1. Navigate to the Active Directory section in the Azure portal and select your Dyanmics CRM tenant. Select the **APPLICATIONS** tab.
 
-2. 
+2. Verify that you have 2 application entries, one for **ActivityLoggerBackend** and one for **ActivityLoggerNativeApp**.
+
+3. Select each application registration and select the **DASHBOARD** tab. Verify that you have the following permissions listed under `oauth 2.0 permission grants`:
+
+    - **ActivityLoggerBackend** (Mobile Service registration)
+        - DYNAMICS CRM ONLINE
+          Access CRM Online as organization usersHelp
+
+        - WINDOWS AZURE ACTIVE DIRECTORY
+          Enable sign-on and read users' profiles
+
+    - **ActivityLoggerNativeApp** (native mobile client app registration)
+
+        - ACTIVITYLOGGERBACKEND
+          Access ActivityLoggerBackend
+
+        - WINDOWS AZURE ACTIVE DIRECTORY
+          Enable sign-on and read users' profiles
 
 
 ## 8. Configure and run the client app
