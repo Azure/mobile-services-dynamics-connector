@@ -14,20 +14,16 @@
 // Configure the values based based on your Mobile Service settings
 
 // endpoint for your hosted mobile service
-NSString *const mobileServiceUrl =      @"https://donnam-dynamics-connector.azure-mobile.net";
-//NSString *const applicationURL =      @"INSERT MOBILE SERVICE URI";
+NSString *const applicationURL =      @"INSERT MOBILE SERVICE URI";
 
 // Application Key, retrieve from your Mobile Service in the Azure Management portal
-NSString *const mobileServiceAppKey = @"wljJDVzQdUWopFonRJJfTNslZFuQUb44";
-//NSString *const mobileServiceAppKey = @"INSERT MOBILE SERVICE APP KEY";
+NSString *const mobileServiceAppKey = @"INSERT MOBILE SERVICE APP KEY";
 
 // Active Directory authority, usually of the form "https://login.windows.net/yourtenant/onmicrosoft.com"
-NSString *const aadAuthorityUri =     @"https://login.windows.net/donnam.onmicrosoft.com";
-//NSString *const aadAuthorityUri =     @"INSERT AUTHORITY URI";
+NSString *const aadAuthorityUri =     @"INSERT AUTHORITY URI";
 
 // client ID for native app registration in Azure Active Directory
-NSString *const activeDirectoryNativeClientId = @"748332dd-3cc8-41c4-bb4f-e66a1da53781";
-//NSString *const activeDirectoryNativeClientId = @"INSERT CLIENT ID";
+NSString *const activeDirectoryNativeClientId = @"INSERT CLIENT ID";
 
 /**
  * The following constants are meant for end users to use to determine the status
