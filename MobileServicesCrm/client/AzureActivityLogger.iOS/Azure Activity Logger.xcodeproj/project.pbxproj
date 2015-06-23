@@ -36,8 +36,6 @@
 		294CEA8B1AAF9C8900858B09 /* Appointment.m in Sources */ = {isa = PBXBuildFile; fileRef = 294CEA8A1AAF9C8900858B09 /* Appointment.m */; };
 		294CEA8C1AAF9C8900858B09 /* Appointment.m in Sources */ = {isa = PBXBuildFile; fileRef = 294CEA8A1AAF9C8900858B09 /* Appointment.m */; };
 		297C9AAA1ABC9665001B4594 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 297C9AA91ABC9665001B4594 /* MapKit.framework */; };
-		29A508941AB24E560058EB34 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A508921AB24E560058EB34 /* Crashlytics.framework */; };
-		29A508951AB24E560058EB34 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A508931AB24E560058EB34 /* Fabric.framework */; };
 		29C261BB1AADF3C000606DAF /* NewActivityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29C261B81AADF3C000606DAF /* NewActivityView.xib */; };
 		29C261BC1AADF3C000606DAF /* NewActivityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29C261B81AADF3C000606DAF /* NewActivityView.xib */; };
 		29C261BD1AADF3C000606DAF /* NewActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C261BA1AADF3C000606DAF /* NewActivityViewController.m */; };
@@ -94,8 +92,6 @@
 		294CEA8A1AAF9C8900858B09 /* Appointment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appointment.m; sourceTree = "<group>"; };
 		294CEA8D1AAF9F6900858B09 /* ObjectDisplayable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectDisplayable.h; sourceTree = "<group>"; };
 		297C9AA91ABC9665001B4594 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		29A508921AB24E560058EB34 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
-		29A508931AB24E560058EB34 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
 		29C261B81AADF3C000606DAF /* NewActivityView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewActivityView.xib; sourceTree = "<group>"; };
 		29C261B91AADF3C000606DAF /* NewActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewActivityViewController.h; sourceTree = "<group>"; };
 		29C261BA1AADF3C000606DAF /* NewActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewActivityViewController.m; sourceTree = "<group>"; };
@@ -128,10 +124,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				29336D821AAA430600EB3F33 /* WindowsAzureMobileServices.framework in Frameworks */,
-				29A508941AB24E560058EB34 /* Crashlytics.framework in Frameworks */,
 				297C9AAA1ABC9665001B4594 /* MapKit.framework in Frameworks */,
 				650EDFE83A6542E97BD50E5E /* libPods.a in Frameworks */,
-				29A508951AB24E560058EB34 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,8 +224,6 @@
 			isa = PBXGroup;
 			children = (
 				297C9AA91ABC9665001B4594 /* MapKit.framework */,
-				29A508921AB24E560058EB34 /* Crashlytics.framework */,
-				29A508931AB24E560058EB34 /* Fabric.framework */,
 				29C692421AAA3116003855FD /* WindowsAzureMobileServices.framework */,
 				7086014E74FB4687C30010F4 /* libPods.a */,
 			);
@@ -297,7 +289,6 @@
 				29C6920F1AAA2FEF003855FD /* Frameworks */,
 				29C692101AAA2FEF003855FD /* Resources */,
 				0F9E1E174FE208276B560EB2 /* Copy Pods Resources */,
-				29A508911AB24E2C0058EB34 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -410,19 +401,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		29A508911AB24E2C0058EB34 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "./Fabric.framework/run df25e06f6c37ecc5de901fc9506ddc24bb1bcacb ad93eb76d78537dffb429878cc9245d7c436e3453b98e676988e8ea03d02b103";
 		};
 		AE91C499FF3BFB5CB8212586 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
