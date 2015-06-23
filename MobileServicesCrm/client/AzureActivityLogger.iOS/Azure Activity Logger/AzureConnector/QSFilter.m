@@ -1,9 +1,6 @@
 //
 //  QSFilter.m
-//  chrandeiOSDotnet
-//
-//  Created by Christopher Anderson on 3/31/15.
-//  Copyright (c) 2015 MobileServices. All rights reserved.
+//  Azure Activity Logger
 //
 
 #import <Foundation/Foundation.h>
@@ -11,7 +8,7 @@
 #import "QSFilter.h"
 #import "AzureConnector.h"
 
-// This is the MSFilter protocol implementation taken from the iOS Mobile Services'\
+// This is the MSFilter protocol implementation taken from the iOS Mobile Services
 // quickstart and modified to log the user in if a 401 Unauthorized response is received
 
 #pragma mark * MSFilter methods

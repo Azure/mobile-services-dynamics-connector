@@ -65,8 +65,11 @@
 }
 
 - (void)updateViewForLoggedIn:(BOOL)loggedIn {
+    
     for (UITextField *textField in self.textFields) {
-        textField.enabled = !loggedIn;
+        // DM: commented out since now values are hardcoded in AzureConnector.m
+//        textField.enabled = !loggedIn;
+        textField.enabled = false;
     }
 
     self.loginButton.enabled = !loggedIn;
