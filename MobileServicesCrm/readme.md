@@ -212,7 +212,7 @@ In this section, you will download the sample iOS client app that uses the backe
 4. Open `AzureConnector.m` in the folder `Azure Activity Logger/AzureConnector`. Locate the following code near the top of the file:
 
         // endpoint for your hosted mobile service
-        NSString *const applicationURL =      @"INSERT MOBILE SERVICE URI";
+        NSString *const mobileServiceUrl =    @"INSERT MOBILE SERVICE URI";
 
         // Application Key, retrieve from your Mobile Service in the Azure Management portal
         NSString *const mobileServiceAppKey = @"INSERT MOBILE SERVICE APP KEY";
@@ -225,7 +225,7 @@ In this section, you will download the sample iOS client app that uses the backe
 
   Update the code as follows:
 
-    - To set `applicationURL`, retrieve your mobile service URL from the Azure Management Portal. 
+    - To set `mobileServiceUrl`, retrieve your mobile service URL from the Azure Management Portal. 
 
     - To set `mobileServiceAppKey`, navigate to your mobile service in the Azure Management Portal. Click **Keys** in the command bar at the bottom. Copy the first key, which is the application key.
 

@@ -14,7 +14,7 @@
 // Configure the values based based on your Mobile Service settings
 
 // endpoint for your hosted mobile service
-NSString *const applicationURL =      @"INSERT MOBILE SERVICE URI";
+NSString *const mobileServiceUrl =    @"INSERT MOBILE SERVICE URI";
 
 // Application Key, retrieve from your Mobile Service in the Azure Management portal
 NSString *const mobileServiceAppKey = @"INSERT MOBILE SERVICE APP KEY";
