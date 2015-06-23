@@ -33,7 +33,7 @@ To deploy this sample, you will follow these steps:
 
 Note that the native client app does not need direct permissions to Dynamics CRM. Instead, it will retrieve an authentication token from AAD for the specific logged-in user. 
 
-Then, this token is passed to the Azure Mobile Services backend as part of the `LoginAsync` method. Since the Azure Mobile Services backend has access to AAD and has delegated access to Dynamics CRM Online, it can use this user authentication token to securely take actions in Dynamics CRM on-behalf-of the logged in user in the native client application.
+Then, this token is passed to the Azure Mobile Services backend as part of the `LoginAsync` method (or `loginWithProvider` on iOS). Since the Azure Mobile Services backend has access to AAD and has delegated access to Dynamics CRM Online, it can use this user authentication token to securely take actions in Dynamics CRM on-behalf-of the logged in user in the native client application.
 
 ## 0. Connect your Dynamics CRM Online Active Directory tenant to Azure
 
@@ -99,7 +99,7 @@ In order for your mobile service backend application to be able to access Dynami
   
 11. In the **Allowed Tenants** list, add the domain of the directory in which you registered the application (e.g. `contoso.onmicrosoft.com`). You can find your default domain name by clicking the **Domains** tab on your Azure Active Directory tenant. Add your domain name to the **Allowed Tenants** list then click **Save**.  
 
-## 4. (Required only for Windows Store client apps) Create a Windows Store Package Security Identifier (SID)
+## 4. (Only for Windows Store client apps) Create a Windows Store Package Security Identifier (SID)
 
 To register a Windows Store app with your Azure Active Directory tenant, you must associate it to the Windows Store and have a package security identifier (SID) for the app. The package SID gets registered with the native application settings in the Azure Active Directory.
 
@@ -136,7 +136,11 @@ Now you need to retrieve your package SID which will be configured with the nati
 
 4. In the Add Application Wizard, enter a **Name** for your application such as "ActivityLoggerNativeApp" and click the  **Native Client Application** type. Then click to continue.
 
-5. In the **Redirect URI** box, enter the /login/done endpoint for your mobile service. This value should be similar to  https://my-mobile-service.azure-mobile.net/login/aad.
+5. In the **Redirect URI** box, enter the following:
+    
+     - For a Windows Store client, use the **Package SID** that you copied from the Microsoft Account Developer Center, which has the prefix `ms-app://`.
+
+     - For iOS or Xamarin, use the */login/done* endpoint for your mobile service. This value should be similar to  `https://my-mobile-service.azure-mobile.net/login/aad`.
 
 6. Once the native application has been added, click the **Configure** tab. Copy the **Client ID**. You will need this later when you configure your iOS or Windows Store client app.
 
@@ -144,7 +148,7 @@ Now you need to retrieve your package SID which will be configured with the nati
 
 8. Search for the web application **ActivityLoggerBackend** that you registered earlier and click the plus icon. Then click the check to close the dialog.
 
-9. On the new entry you just added, open the **Delegated Permissions** dropdown and select **Access ActivityLoggerBackend**. Then click **Save**
+9. On the new entry you just added, open the **Delegated Permissions** dropdown and select **Access ActivityLoggerBackend**. Then click **Save**.
 
 
 ## 6. Configure your Mobile Service settings
@@ -153,13 +157,13 @@ Now you need to retrieve your package SID which will be configured with the nati
 
 2. Under Configure, scroll down to Keys. You will obtain a Client Secret by generating a new key. Note once you create a key and leave the page, there is no way to get it out of the portal again. Upon creation you must copy and save this value in a secure location. Select a duration for your key, then click save, and copy out the resulting value.
 
-3. In the Mobile Services section of the Management Portal, select your mobile service. Navigate to the Configure tab, and scroll down to App Settings. Here you can provide a key-value pair to help you reference the necessary credentials.
+3. In the Mobile Services section of the Management Portal, select your mobile service. Navigate to the Configure tab, and scroll down to App Settings. Here you can provide key-value pairs to help you reference the necessary settings.
 
     * Set CrmAuthorityUrl to be the authority endpoint for your AAD tenant. It will be of the form `https://login.windows.net/contoso.onmicrosoft.com`. Copy this value as you will need it later.
 
     * Set CrmClientSecret to be the client secret value you obtained earlier.
 
-    * Set CrmUrl to be the URL for your Dynamics CRM Online tenant, which will have the form `https://contoso.crm.dynamics.com`
+    * Set CrmUrl to be the URL for your Dynamics CRM Online tenant, which will have the form `https://contoso.crm.dynamics.com`.
 
     These values will be used in the ActivityLogger backend code using `ApiServices.Settings`.
 
@@ -169,7 +173,7 @@ Now you need to retrieve your package SID which will be configured with the nati
 
 2. Verify that you have 2 application entries, one for **ActivityLoggerBackend** and one for **ActivityLoggerNativeApp**.
 
-3. Select each application registration and select the **DASHBOARD** tab. Verify that you have the following permissions listed under `oauth 2.0 permission grants`:
+3. Select each application registration and select the **DASHBOARD** tab. Verify that you have the following permissions listed under **oauth 2.0 permission grants**:
 
     - **ActivityLoggerBackend** (Mobile Service registration)
         - DYNAMICS CRM ONLINE
@@ -197,27 +201,27 @@ In this section, you will download the sample iOS client app that uses the backe
 
 1. Install [Cocoapods](https://cocoapods.org/):
 
-      sudo gem install cocoapods
+        sudo gem install cocoapods
 
 2. In Terminal, navigate to the directory `MobileServicesCrm/client/AzureActivityLogger.iOS`. Build the dependencies for your project:
 
-      pod install
+        pod install
 
 3. Open the *workspace* `Azure Activity Logger.xcworkspace` in Xcode. When using Cocoapods, you must open the Xcode workspace rather than the project.
 
 4. Open `AzureConnector.m` in the folder `Azure Activity Logger/AzureConnector`. Locate the following code near the top of the file:
 
-      // endpoint for your hosted mobile service
-      NSString *const applicationURL =      @"INSERT MOBILE SERVICE URI";
+        // endpoint for your hosted mobile service
+        NSString *const applicationURL =      @"INSERT MOBILE SERVICE URI";
 
-      // Application Key, retrieve from your Mobile Service in the Azure Management portal
-      NSString *const mobileServiceAppKey = @"INSERT MOBILE SERVICE APP KEY";
+        // Application Key, retrieve from your Mobile Service in the Azure Management portal
+        NSString *const mobileServiceAppKey = @"INSERT MOBILE SERVICE APP KEY";
 
-      // Active Directory authority, usually of the form "https://login.windows.net/yourtenant/onmicrosoft.com"
-      NSString *const aadAuthorityUri =     @"INSERT AUTHORITY URI";
+        // Active Directory authority, usually of the form "https://login.windows.net/yourtenant/onmicrosoft.com"
+        NSString *const aadAuthorityUri =     @"INSERT AUTHORITY URI";
 
-      // client ID for native app registration in Azure Active Directory
-      NSString *const activeDirectoryNativeClientId = @"INSERT CLIENT ID";
+        // client ID for native app registration in Azure Active Directory
+        NSString *const activeDirectoryNativeClientId = @"INSERT CLIENT ID";
 
   Update the code as follows:
 
@@ -227,7 +231,7 @@ In this section, you will download the sample iOS client app that uses the backe
 
     - To set `aadAuthorityUri`, use the authority endpoint for your AAD tenant. It will be the same value that you set for `CrmAuthorityUrl` in your Mobile Service app settings.
 
-    - To set `activeDirectoryNativeClientId`, use the **client ID** value for your registration **ActivityLoggerNativeApp**.
+    - To set `activeDirectoryNativeClientId`, use the **Client ID** value for your Active Directory application registration **ActivityLoggerNativeApp**.
 
 5. Build and run the app on the iOS simulator or a device.
 
@@ -250,6 +254,9 @@ In this section, you will download the sample iOS client app that uses the backe
 
 - Tutorial: [Register your apps to use an Azure Active Directory Account login]
 
+- Tutorial: [iOS: Authenticate your app with Active Directory Authentication Library Single Sign-On]
+
+- Tutorial: [Windows Store: Authenticate your app with Active Directory Authentication Library Single Sign-On]
 
 <!-- links -->
 
@@ -257,3 +264,7 @@ In this section, you will download the sample iOS client app that uses the backe
 [Classic Azure Management Portal]: https://manage.windowsazure.com/
 
 [Register your apps to use an Azure Active Directory Account login]: https://azure.microsoft.com/en-us/documentation/articles/mobile-services-how-to-register-active-directory-authentication
+
+[iOS: Authenticate your app with Active Directory Authentication Library Single Sign-On]: https://azure.microsoft.com/en-us/documentation/articles/mobile-services-dotnet-backend-ios-adal-sso-authentication/
+
+[Windows Store: Authenticate your app with Active Directory Authentication Library Single Sign-On]: https://azure.microsoft.com/en-us/documentation/articles/mobile-services-windows-store-dotnet-adal-sso-authentication/
