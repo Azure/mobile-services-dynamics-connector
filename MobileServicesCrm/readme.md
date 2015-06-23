@@ -136,7 +136,7 @@ Now you need to retrieve your package SID which will be configured with the nati
 
 4. In the Add Application Wizard, enter a **Name** for your application such as "ActivityLoggerNativeApp" and click the  **Native Client Application** type. Then click to continue.
 
-5. In the **Redirect URI** box, enter the /login/done endpoint for your App Service gateway. This value should be similar to https://contoso.azurewebsites.net/login/done.
+5. In the **Redirect URI** box, enter the /login/done endpoint for your mobile service. This value should be similar to  https://my-mobile-service.azure-mobile.net/login/aad.
 
 6. Once the native application has been added, click the **Configure** tab. Copy the **Client ID**. You will need this later when you configure your iOS or Windows Store client app.
 
@@ -155,13 +155,13 @@ Now you need to retrieve your package SID which will be configured with the nati
 
 3. In the Mobile Services section of the Management Portal, select your mobile service. Navigate to the Configure tab, and scroll down to App Settings. Here you can provide a key-value pair to help you reference the necessary credentials.
 
-* Set CrmAuthorityUrl to be the authority endpoint for your AAD tenant. This should be the same as the authority value used for your client app. It will be of the form `https://login.windows.net/contoso.onmicrosoft.com`
+    * Set CrmAuthorityUrl to be the authority endpoint for your AAD tenant. It will be of the form `https://login.windows.net/contoso.onmicrosoft.com`. Copy this value as you will need it later.
 
-* Set CrmClientSecret to be the client secret value you obtained earlier.
+    * Set CrmClientSecret to be the client secret value you obtained earlier.
 
-* Set CrmUrl to be the URL for your Dynamics CRM Online tenant, which will have the form `https://contoso.crm.dynamics.com`
+    * Set CrmUrl to be the URL for your Dynamics CRM Online tenant, which will have the form `https://contoso.crm.dynamics.com`
 
-These values will be used in the ActivityLogger backend code using `ApiServices.Settings`.
+    These values will be used in the ActivityLogger backend code using `ApiServices.Settings`.
 
 ## 7. Verify your Active Directory application registrations
 
@@ -193,8 +193,67 @@ These values will be used in the ActivityLogger backend code using `ApiServices.
 
 ## 8. Configure and run the client app
 
+In this section, you will download the sample iOS client app that uses the backend that you just deployed. Clone or download the git repository to your Mac, and ensure you are using Xcode 6.0 or later.
+
+1. Install [Cocoapods](https://cocoapods.org/):
+
+      sudo gem install cocoapods
+
+2. In Terminal, navigate to the directory `MobileServicesCrm/client/AzureActivityLogger.iOS`. Build the dependencies for your project:
+
+      pod install
+
+3. Open the *workspace* `Azure Activity Logger.xcworkspace` in Xcode. When using Cocoapods, you must open the Xcode workspace rather than the project.
+
+4. Open `AzureConnector.m` in the folder `Azure Activity Logger/AzureConnector`. Locate the following code near the top of the file:
+
+      // endpoint for your hosted mobile service
+      NSString *const applicationURL =      @"INSERT MOBILE SERVICE URI";
+
+      // Application Key, retrieve from your Mobile Service in the Azure Management portal
+      NSString *const mobileServiceAppKey = @"INSERT MOBILE SERVICE APP KEY";
+
+      // Active Directory authority, usually of the form "https://login.windows.net/yourtenant/onmicrosoft.com"
+      NSString *const aadAuthorityUri =     @"INSERT AUTHORITY URI";
+
+      // client ID for native app registration in Azure Active Directory
+      NSString *const activeDirectoryNativeClientId = @"INSERT CLIENT ID";
+
+  Update the code as follows:
+
+    - To set `applicationURL`, retrieve your mobile service URL from the Azure Management Portal. 
+
+    - To set `mobileServiceAppKey`, navigate to your mobile service in the Azure Management Portal. Click **Keys** in the command bar at the bottom. Copy the first key, which is the application key.
+
+    - To set `aadAuthorityUri`, use the authority endpoint for your AAD tenant. It will be the same value that you set for `CrmAuthorityUrl` in your Mobile Service app settings.
+
+    - To set `activeDirectoryNativeClientId`, use the **client ID** value for your registration **ActivityLoggerNativeApp**.
+
+5. Build and run the app on the iOS simulator or a device.
+
+    - Tap the sync button in the lower right corner to retrieve data from your Dynamics CRM account and sync to the simulator or device. 
+
+    - You will be prompted to log in to Azure Active Directory. Verify that the AAD logon screen shows the name of your native app registration, **ActivityLoggerNativeApp**.
+
+    - Once you have successfully authenticated, the app will retreive contacts that are owned by your logged-in username. 
+
+    - To make changes, tap on a contact and tap the checkmark on the contact info page. You can add a new check in note with details. 
+
+    - Changes will be saved on the device or emulator, but will not be synced with Dynamics CRM until you tap the sync button again. Verify that the new data is not in CRM, then press the sync button.
+
+    - Verify that your new changes are now in Dynamics CRM. Open the new check-in entry in CRM and make modifications to the data, such as changing the checkin date or the title.
+
+    - Press the sync button on the emulator again to retrieve the new data.
 
 
+# Resources
+
+- Tutorial: [Register your apps to use an Azure Active Directory Account login]
+
+
+<!-- links -->
 
 [Azure Management Portal]: https://manage.windowsazure.com/
 [Classic Azure Management Portal]: https://manage.windowsazure.com/
+
+[Register your apps to use an Azure Active Directory Account login]: https://azure.microsoft.com/en-us/documentation/articles/mobile-services-how-to-register-active-directory-authentication
