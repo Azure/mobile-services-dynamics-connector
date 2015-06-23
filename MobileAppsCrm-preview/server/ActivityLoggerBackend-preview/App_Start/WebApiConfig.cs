@@ -28,6 +28,9 @@ namespace ActivityLoggerBackend
             // line. Comment it out again when you deploy your service for production use.
             config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 
+            config.Formatters.JsonFormatter.SerializerSettings.DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Include;
+            config.Formatters.JsonFormatter.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Include;
+
             AutoMapperEntityMapper.InitializeDynamicsCrmCommonMaps();
 
             Mapper.CreateMap<Contact, ContactDto>()
