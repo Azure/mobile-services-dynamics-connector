@@ -1,13 +1,13 @@
 PODS:
-  - ADALiOS (1.2.1)
-  - SSKeychain (1.2.2)
+  - ADALiOS (1.2.4)
+  - SSKeychain (1.2.3)
 
 DEPENDENCIES:
   - ADALiOS
-  - SSKeyChain
+  - SSKeychain
 
 SPEC CHECKSUMS:
-  ADALiOS: b34041305d5ef0b90530ef95ecac1d314da86336
-  SSKeychain: cc48bd3ad24fcd9125adb9e0d23dd50b8bbd08b9
+  ADALiOS: 8179aed8e136bf79dca5a4138a0c1a0d52701cb2
+  SSKeychain: 3f42991739c6c60a9cf1bbd4dff6c0d3694bcf3d
 
-COCOAPODS: 0.35.0
+COCOAPODS: 0.36.0
