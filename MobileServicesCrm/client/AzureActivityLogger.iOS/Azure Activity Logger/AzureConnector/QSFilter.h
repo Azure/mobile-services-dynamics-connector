@@ -1,9 +1,6 @@
 //
 //  QSFilter.h
-//  chrandeiOSDotnet
-//
-//  Created by Christopher Anderson on 3/31/15.
-//  Copyright (c) 2015 MobileServices. All rights reserved.
+//  Azure Activity Logger
 //
 
 #ifndef chrandeiOSDotnet_QSFilter_h

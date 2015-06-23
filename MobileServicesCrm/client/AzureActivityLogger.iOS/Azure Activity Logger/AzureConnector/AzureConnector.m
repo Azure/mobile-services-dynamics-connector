@@ -11,11 +11,30 @@
 #import "SSKeychain.h"
 #import "QSFilter.h"
 
+// Configure the values based based on your Mobile Service settings
+
+// endpoint for your hosted mobile service
+NSString *const mobileServiceUrl =      @"https://donnam-dynamics-connector.azure-mobile.net";
+//NSString *const applicationURL =      @"INSERT MOBILE SERVICE URI";
+
+// Application Key, retrieve from your Mobile Service in the Azure Management portal
+NSString *const mobileServiceAppKey = @"wljJDVzQdUWopFonRJJfTNslZFuQUb44";
+//NSString *const mobileServiceAppKey = @"INSERT MOBILE SERVICE APP KEY";
+
+// Active Directory authority, usually of the form "https://login.windows.net/yourtenant/onmicrosoft.com"
+NSString *const aadAuthorityUri =     @"https://login.windows.net/donnam.onmicrosoft.com";
+//NSString *const aadAuthorityUri =     @"INSERT AUTHORITY URI";
+
+// client ID for native app registration in Azure Active Directory
+NSString *const activeDirectoryNativeClientId = @"748332dd-3cc8-41c4-bb4f-e66a1da53781";
+//NSString *const activeDirectoryNativeClientId = @"INSERT CLIENT ID";
+
 /**
- * The following constants are meant for consumers to use to determine the status
- * of the sync process. The key constants are for consumers to determine the
+ * The following constants are meant for end users to use to determine the status
+ * of the sync process. The key constants are for end users to determine the
  * overall success/failure of the sync process.
  */
+
 /// Sync status notification names.
 NSString *const AzureConnectorSyncStarted = @"AzureConnectorSyncStarted";
 NSString *const AzureConnectorSyncCompleted = @"AzureConnectorSyncCompleted";
@@ -32,23 +51,7 @@ NSString *const AzureConnectorSyncFailedMessagesKey = @"AzureConnectorSyncFailed
 /// Private key for use with NSUserDefaults to store the last successful sync date.
 NSString *const kAzureConnectorSyncCompletedDateKey = @"AzureConnectorSyncCompletedDateKey";
 
-/// Private keys for use with NSUserDefaults to store application strings.
-NSString *const kAzureConnectorApplicatonKey = @"kAzureConnectorApplicatonKey";
-NSString *const kDefaultAzureConnectorApplicatonKey = @"UzOuYZAOxIRZzDdHYqeMGifuSqGwYu15";
-NSString *const kAzureConnectorAuthorityKey = @"kAzureConnectorAuthorityKey";
-NSString *const kDefaultAzureConnectorAuthority = @"https://login.windows.net/sonomap.onmicrosoft.com";
-NSString *const kAzureConnectorApplicationURLKey = @"kAzureConnectorApplicationURLKey";
-NSString *const kDefaultAzureConnectorApplicationURL = @"https://sonoma-azure-demo.azure-mobile.net/";
-NSString *const kAzureConnectorResourceURIKey = @"kAzureConnectorResourceURIKey";
-NSString *const kDefaultAzureConnectorResourceURI = @"https://sonoma-azure-demo.azure-mobile.net/login/aad";
-NSString *const kAzureConnectorClientIDKey = @"kAzureConnectorClientIDKey";
-NSString *const kDefaultAzureConnectorClientID = @"23bff0e9-7ce7-433a-9d4f-4fb93098c0d3";
-NSString *const kAzureConnectorRedirectURIKey = @"kAzureConnectorRedirectURIKey";
-NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-2478766528-319279558-2094806392-3380066906-3630131337-54439661-3135774793";
-
 @interface AzureConnector ()
-
-@property (nonatomic, strong) NSString *authority;
 
 @property (nonatomic, strong) MSClient *client;
 @property (nonatomic, strong) MSSyncTable *contactTable;
@@ -81,7 +84,7 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 }
 
 - (MSClient *)setupClient {
-    MSClient *client = [MSClient clientWithApplicationURLString:self.applicationURL applicationKey:kDefaultAzureConnectorApplicatonKey];
+    MSClient *client = [MSClient clientWithApplicationURLString:mobileServiceUrl applicationKey:mobileServiceAppKey];
     QSFilter *filter = [[QSFilter alloc] init];
     client = [client clientWithFilter:filter];
     filter.client = client;
@@ -162,7 +165,7 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
 }
 
 - (ADAuthenticationContext *)authenticationContext {
-    return [ADAuthenticationContext authenticationContextWithAuthority:self.authority validateAuthority:NO error:nil];
+    return [ADAuthenticationContext authenticationContextWithAuthority:aadAuthorityUri validateAuthority:NO error:nil];
 }
 
 - (void)loginWithController:(UIViewController *)controller completion:(MSClientLoginBlock)completion {
@@ -278,76 +281,24 @@ NSString *const kDefaultAzureConnectorRedirectURI = @"ms-app://s-1-15-2-24787665
     [self.taskTable insert:task completion:completion];
 }
 
-#pragma mark - Instance property accessor/setters
 
-- (NSString *)authority {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *authority = [defaults valueForKey:kAzureConnectorAuthorityKey];
-    if (!authority) {
-        authority = kDefaultAzureConnectorAuthority;
-        self.authority = authority;
-    }
-    return authority;
-}
-
-- (void)setAuthority:(NSString *)authority {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setValue:authority forKey:kAzureConnectorAuthorityKey];
-    [defaults synchronize];
-}
-
-- (NSString *)applicationURL {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *url = [defaults valueForKey:kAzureConnectorApplicationURLKey];
-    if (!url) {
-        url = kDefaultAzureConnectorApplicationURL;
-        self.applicationURL = url;
-    }
-    return url;
-}
-
-- (void)setApplicationURL:(NSString *)applicationURL {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setValue:applicationURL forKey:kAzureConnectorApplicationURLKey];
-    [defaults synchronize];
-}
+#pragma mark - Settings getters
 
 - (NSString *)resourceURI {
-    NSString *uri = [self applicationURL];
-    return [uri stringByAppendingString:@"login/aad"];
-}
-
-- (void)setResourceURI:(NSString *)resourceURI {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setValue:resourceURI forKey:kAzureConnectorResourceURIKey];
-    [defaults synchronize];
+    return [mobileServiceUrl stringByAppendingString:@"/login/aad"];
 }
 
 - (NSString *)redirectURI {
-//    NSString *uri = [self applicationURL];
-//    return [uri stringByAppendingString:@"login/done"];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *uri = [defaults valueForKey:kAzureConnectorRedirectURIKey];
-    if (!uri) {
-        uri = kDefaultAzureConnectorRedirectURI;
-    }
-    return uri;
+    return [mobileServiceUrl stringByAppendingString:@"/login/done"];
 }
 
 - (NSString *)clientID {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *cID = [defaults valueForKey:kAzureConnectorClientIDKey];
-    if (!cID) {
-        cID = kDefaultAzureConnectorClientID;
-        self.clientID = cID;
-    }
-    return cID;
+    return activeDirectoryNativeClientId;
 }
 
-- (void)setClientID:(NSString *)clientID {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setValue:clientID forKey:kAzureConnectorClientIDKey];
-    [defaults synchronize];
+- (NSString *)applicationURL {
+    return mobileServiceUrl;
 }
 
 @end
+

@@ -16,7 +16,6 @@ extern NSString *const AzureConnectorSyncFailedMessagesKey;
 @interface AzureConnector : NSObject
 
 @property (nonatomic, strong) NSString *applicationURL;
-@property (nonatomic, strong) NSString *resourceURI;
 @property (nonatomic, strong) NSString *clientID;
 
 + (AzureConnector *)sharedConnector;
