@@ -27,7 +27,7 @@ namespace ActivityLoggerBackend.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<IncidentDto>> Get(ODataQueryOptions<IncidentDto> query)
+        public async Task<IEnumerable<IncidentDto>> Get(ODataQueryOptions query)
         {
             this.Services.Log.Info("inside the query\n");
             this.Services.Log.Info("Query is: " + this.Request.RequestUri.ToString());
