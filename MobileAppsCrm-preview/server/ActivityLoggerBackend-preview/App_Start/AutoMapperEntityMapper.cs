@@ -51,11 +51,17 @@ namespace ActivityLoggerBackend
 
             PropertyMap["createdat"] = "createdon";
             PropertyMap["updatedat"] = "modifiedon";
+            PropertyMap["version"] = "modifiedon";
         }
 
         public string GetAttributeName(string propertyName)
         {
-            return this.PropertyMap[propertyName];
+            string value;
+            
+            if (!this.PropertyMap.TryGetValue(propertyName, out value))
+                throw new KeyNotFoundException(String.Format("The given propertyName ({0}) was not mapped.", propertyName));
+            
+            return value;
         }
 
         public IEnumerable<string> GetAttributeNames()
@@ -82,6 +88,8 @@ namespace ActivityLoggerBackend
 
             data.UpdatedAt = entity.GetAttributeValue<DateTime?>("modifiedon");
             data.CreatedAt = entity.GetAttributeValue<DateTime?>("createdon");
+            var ticks = data.UpdatedAt.HasValue ? data.UpdatedAt.Value.Ticks : 0;
+            data.Version = BitConverter.GetBytes(ticks);
 
             // Upper case guids are currently required by the Azure Mobile Services
             // client libraries because they create new records with Guids as uppercase strings.

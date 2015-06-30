@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
+﻿using Microsoft.Data.Edm;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Azure.Mobile.Server;
 using Microsoft.Azure.Mobile.Server.Security;
 using Microsoft.Azure.Mobile.Server.Tables;
@@ -15,6 +16,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.OData;
+using System.Web.Http.OData.Builder;
 using System.Web.Http.OData.Query;
 using Microsoft.Azure.Mobile.Security;
 
@@ -31,6 +33,8 @@ namespace Microsoft.Azure.Mobile.Server.DynamicsCrm
     {
         protected string EntityLogicalName { get; set; }
         protected IEntityMapper<TTableData, TEntity> Map { get; private set; }
+
+        private const string ModelKeyPrefix = "MS_EdmModel";
 
         public string CrmUrlSettingsKey { get; set; }
         public string CrmAuthorityUrlSettingsKey { get; set; }
@@ -141,6 +145,18 @@ namespace Microsoft.Azure.Mobile.Server.DynamicsCrm
 
         public async Task<IEnumerable<TTableData>> QueryAsync(ODataQueryOptions query, Action<QueryExpression> queryModifier)
         {
+            bool isSelectModified;
+            var systemPropertyMap = new Dictionary<string, string>()
+            {
+                {"__updatedAt", "UpdatedAt"},
+                {"__version", "Version"}
+            };
+
+            var properties = this.Request.SetSelectedProperties(typeof(TTableData), systemPropertyMap, out isSelectModified);
+
+            var context = new ODataQueryContext(this.GetEdmModel(), typeof(TTableData));
+            query = new ODataQueryOptions(context, this.Request); 
+            
             var builder = new QueryExpressionBuilder<TTableData, TEntity>(this.EntityLogicalName, query, this.Map);
             var crmQuery = builder.GetQueryExpression();
 
@@ -155,6 +171,22 @@ namespace Microsoft.Azure.Mobile.Server.DynamicsCrm
             return entityCollection.Entities.Cast<TEntity>().Select(Map.Map);
         }
 
+        private IEdmModel GetEdmModel()
+        {
+            var actionDescriptor = this.Request.GetActionDescriptor();
+            IEdmModel model = actionDescriptor == null ? null : (IEdmModel)actionDescriptor.Properties[ModelKeyPrefix + typeof(TTableData).FullName];
+            if (model != null)
+            {
+                return model;
+            }
+
+            var builder = new ODataConventionModelBuilder();
+            builder.EntitySet<TTableData>(typeof(TTableData).Name);
+            model = builder.GetEdmModel();
+
+            return model;
+        }
+
         public override Task<IEnumerable<TTableData>> QueryAsync(ODataQueryOptions query)
         {
             return QueryAsync(query, null);
@@ -162,6 +194,13 @@ namespace Microsoft.Azure.Mobile.Server.DynamicsCrm
 
         public override async Task<TTableData> ReplaceAsync(string id, TTableData data)
         {
+            var preExisting = Lookup(data.Id).Queryable.First();
+
+            if (!preExisting.Version.SequenceEqual(data.Version))
+            {
+                throw new HttpResponseException(HttpStatusCode.Conflict);
+            }
+
             TEntity entity = Map.Map(data);
             var orgService = await GetOrganizationServiceAsync();
             orgService.Update(entity);

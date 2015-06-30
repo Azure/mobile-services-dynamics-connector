@@ -236,7 +236,14 @@ namespace Microsoft.Azure.Mobile.Server.DynamicsCrm
             switch (queryNode.Kind)
             {
                 case QueryNodeKind.Constant:
-                    return ((ConstantNode)queryNode).Value;
+                    object value = ((ConstantNode)queryNode).Value;
+
+                    if (value is DateTimeOffset)
+                    {
+                        value = ((DateTimeOffset)value).UtcDateTime;
+                    }
+                    
+                    return value;
 
                 case QueryNodeKind.Convert:
                     return GetValue(((ConvertNode)queryNode).Source);
@@ -285,8 +292,12 @@ namespace Microsoft.Azure.Mobile.Server.DynamicsCrm
                 foreach (var item in selectExpand.SelectExpandClause.SelectedItems.OfType<PathSelectItem>())
                 {
                     var pathItem = item.SelectedPath.OfType<PropertySegment>().Single();
-                    var attributeName = EntityMapper.GetAttributeName(pathItem.Property.Name);
-                    columnSet.AddColumn(attributeName);
+
+                    if (pathItem.Property.Name != "Deleted")
+                    {
+                        var attributeName = EntityMapper.GetAttributeName(pathItem.Property.Name);
+                        columnSet.AddColumn(attributeName);
+                    }
                 }
             }
 
