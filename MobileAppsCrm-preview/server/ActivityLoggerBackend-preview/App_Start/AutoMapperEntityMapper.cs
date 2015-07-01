@@ -20,6 +20,7 @@ namespace ActivityLoggerBackend
             Mapper.CreateMap<Guid, EntityReference>().ConvertUsing(g => g == Guid.Empty ? null : new EntityReference { Id = g });
             Mapper.CreateMap<OptionSetValue, int?>().ConvertUsing(osv => osv == null ? (int?)null : osv.Value);
             Mapper.CreateMap<OptionSetValue, int>().ConvertUsing(osv => osv == null ? 0 : osv.Value);
+            Mapper.CreateMap<OptionSetValue, bool>().ConvertUsing(osv => osv == null ? false : (osv.Value == 1));
             Mapper.CreateMap<int, OptionSetValue>().ConvertUsing(i => i == 0 ? null : new OptionSetValue(i));
             Mapper.CreateMap<int?, OptionSetValue>().ConvertUsing(i => i == null ? null : new OptionSetValue(i.Value));
         }
@@ -71,7 +72,7 @@ namespace ActivityLoggerBackend
             names.Add("modifiedon");
             names.Add("createdon");
             
-            if(EnableSoftDelete)
+            if (EnableSoftDelete)
                 names.Add("statecode");
             
             return names;

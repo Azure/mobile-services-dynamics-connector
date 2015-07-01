@@ -36,12 +36,13 @@ namespace ActivityLoggerBackend
             Mapper.CreateMap<Contact, ContactDto>()
                 .ReverseMap();
 
+            // NOTE: don't map from IncidentDto.Complete *TO* Incident.Status since changing the status requires RPC calls
             Mapper.CreateMap<Incident, IncidentDto>()
-                .ForMember(a => a.Complete, opt => opt.MapFrom(t => (t.StatusCode.Value == 1)) )
-                .ForMember(a => a.Text, opt => opt.MapFrom(t => t.Title))
+                .ForMember(dto => dto.Complete, opt => opt.MapFrom(entity => entity.StateCode))
+                .ForMember(dto => dto.Text, opt => opt.MapFrom(entity => entity.Title))
                 .ReverseMap()
-                .ForMember(t => t.ActivitiesComplete, opt => opt.MapFrom(a => a.Complete))
-                .ForMember(t => t.Title, opt => opt.MapFrom(a => a.Text));
+                .ForMember(entity => entity.Title, opt => opt.MapFrom(dto => dto.Text))
+                .ForMember(entity => entity.StateCode, opt => opt.UseDestinationValue());
 
             Mapper.CreateMap<Task, ActivityDto>()
                 .ForMember(a => a.Details, opt => opt.MapFrom(t => t.Description))
