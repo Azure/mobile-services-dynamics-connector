@@ -130,7 +130,7 @@ Now you need to retrieve your package SID which will be configured with the nati
 
 1. Navigate to **Active Directory** in the [Azure Management Portal](https://manage.windowsazure.com).
 
-2. Select directory you used before, and then select the **Applications** tab at the top. Click **ADD** at the bottom to create a new app registration.
+2. Select the directory you used before, and then select the **Applications** tab at the top. Click **ADD** at the bottom to create a new app registration.
 
 3. Click **Add an application my organization is developing**.
 
@@ -140,7 +140,7 @@ Now you need to retrieve your package SID which will be configured with the nati
 
      - For a Windows Store client, use the **Package SID** that you copied from the Microsoft Account Developer Center, which has the prefix `ms-app://`.
 
-     - For iOS or Xamarin, use the */login/done* endpoint for your mobile service. This value should be similar to  `https://my-mobile-service.azure-mobile.net/login/done`. Make sure that you are using the HTTPS scheme
+     - For iOS or Xamarin, use the */login/done* endpoint for your mobile service. This value should be similar to  `https://my-mobile-service.azure-mobile.net/login/done`. Make sure that you are using the HTTPS scheme.
 
 6. Once the native application has been added, click on its **Configure** tab. Copy the **Client ID**. You will need this later when you configure your iOS or Windows Store client app.
 
