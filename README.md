@@ -1,6 +1,6 @@
 # Azure Mobile Services/Apps Dynamics CRM Domain Manager and sample
 
-This repository has two SDKs and sample projects:
+This repository has two SDKs, each with its own sample projects:
 
 - :star: Use the [Mobile Services Connector SDK](MobileServicesCrm/readme.md) for apps that will go in production in the next 3-6 months. Azure Mobile Services is Generally Available with a [99.9% uptime SLA](http://azure.microsoft.com/en-us/pricing/details/mobile-services/).
 
