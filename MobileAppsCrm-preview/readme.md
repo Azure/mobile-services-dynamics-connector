@@ -1,8 +1,8 @@
 # Azure Mobile Apps PREVIEW Dynamics CRM Domain Manager and sample
 
-:exclamation: Use this repository to try out our new **preview service** that runs on Azure App Service. **There is no SLA for Azure Mobile Apps** and it is not currently recommended for production use. However, once Azure Mobile Apps is GA, we will encourage Mobile Services customers to migrate in order to take advantage of new features.
+:exclamation: Use this repository to try out our new **preview service** that runs on Azure App Service. **There is no SLA for Azure Mobile Apps** and it is not currently recommended for production use. Once Azure Mobile Apps is Generally Available, we will offer a seamless migration from Mobile Services to App Service so that you can take advantage of the new features.
 
-**For production apps, use the [Mobile Services Connector SDK](../MobileServicesCrm).**
+**For production apps, or apps expected to go to production within the next 3-6 months, use the [Mobile Services Connector SDK](../MobileServicesCrm).**
 
 If you have any questions on this SDK or Azure Mobile in general, [tweet @AzureMobile](https://twitter.com/AzureMobile) or post on the [MSDN forums](https://social.msdn.microsoft.com/forums/azure/en-US/home?forum=azuremobile).
 
