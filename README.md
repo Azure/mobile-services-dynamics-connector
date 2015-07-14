@@ -1,4 +1,4 @@
-# Azure Mobile Services/Apps Dynamics CRM Domain Manager and sample
+# Azure Mobile Connector SDK for Dynamics CRM Online
 
 This repository has two SDKs, each with its own sample projects:
 
