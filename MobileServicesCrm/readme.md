@@ -54,7 +54,7 @@ Note that the native client app does not need direct permissions to Dynamics CRM
 
 Then, this token is passed to the Azure Mobile Services backend as part of the `LoginAsync` method (or `loginWithProvider` on iOS). Since the Azure Mobile Services backend has access to AAD and has delegated access to Dynamics CRM Online, it can use this user authentication token to securely take actions in Dynamics CRM on-behalf-of the logged in user in the native client application.
 
-## Project structure:
+## Repository structure:
 
 - [WindowsAzure.Mobile.Service.DynamicsCrm](server/MobileCrmDomainManager/WindowsAzure.Mobile.Service.DynamicsCrm). A custom DomainManager extension for Dynamics CRM Online. Contains code to set up custom entities.
 
