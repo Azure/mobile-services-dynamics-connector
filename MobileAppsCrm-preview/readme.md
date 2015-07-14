@@ -1,4 +1,4 @@
-# Azure Mobile Apps PREVIEW Dynamics CRM Domain Manager and sample
+# (PREVIEW) Azure Mobile Apps Connector SDK for Dynamics CRM Online
 
 :exclamation: Use this repository to try out our new **preview service** that runs on Azure App Service. **There is no SLA for Azure Mobile Apps** and it is not currently recommended for production use. Once Azure Mobile Apps is Generally Available, we will offer a seamless migration from Mobile Services to App Service so that you can take advantage of the new features.
 
@@ -117,7 +117,7 @@ Note that the native client app does not need direct permissions to Dynamics CRM
 
 * Set CrmClientSecret to be the client secret value you obtained earlier.
 
-* Set CrmUrl to be the URL for your Dynamics CRM Online tenant, which will have the form `https://donnam.crm.dynamics.com`
+* Set CrmUrl to be the URL for your Dynamics CRM Online tenant, which will have the form `https://contoso.crm.dynamics.com`
 
 * Set AzureActiveDirectoryClientId to the client ID of the **ActivityLoggerBackend** Active Directory application.
 
