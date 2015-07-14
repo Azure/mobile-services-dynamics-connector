@@ -1,11 +1,15 @@
-# Azure Mobile Apps Dynamics CRM Domain Manager and sample
+# Azure Mobile Apps PREVIEW Dynamics CRM Domain Manager and sample
+
+:exclamation: Use this repository to try out our new **preview service** that runs on Azure App Service. **There is no SLA for Azure Mobile Apps** and it is not currently recommended for production use. However, once Azure Mobile Apps is GA, we will encourage Mobile Services customers to migrate in order to take advantage of new features.
+
+If you have any questions on this SDK or Azure Mobile in general, [tweet @AzureMobile](https://twitter.com/AzureMobile) or post on the [MSDN forums](https://social.msdn.microsoft.com/forums/azure/en-US/home?forum=azuremobile).
 
 This folder contains a DomainManager extension to Azure Mobile Apps for connecting to Dynamics CRM Online. There is also a sample Azure Mobile App backend project, **ActivityLoggerBackend-preview**. This project sets up the 'tables' endpoints for several built-in CRM entities, such as Activities, Contacts, and Tasks and enables offline sync with the Azure Mobile client SDKs.
 
 ## Prerequisites 
 
 - Visual Studio 2013
-- .NET Runtime version 2.5.2
+- .NET Runtime version 4.5.2
 - Azure subscription
 - Dynamics CRM Online subscription
 
@@ -35,7 +39,7 @@ Note that the native client app does not need direct permissions to Dynamics CRM
 
 ## 1. Provision a new Azure Mobile App
 
-- Follow the steps in the tutorial TODO to provision a new Azure Mobile App.
+- Follow the steps in the tutorial [Create an iOS App](https://azure.microsoft.com/en-us/documentation/articles/app-service-mobile-dotnet-backend-ios-get-started-preview/) to provision a new Azure Mobile App.
 
 ## 2. Publish the backend project to your Azure Mobile App code site
 
@@ -114,11 +118,5 @@ Note that the native client app does not need direct permissions to Dynamics CRM
 * Set AzureActiveDirectoryClientId to the client ID of the **ActivityLoggerBackend** Active Directory application.
 
 [Azure Management Portal]: https://manage.windowsazure.com/
-[How to configure your Mobile App with Azure Active Directory]: ../articles/app-service-how-to-configure-active-directory-authentication-preview.md
-
-
 [Preview Azure Management Portal]: https://portal.azure.com/
 [Classic Azure Management Portal]: https://manage.windowsazure.com/
-[SharePoint Online]: http://office.microsoft.com/en-us/sharepoint/
-[Authenticate your app with Active Directory Authentication Library Single Sign-On]: app-service-mobile-dotnet-backend-ios-aad-sso-preview.md
-[Mobile Apps .NET Backend App Service Extension]: http://www.nuget.org/packages/Microsoft.Azure.Mobile.Server.AppService/
