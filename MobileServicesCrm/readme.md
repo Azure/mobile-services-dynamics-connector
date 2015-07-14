@@ -1,4 +1,4 @@
-# Azure Mobile Services Dynamics CRM Domain Manager and sample
+# Azure Mobile Services Connector SDK for Dynamics CRM Online
 
 This folder contains a DomainManager extension to Azure Mobile Services for connecting to Dynamics CRM Online. There is also a sample Mobile Services backend project, **ActivityLoggerBackend**. This project sets up the 'tables' endpoints for several built-in CRM entities, such as Activities, Contacts, Incidents, and Tasks and enables offline sync with the Azure Mobile client SDKs.
 
