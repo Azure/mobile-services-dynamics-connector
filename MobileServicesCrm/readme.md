@@ -2,6 +2,24 @@
 
 This folder contains a DomainManager extension to Azure Mobile Services for connecting to Dynamics CRM Online. There is also a sample Mobile Services backend project, **ActivityLoggerBackend**. This project sets up the 'tables' endpoints for several built-in CRM entities, such as Activities, Contacts, Incidents, and Tasks and enables offline sync with the Azure Mobile client SDKs.
 
+If you have any questions on this SDK or Azure Mobile in general, tweet [@AzureMobile](https://twitter.com/AzureMobile) or post on the [MSDN forums](https://social.msdn.microsoft.com/forums/azure/en-US/home?forum=azuremobile).
+
+## Table of Contents
+
+  - [Prerequisites](#prerequisites)
+  - [Overview](#overview)
+  - [Overview of Azure Active Directory configuration](#overview-of-azure-active-directory-configuration)
+  - [Project Structure](#project-structure)
+  - [0. Connect your Dynamics CRM Online Active Directory tenant to Azure](#0-connect-your-dynamics-crm-online-active-directory-tenant-to-azure)
+  - [1. Provision a new Azure Mobile Service](#1-provision-a-new-azure-mobile-service)
+  - [2. Publish the backend project to your Mobile Service](#2-publish-the-backend-project-to-your-mobile-service)
+  - [3. Register your mobile service with Azure Active Directory](#3-register-your-mobile-service-with-azure-active-directory)
+  - [4. (Only for Windows Store client apps) Create a Windows Store Package Security Identifier (SID)](#4-only-for-windows-store-client-apps-create-a-windows-store-package-security-identifier-sid)
+  - [5. Register the native client application with Azure Active Directory](#5-register-the-native-client-application-with-azure-active-directory)
+  - [6. Configure your Mobile Service settings](#6-configure-your-mobile-service-settings)
+  - [7. Verify your Active Directory application registrations](#7-verify-your-active-directory-application-registrations)
+  - [8. Configure and run the client app](#8-configure-and-run-the-client-app)
+
 ## Prerequisites
 
 - Visual Studio 2013
@@ -17,7 +35,7 @@ To deploy this sample, you will follow these steps:
 2. In Visual Studio, build and deploy the project **ActivityLoggerBackend.sln** to your Mobile Service.
 3. Configure the Azure Active Directory authentication settings to enable on-behalf-of access between your Windows mobile client application and the CRM backend.
 
-## Overview: Azure Active Directory configuration
+## Overview of Azure Active Directory configuration
 
 - You will create two Active Directory application entries:
   - One for the Windows client app, called `ActivityLoggerNative`
@@ -34,6 +52,16 @@ To deploy this sample, you will follow these steps:
 Note that the native client app does not need direct permissions to Dynamics CRM. Instead, it will retrieve an authentication token from AAD for the specific logged-in user.
 
 Then, this token is passed to the Azure Mobile Services backend as part of the `LoginAsync` method (or `loginWithProvider` on iOS). Since the Azure Mobile Services backend has access to AAD and has delegated access to Dynamics CRM Online, it can use this user authentication token to securely take actions in Dynamics CRM on-behalf-of the logged in user in the native client application.
+
+## Project structure:
+
+- [WindowsAzure.Mobile.Service.DynamicsCrm](server/MobileCrmDomainManager/WindowsAzure.Mobile.Service.DynamicsCrm). A custom DomainManager extension for Dynamics CRM Online. Contains code to set up custom entities.
+
+- [ActivityLoggerBackend](server/ActivityLoggerBackend). Mobile Services server project, deploy to your own hosted mobile service. Exposes REST endpoints for built-in CRM entities, such as Activities, Contacts, and Tasks.
+
+- [AzureActivityLogger.iOS](client/AzureActivityLogger.iOS). iOS client project that connects to an instance of ActivityLoggerBackend.
+
+- [Tools](Tools/CrmSvcUtil). Codegen tools for CRM.
 
 ## 0. Connect your Dynamics CRM Online Active Directory tenant to Azure
 
