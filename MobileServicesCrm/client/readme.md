@@ -2,7 +2,7 @@
 
 This is a pre-built iOS app for connecting to Dynamics CRM Online. After deploying your backend, you should customize your client settings to connect to your deployed backend.
 
-See the [instructions here to configure the client app](../MobileServicesCrm#8-configure-and-run-the-client-app).
+See the [instructions here to configure the client app](../readme.md#8-configure-and-run-the-client-app).
 
 ## Using the app
 
