@@ -33,7 +33,8 @@ To deploy this sample, you will follow these steps:
 
 1. Provision a new Azure Mobile Service.
 2. In Visual Studio, build and deploy the project **ActivityLoggerBackend.sln** to your Mobile Service.
-3. Configure the Azure Active Directory authentication settings to enable on-behalf-of access between your Windows mobile client application and the CRM backend.
+3. Configure the Azure Active Directory authentication settings to enable on-behalf-of access between your iOS mobile client application and the CRM backend.
+4. Configure and run your iOS mobile client application.
 
 ## Overview of Azure Active Directory configuration
 
@@ -59,13 +60,13 @@ Then, this token is passed to the Azure Mobile Services backend as part of the `
 
 - [ActivityLoggerBackend](server/ActivityLoggerBackend). Mobile Services server project, deploy to your own hosted mobile service. Exposes REST endpoints for built-in CRM entities, such as Activities, Contacts, and Tasks.
 
-- [AzureActivityLogger.iOS](client/AzureActivityLogger.iOS). iOS client project that connects to an instance of ActivityLoggerBackend.
+- [AzureActivityLogger.iOS](client). iOS client project that connects to an instance of ActivityLoggerBackend.
 
-- [Tools](Tools/CrmSvcUtil). Codegen tools for CRM.
+- [Tools](../Tools/CrmSvcUtil). Codegen tools for CRM.
 
 ## 0. Connect your Dynamics CRM Online Active Directory tenant to Azure
 
-- If you don’t have an Azure tenant (account) or you do have one but your Office 365 subscription with Microsoft Dynamics CRM Online is not available in your Azure account, following the instructions in the topic [Set up Azure Active Directory access for your Developer Site](https://msdn.microsoft.com/office/office365/HowTo/setup-development-environment) to associate the two accounts.
+- If you don’t have an Azure tenant (account) or you do have one but your Office 365 subscription with Microsoft Dynamics CRM Online is not available in your Azure account, then follow the instructions in the topic [Set up Azure Active Directory access for your Developer Site](https://msdn.microsoft.com/office/office365/HowTo/setup-development-environment).
 
 - For more information, see the section **Register an application with Microsoft Azure** in the document [Walkthrough: Register a CRM app with Active Directory](https://msdn.microsoft.com/en-us/library/dn531010.aspx)
 
