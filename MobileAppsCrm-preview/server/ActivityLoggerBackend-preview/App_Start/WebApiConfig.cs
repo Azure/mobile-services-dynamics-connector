@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.Azure.Mobile.Server;
-using Microsoft.Azure.Mobile.Server.AppService.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using ActivityLoggerBackend.Models;
+using Microsoft.Azure.Mobile.Server.Config;
 
 namespace ActivityLoggerBackend
 {
@@ -13,13 +13,12 @@ namespace ActivityLoggerBackend
     {
         public static void Register()
         {
-            AppServiceExtensionConfig.Initialize();
-
-            // Use this class to set configuration options for your mobile service
-            ConfigOptions options = new ConfigOptions();
-
             // Use this class to set WebAPI configuration options
-            HttpConfiguration config = ServiceConfig.Initialize(new ConfigBuilder(options));
+            HttpConfiguration config = new HttpConfiguration();
+
+            new MobileAppConfiguration()
+                .UseDefaultConfiguration()
+                .ApplyTo(config);
 
             // enforce user authentication even when debugging locally
             config.SetIsHosted(true);

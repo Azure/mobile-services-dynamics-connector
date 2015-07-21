@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using ActivityLoggerBackend.Models;
-using Microsoft.Azure.Mobile.Server.Security;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk.Client;
 using System.Collections.Generic;
@@ -13,11 +12,9 @@ using Microsoft.Xrm.Sdk.WebServiceClient;
 using Microsoft.Xrm.Client;
 using System.Net;
 using Microsoft.Xrm.Sdk.Query;
-using Microsoft.Azure.Mobile.Security;
-
 namespace ActivityLoggerBackend.Controllers
 {
-    [AuthorizeLevel(AuthorizationLevel.User)]
+    [Authorize]
     public class ContactController : BaseController<ContactDto, Contact>
     {
         public ContactController() : base(true)

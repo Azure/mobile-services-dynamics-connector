@@ -44,7 +44,7 @@ namespace Microsoft.Azure.Mobile.Server.DynamicsCrm
         {
             base.Initialize(controllerContext);
 
-            this.DomainManager = new DynamicsCrmDomainManager<TTableData, TEntity>(Request, Services, EntityMapper);
+            this.DomainManager = new DynamicsCrmDomainManager<TTableData, TEntity>(Request, EntityMapper);
         }
 
         /// <summary>

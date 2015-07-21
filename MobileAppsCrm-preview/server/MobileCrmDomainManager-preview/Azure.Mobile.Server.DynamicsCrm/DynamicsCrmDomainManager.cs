@@ -1,9 +1,7 @@
 ﻿using Microsoft.Data.Edm;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Azure.Mobile.Server;
-using Microsoft.Azure.Mobile.Server.Security;
 using Microsoft.Azure.Mobile.Server.Tables;
-using Microsoft.Azure.Mobile.Server.AppService;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Query;
@@ -18,7 +16,7 @@ using System.Web.Http;
 using System.Web.Http.OData;
 using System.Web.Http.OData.Builder;
 using System.Web.Http.OData.Query;
-using Microsoft.Azure.Mobile.Security;
+using Microsoft.Azure.Mobile.Server.Authentication;
 
 namespace Microsoft.Azure.Mobile.Server.DynamicsCrm
 {
@@ -45,8 +43,8 @@ namespace Microsoft.Azure.Mobile.Server.DynamicsCrm
         /// </summary>
         /// <param name="organizationService">The <see cref="IOrganizationService"/> instance to use when communicating with Dynamics CRM.</param>
         /// <param name="map">The <see cref="IEntityMapper{TTableData,TEntity}"/> instance to use when mapping between <typeparamref name="TTableData"/> and <typeparamref name="TEntity"/> instances.</param>
-        public DynamicsCrmDomainManager(HttpRequestMessage request, ApiServices services, IEntityMapper<TTableData, TEntity> map)
-            :base(request, services, false)
+        public DynamicsCrmDomainManager(HttpRequestMessage request, IEntityMapper<TTableData, TEntity> map)
+            :base(request, false)
         {
             this.Map = map;
 
@@ -64,7 +62,7 @@ namespace Microsoft.Azure.Mobile.Server.DynamicsCrm
         { 
             if(_organizationService == null)
             {
-                var settings = this.Services.Settings;
+                var settings = new ServiceSettingsDictionary();
 
                 string crmUrl = settings[CrmUrlSettingsKey];
                 string servicePath = "/XRMServices/2011/Organization.svc/web";

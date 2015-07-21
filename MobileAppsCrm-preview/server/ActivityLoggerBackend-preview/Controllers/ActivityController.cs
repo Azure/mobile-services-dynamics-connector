@@ -5,11 +5,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.OData.Query;
-using Microsoft.Azure.Mobile.Security;
 
 namespace ActivityLoggerBackend.Controllers
 {
-    [AuthorizeLevel(AuthorizationLevel.User)]
+    [Authorize]
     public abstract class ActivityController<TEntity> : BaseController<ActivityDto, TEntity>
         where TEntity : Entity
     {
