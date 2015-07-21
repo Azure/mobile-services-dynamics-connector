@@ -1,10 +1,9 @@
 ﻿using System.Web.Http;
 using ActivityLoggerBackend.Models;
-using Microsoft.Azure.Mobile.Security;
 
 namespace ActivityLoggerBackend.Controllers
 {
-    [AuthorizeLevel(AuthorizationLevel.User)]
+    [Authorize]
     public class AppointmentController : ActivityController<Appointment>
     {
     }
