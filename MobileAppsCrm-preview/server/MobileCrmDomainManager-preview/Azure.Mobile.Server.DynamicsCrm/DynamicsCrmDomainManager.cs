@@ -62,7 +62,7 @@ namespace Microsoft.Azure.Mobile.Server.DynamicsCrm
         { 
             if(_organizationService == null)
             {
-                var settings = new ServiceSettingsDictionary();
+                var settings = this.Request.GetConfiguration().GetServiceSettingsProvider().GetServiceSettings();
 
                 string crmUrl = settings[CrmUrlSettingsKey];
                 string servicePath = "/XRMServices/2011/Organization.svc/web";
