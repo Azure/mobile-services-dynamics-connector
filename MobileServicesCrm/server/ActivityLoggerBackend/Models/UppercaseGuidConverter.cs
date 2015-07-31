@@ -26,6 +26,7 @@ namespace Microsoft.Windows.Azure.Service.DynamicsCrm.WebHost
             if (value == null)
             {
                 writer.WriteNull();
+                return;
             }
 
             writer.WriteValue(value.ToString().ToUpperInvariant());

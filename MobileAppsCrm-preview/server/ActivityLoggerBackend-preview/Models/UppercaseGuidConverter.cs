@@ -26,6 +26,7 @@ namespace ActivityLoggerBackend
             if (value == null)
             {
                 writer.WriteNull();
+                return;
             }
 
             writer.WriteValue(value.ToString().ToUpperInvariant());
